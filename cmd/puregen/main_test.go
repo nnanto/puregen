@@ -1,23 +1,22 @@
 package main
 
 import (
-	"flag"
 	"os"
 	"os/exec"
 	"strings"
 	"testing"
 )
 
-func TestMainWithVersionFlag(t *testing.T) {
+func TestMainWithVersionCommand(t *testing.T) {
 	// Phase 2: When BE_CRASHER=1, run the actual main() function
 	if os.Getenv("BE_CRASHER") == "1" {
-		os.Args = []string{"puregen", "-version"}
+		os.Args = []string{"puregen", "version"}
 		main() // This will call os.Exit() or return normally
 		return
 	}
 
 	// Phase 1: Spawn a subprocess with BE_CRASHER=1 to test main()
-	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithVersionFlag")
+	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithVersionCommand")
 	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
 	out, err := cmd.CombinedOutput()
 
@@ -31,38 +30,15 @@ func TestMainWithVersionFlag(t *testing.T) {
 	}
 }
 
-func TestMainWithVersionShortFlag(t *testing.T) {
-	// Test -v flag
+func TestMainWithGenerateNoFlags(t *testing.T) {
+	// Test generate command with no flags
 	if os.Getenv("BE_CRASHER") == "1" {
-		os.Args = []string{"puregen", "-v"}
+		os.Args = []string{"puregen", "generate"}
 		main()
 		return
 	}
 
-	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithVersionShortFlag")
-	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
-	out, err := cmd.CombinedOutput()
-
-	if err != nil {
-		t.Fatalf("Expected successful execution, got error: %v", err)
-	}
-
-	output := string(out)
-	if !strings.Contains(output, "puregen version") {
-		t.Errorf("Expected version output, got: %s", output)
-	}
-}
-
-func TestMainWithInsufficientArgs(t *testing.T) {
-	// Test with no arguments
-	if os.Getenv("BE_CRASHER") == "1" {
-		os.Args = []string{"puregen"}
-		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
-		main()
-		return
-	}
-
-	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithInsufficientArgs")
+	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithGenerateNoFlags")
 	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
 	out, err := cmd.CombinedOutput()
 
@@ -71,21 +47,20 @@ func TestMainWithInsufficientArgs(t *testing.T) {
 	}
 
 	output := string(out)
-	if !strings.Contains(output, "Usage:") {
-		t.Errorf("Expected usage message, got: %s", output)
+	if !strings.Contains(output, "required flag") {
+		t.Errorf("Expected required flag error, got: %s", output)
 	}
 }
 
-func TestMainWithOneArg(t *testing.T) {
-	// Test with only one argument
+func TestMainWithGenerateMissingInput(t *testing.T) {
+	// Test generate command with missing input flag
 	if os.Getenv("BE_CRASHER") == "1" {
-		os.Args = []string{"puregen", "test.yaml"}
-		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+		os.Args = []string{"puregen", "generate", "--templates", "test.tmpl"}
 		main()
 		return
 	}
 
-	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithOneArg")
+	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithGenerateMissingInput")
 	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
 	out, err := cmd.CombinedOutput()
 
@@ -94,16 +69,37 @@ func TestMainWithOneArg(t *testing.T) {
 	}
 
 	output := string(out)
-	if !strings.Contains(output, "Usage:") {
-		t.Errorf("Expected usage message, got: %s", output)
+	if !strings.Contains(output, "required flag") && !strings.Contains(output, "input") {
+		t.Errorf("Expected input flag error, got: %s", output)
+	}
+}
+
+func TestMainWithGenerateMissingTemplates(t *testing.T) {
+	// Test generate command with missing templates flag
+	if os.Getenv("BE_CRASHER") == "1" {
+		os.Args = []string{"puregen", "generate", "--input", "test.yaml"}
+		main()
+		return
+	}
+
+	cmd := exec.Command(os.Args[0], "-test.run=TestMainWithGenerateMissingTemplates")
+	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
+	out, err := cmd.CombinedOutput()
+
+	if err == nil {
+		t.Fatal("Expected non-zero exit code")
+	}
+
+	output := string(out)
+	if !strings.Contains(output, "required flag") && !strings.Contains(output, "templates") {
+		t.Errorf("Expected templates flag error, got: %s", output)
 	}
 }
 
 func TestMainWithNonExistentYamlFile(t *testing.T) {
 	// Test with non-existent YAML file
 	if os.Getenv("BE_CRASHER") == "1" {
-		os.Args = []string{"puregen", "nonexistent.yaml", "template.tmpl"}
-		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+		os.Args = []string{"puregen", "generate", "--input", "nonexistent.yaml", "--templates", "template.tmpl"}
 		main()
 		return
 	}
@@ -139,8 +135,7 @@ func TestMainWithNonExistentTemplateFile(t *testing.T) {
 
 	// Test with non-existent template file
 	if os.Getenv("BE_CRASHER") == "1" {
-		os.Args = []string{"puregen", yamlFile.Name(), "nonexistent.tmpl"}
-		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+		os.Args = []string{"puregen", "generate", "--input", yamlFile.Name(), "--templates", "nonexistent.tmpl"}
 		main()
 		return
 	}
@@ -175,8 +170,7 @@ func TestMainWithMultipleTemplates(t *testing.T) {
 
 	// Test with multiple template files (some non-existent)
 	if os.Getenv("BE_CRASHER") == "1" {
-		os.Args = []string{"puregen", yamlFile.Name(), "nonexistent1.tmpl,nonexistent2.tmpl"}
-		flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+		os.Args = []string{"puregen", "generate", "--input", yamlFile.Name(), "--templates", "nonexistent1.tmpl,nonexistent2.tmpl"}
 		main()
 		return
 	}

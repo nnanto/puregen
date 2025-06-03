@@ -99,7 +99,7 @@ services:
 
 2. **Generate code using a template**:
 ```bash
-puregen user_service.yaml templates/typescript.tmpl ./generated
+puregen generate --input user_service.yaml --templates templates/typescript.tmpl --output ./generated
 ```
 
 3. **Result**: PureGen generates type-safe code in your target language!
@@ -110,19 +110,31 @@ puregen user_service.yaml templates/typescript.tmpl ./generated
 
 ```bash
 # Basic usage
-puregen <idl-file> <template-file> [output-directory]
+puregen generate --input <idl-file> --templates <template-file> --output <output-directory>
+
+# Short flags
+puregen generate -i <idl-file> -t <template-file> -o <output-directory>
 
 # Multiple templates (comma-separated)
-puregen <idl-file> <template1,template2,template3> [output-directory]
+puregen generate --input <idl-file> --templates <template1,template2,template3> --output <output-directory>
 
 # Examples
-puregen service.yaml templates/go.tmpl ./gen
-puregen api.yaml templates/typescript.tmpl ./src/types
-puregen schema.yaml templates/python.tmpl ./
+puregen generate -i service.yaml -t templates/go.tmpl -o ./gen
+puregen generate -i api.yaml -t templates/typescript.tmpl -o ./src/types
+puregen generate -i schema.yaml -t templates/python.tmpl -o ./
 
 # Generate multiple languages at once
-puregen user_service.yaml templates/go.tmpl,templates/typescript.tmpl,templates/python.tmpl ./generated
+puregen generate -i user_service.yaml -t templates/go.tmpl,templates/typescript.tmpl,templates/python.tmpl -o ./generated
+
+# Check version
+puregen version
 ```
+
+### Available Commands
+
+- `puregen generate` - Generate code from IDL files using templates
+- `puregen version` - Show version information
+- `puregen help` - Show help information
 
 ### Available Templates
 
