@@ -10,6 +10,8 @@ PureGen is a code generation tool that transforms YAML into code for any target 
 - **Flexible Templates**: Write custom templates for your specific needs
 - **Service Contracts**: Define RPC services alongside your data structures
 - **Field Validation**: Built-in support for required fields, arrays, and custom types
+- **Interactive Creation**: Create IDL files interactively with the creator command
+- **Validation**: Validate IDL files for type consistency
 
 ## Installation
 
@@ -109,7 +111,7 @@ puregen generate --input user_service.yaml --templates templates/typescript.tmpl
 ### Command Line
 
 ```bash
-# Basic usage
+# Basic code generation
 puregen generate --input <idl-file> --templates <template-file> --output <output-directory>
 
 # Short flags
@@ -118,10 +120,17 @@ puregen generate -i <idl-file> -t <template-file> -o <output-directory>
 # Multiple templates (comma-separated)
 puregen generate --input <idl-file> --templates <template1,template2,template3> --output <output-directory>
 
+# Interactive IDL creation
+puregen creator --output-file <output-yaml-file>
+
+# Validate IDL file
+puregen validate --input <idl-file>
+
 # Examples
 puregen generate -i service.yaml -t templates/go.tmpl -o ./gen
 puregen generate -i api.yaml -t templates/typescript.tmpl -o ./src/types
-puregen generate -i schema.yaml -t templates/python.tmpl -o ./
+puregen creator -o my_service.yaml
+puregen validate -i my_service.yaml
 
 # Generate multiple languages at once
 puregen generate -i user_service.yaml -t templates/go.tmpl,templates/typescript.tmpl,templates/python.tmpl -o ./generated
@@ -133,8 +142,43 @@ puregen version
 ### Available Commands
 
 - `puregen generate` - Generate code from IDL files using templates
+- `puregen creator` - Interactively create a new IDL file
+- `puregen validate` - Validate an IDL file for type consistency and potential issues
 - `puregen version` - Show version information
 - `puregen help` - Show help information
+
+### Creator Mode
+
+Use the interactive creator to build IDL files step by step:
+
+```bash
+puregen creator --output-file my_service.yaml
+```
+
+The creator will guide you through:
+- Setting service name and version
+- Defining messages with typed fields
+- Creating service methods
+- Setting up field validation rules
+
+### Validation
+
+Validate your IDL files to catch potential issues:
+
+```bash
+puregen validate --input my_service.yaml
+```
+
+The validator checks for:
+- **Type consistency**: Ensures all field types are either primitive types or defined messages
+- **Missing references**: Warns about custom types that aren't defined in the Messages section
+- **Syntax errors**: Basic YAML and structure validation
+
+Example validation output:
+```
+Warning: Field 'profile' in message 'User' has type 'UserProfile' which is not primitive and not defined in Messages
+Warning: Field 'settings' in message 'User' has type '[]AppSettings' which is not primitive and not defined in Messages
+```
 
 ### Available Templates
 
@@ -221,9 +265,9 @@ services:
 
 ## Supported Field Types
 
-- **Primitives**: `string`, `int32`, `int64`, `float32`, `float64`, `bool`
+- **Primitives**: `string`, `int`, `int32`, `int64`, `float`, `float32`, `float64`, `bool`, `byte`, `bytes`
 - **Custom Types**: Reference other messages by name
-- **Arrays**: Use `repeated: true` for array/slice types
+- **Arrays**: Use `repeated: true` for array/slice types or prefix with `[]`
 - **Optional**: Fields without `required: true` are optional
 
 ## Writing Custom Templates

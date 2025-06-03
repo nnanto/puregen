@@ -16,6 +16,7 @@ var (
 	inputFile     string
 	templatePaths string
 	outputDir     string
+	validateFile  string
 )
 
 var rootCmd = &cobra.Command{
@@ -77,9 +78,71 @@ var versionCmd = &cobra.Command{
 	},
 }
 
+var validateCmd = &cobra.Command{
+	Use:   "validate",
+	Short: "Validate YAML IDL file",
+	Long:  `Validate a YAML IDL file and check for potential issues with field types.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if validateFile == "" {
+			fmt.Fprintf(os.Stderr, "Error: input file is required\n")
+			os.Exit(1)
+		}
+
+		parser := idl.NewParser()
+		schema, err := parser.ParseFile(validateFile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing IDL file: %v\n", err)
+			os.Exit(1)
+		}
+
+		// Define primitive types
+		primitiveTypes := map[string]bool{
+			"string":  true,
+			"int":     true,
+			"int32":   true,
+			"int64":   true,
+			"float":   true,
+			"float32": true,
+			"float64": true,
+			"bool":    true,
+			"byte":    true,
+			"bytes":   true,
+		}
+
+		// Collect all defined message names
+		definedMessages := make(map[string]bool)
+		for _, message := range schema.Messages {
+			definedMessages[message.Name] = true
+		}
+
+		// Validate field types
+		hasWarnings := false
+		for _, message := range schema.Messages {
+			for fieldName, field := range message.Fields {
+				fieldType := field.Type
+				// Remove array notation if present
+				fieldType = strings.TrimPrefix(fieldType, "[]")
+
+				// Check if type is primitive or defined in Messages
+				if !primitiveTypes[fieldType] && !definedMessages[fieldType] {
+					fmt.Printf("Warning: Field '%s' in message '%s' has type '%s' which is not primitive and not defined in Messages\n",
+						fieldName, message.Name, field.Type)
+					hasWarnings = true
+				}
+			}
+		}
+
+		if !hasWarnings {
+			fmt.Println("Validation completed successfully - no issues found")
+		}
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(generateCmd)
 	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(validateCmd)
+	rootCmd.AddCommand(creatorCmd)
 
 	generateCmd.Flags().StringVarP(&inputFile, "input", "i", "", "Input YAML IDL file (required)")
 	generateCmd.Flags().StringVarP(&templatePaths, "templates", "t", "", "Template file paths (comma-separated for multiple templates) (required)")
@@ -87,6 +150,12 @@ func init() {
 
 	generateCmd.MarkFlagRequired("input")
 	generateCmd.MarkFlagRequired("templates")
+
+	validateCmd.Flags().StringVarP(&validateFile, "input", "i", "", "Input YAML IDL file to validate (required)")
+	validateCmd.MarkFlagRequired("input")
+
+	creatorCmd.Flags().StringVarP(&outputFile, "output-file", "o", "", "Output YAML file path (required)")
+	creatorCmd.MarkFlagRequired("output-file")
 }
 
 func main() {
