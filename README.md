@@ -112,10 +112,16 @@ puregen user_service.yaml templates/typescript.tmpl ./generated
 # Basic usage
 puregen <idl-file> <template-file> [output-directory]
 
+# Multiple templates (comma-separated)
+puregen <idl-file> <template1,template2,template3> [output-directory]
+
 # Examples
 puregen service.yaml templates/go.tmpl ./gen
 puregen api.yaml templates/typescript.tmpl ./src/types
 puregen schema.yaml templates/python.tmpl ./
+
+# Generate multiple languages at once
+puregen user_service.yaml templates/go.tmpl,templates/typescript.tmpl,templates/python.tmpl ./generated
 ```
 
 ### Available Templates

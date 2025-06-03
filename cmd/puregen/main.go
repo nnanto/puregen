@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/nnanto/puregen/generator"
 	"github.com/nnanto/puregen/idl"
@@ -24,14 +25,15 @@ func main() {
 
 	args := flag.Args()
 	if len(args) < 2 {
-		fmt.Fprintf(os.Stderr, "Usage: %s [flags] <yaml-file> <template-path> [output-dir]\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s [flags] <yaml-file> <template-path(s)> [output-dir]\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Template paths can be comma-separated for multiple templates\n")
 		fmt.Fprintf(os.Stderr, "Flags:\n")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
 	filename := args[0]
-	templatePath := args[1]
+	templatePaths := strings.Split(args[1], ",")
 
 	outputDir := "generated"
 	if len(args) >= 3 {
@@ -47,17 +49,23 @@ func main() {
 
 	gen := generator.New()
 
-	// Set up template reader from file
-	templateFile, err := os.Open(templatePath)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error opening template file: %v\n", err)
-		os.Exit(1)
-	}
-	defer templateFile.Close()
+	// Process each template
+	for _, templatePath := range templatePaths {
+		templatePath = strings.TrimSpace(templatePath)
 
-	err = gen.Generate(schema, templateFile, outputDir)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error generating code: %v\n", err)
-		os.Exit(1)
+		// Set up template reader from file
+		templateFile, err := os.Open(templatePath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error opening template file %s: %v\n", templatePath, err)
+			os.Exit(1)
+		}
+
+		err = gen.Generate(schema, templateFile, outputDir)
+		templateFile.Close()
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error generating code from template %s: %v\n", templatePath, err)
+			os.Exit(1)
+		}
 	}
 }
