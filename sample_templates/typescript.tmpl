@@ -1,0 +1,66 @@
+{{ define "metadata" -}}
+{
+  "extension": "ts",
+  "typeMapping": {
+    "int32": "number",
+    "int64": "number",
+    "string": "string",
+    "map[string]string": "{ [key: string]: string }",
+    "bool": "boolean",
+    "float": "number",
+    "double": "number"
+  }
+}
+{{- end }}
+
+/**
+ * Auto-generated TypeScript code from IDL schema
+ */
+
+{{range .Messages}}
+/**
+ * {{.Description}}
+ */
+export interface {{.Name}} {
+{{range $fieldName, $field := .Fields}}  {{$fieldName}}: {{$field.Type}}; // {{$field.Description}}
+{{end}}}
+
+export class {{.Name}}Impl implements {{.Name}} {
+{{range $fieldName, $field := .Fields}}  {{$fieldName}}: {{$field.Type}};
+{{end}}
+  
+  constructor(data: Partial<{{.Name}}> = {}) {
+{{range $fieldName, $field := .Fields}}    this.{{$fieldName}} = data.{{$fieldName}} as {{$field.Type}};
+{{end}}  }
+  
+  toJSON(): string {
+    return JSON.stringify(this);
+  }
+  
+  static fromJSON(json: string): {{.Name}}Impl {
+    const data = JSON.parse(json);
+    return new {{.Name}}Impl(data);
+  }
+}
+
+{{end}}
+
+{{range .Services}}
+/**
+ * {{.Name}} service interface
+ */
+export interface {{.Name}} {
+{{range .Methods}}  {{.Name}}(input: {{.Input}}): Promise<{{.Output}}>;
+{{end}}}
+
+export class {{.Name}}Impl implements {{.Name}} {
+{{range .Methods}}  async {{.Name}}(input: {{.Input}}): Promise<{{.Output}}> {
+    // TODO: Implement {{.Name}}
+    // {{.Description}}
+    console.log(`Called {{.Name}} with input:`, input);
+    return null as any;
+  }
+  
+{{end}}}
+
+{{end}}
