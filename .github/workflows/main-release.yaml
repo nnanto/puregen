@@ -1,0 +1,98 @@
+name: Main Branch Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  test-and-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23'
+
+    - name: Run tests with coverage
+      run: |
+        go test -v -race -coverprofile=coverage.out ./...
+        go tool cover -html=coverage.out -o coverage.html
+        go tool cover -func=coverage.out
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: |
+          coverage.out
+          coverage.html
+
+    - name: Get commit SHA
+      id: commit
+      run: echo "SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+    - name: Build binaries
+      run: |
+        # Create dist directory
+        mkdir -p dist
+        CMD_PATH=./cmd/puregen
+        # Build for different platforms
+        GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.version=main-${{ steps.commit.outputs.SHA }}" -o dist/puregen-linux-amd64 $CMD_PATH
+        GOOS=linux GOARCH=arm64 go build -ldflags="-s -w -X main.version=main-${{ steps.commit.outputs.SHA }}" -o dist/puregen-linux-arm64 $CMD_PATH
+        GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.version=main-${{ steps.commit.outputs.SHA }}" -o dist/puregen-darwin-amd64 $CMD_PATH
+        GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w -X main.version=main-${{ steps.commit.outputs.SHA }}" -o dist/puregen-darwin-arm64 $CMD_PATH
+        GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.version=main-${{ steps.commit.outputs.SHA }}" -o dist/puregen-windows-amd64.exe $CMD_PATH
+
+        # Create archives
+        cd dist
+        tar -czf puregen-linux-amd64.tar.gz puregen-linux-amd64
+        tar -czf puregen-linux-arm64.tar.gz puregen-linux-arm64
+        tar -czf puregen-darwin-amd64.tar.gz puregen-darwin-amd64
+        tar -czf puregen-darwin-arm64.tar.gz puregen-darwin-arm64
+        zip puregen-windows-amd64.zip puregen-windows-amd64.exe
+
+    - name: Delete existing main release
+      run: |
+        gh release delete dev --yes || true
+        git push --delete origin dev || true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create main release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: dev
+        name: Dev Release
+        files: |
+          dist/*.tar.gz
+          dist/*.zip
+        body: |
+          This is an automated release from the main branch (commit: ${{ steps.commit.outputs.SHA }}).
+          
+          This release contains the latest development version and may be unstable.
+          For stable releases, use the tagged or latest versions.
+          
+          ## Installation
+          
+          Download the appropriate binary for your platform and add it to your PATH.
+          
+          ### Linux/macOS
+          ```bash
+          curl -L https://github.com/nnanto/puregen/releases/download/dev/puregen-linux-amd64.tar.gz | tar -xz
+          sudo mv puregen-* /usr/local/bin/puregen
+
+          # Or for macOS
+          curl -L https://github.com/nnanto/puregen/releases/download/dev/puregen-darwin-amd64.tar.gz | tar -xz
+          sudo mv puregen-* /usr/local/bin/puregen
+          ```
+          
+          ### Windows
+          Extract the zip file and add the executable to your PATH.
+        draft: false
+        prerelease: true
