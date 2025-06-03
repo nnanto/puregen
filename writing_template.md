@@ -10,11 +10,42 @@ Every template must include a `metadata` template that defines the output file e
 {{define "metadata"}}
 {
   "extension": "go",
+  "outputFileSuffix": "_generated",
   "typeMapping": {
     "string": "string",
     "int": "int64",
     "bool": "bool"
   }
+}
+{{end}}
+```
+
+**Fields:**
+- `extension` (required): File extension for generated code (e.g., "go", "py", "java")
+- `outputFileSuffix` (optional): Suffix to add to filename before extension
+  - If schema name is "UserService" and extension is "go":
+    - Without suffix: `userservice.go`
+    - With suffix "_generated": `userservice_generated.go`
+    - With suffix ".models": `userservice.models.go`
+- `typeMapping` (optional): Map of IDL types to target language types
+
+## Output File Naming
+
+The `outputFileSuffix` field controls how generated files are named:
+
+### Examples:
+- Schema: "UserAPI", Extension: "go"
+  - No suffix: `userapi.go`  
+  - Suffix "_client": `userapi_client.go`
+  - Suffix "_models": `userapi_models.go`
+  - Suffix ".pb": `userapi.pb.go`
+
+### Usage in Templates:
+```go
+{{define "metadata"}}
+{
+  "extension": "go",
+  "outputFileSuffix": "_generated"
 }
 {{end}}
 ```
@@ -236,6 +267,7 @@ Here's a complete example that generates a Go struct:
 {{define "metadata"}}
 {
   "extension": "go",
+  "outputFileSuffix": "_models",
   "typeMapping": {
     "string": "string",
     "int": "int64",

@@ -16,8 +16,9 @@ type Generator struct {
 }
 
 type TemplateMetadata struct {
-	Extension   string            `json:"extension"`
-	TypeMapping map[string]string `json:"typeMapping"`
+	Extension        string            `json:"extension"`
+	OutputFileSuffix string            `json:"outputFileSuffix"`
+	TypeMapping      map[string]string `json:"typeMapping"`
 }
 
 func New() *Generator {
@@ -39,7 +40,7 @@ func (g *Generator) Generate(schema *idl.Schema, templateReader io.Reader, outpu
 		return fmt.Errorf("failed to create output directory: %w", err)
 	}
 
-	outputFile := filepath.Join(outputDir, g.getOutputFilename(extension, schema))
+	outputFile := filepath.Join(outputDir, g.getOutputFilename(extension, metadata.OutputFileSuffix, schema))
 	file, err := os.Create(outputFile)
 	if err != nil {
 		return fmt.Errorf("failed to create output file: %w", err)
@@ -99,9 +100,13 @@ func (g *Generator) extractMetadataFromTemplate(tmpl *template.Template) (*Templ
 	return &metadata, nil
 }
 
-func (g *Generator) getOutputFilename(extension string, schema *idl.Schema) string {
+func (g *Generator) getOutputFilename(extension, suffix string, schema *idl.Schema) string {
 	baseName := strings.ToLower(schema.Name)
-	return baseName + "." + extension
+	fileName := baseName + "." + extension
+	if suffix != "" {
+		fileName = strings.TrimSuffix(fileName, "."+extension) + suffix + "." + extension
+	}
+	return fileName
 }
 
 func (g *Generator) applyTypeMapping(schema *idl.Schema, typeMapping map[string]string) *idl.Schema {

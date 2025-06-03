@@ -329,7 +329,7 @@ func TestGetOutputFilename(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			g := New()
-			result := g.getOutputFilename(tt.extension, tt.schema)
+			result := g.getOutputFilename(tt.extension, "", tt.schema)
 
 			if result != tt.expected {
 				t.Errorf("expected %q, got %q", tt.expected, result)
