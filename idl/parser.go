@@ -7,13 +7,18 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type GeneratorMetadata struct {
+	OutputFilePath string `json:"outputFilePath"`
+}
+
 // Schema represents the root IDL schema
 type Schema struct {
-	Name     string    `yaml:"name"`
-	Version  string    `yaml:"version"`
-	Package  string    `yaml:"package"`
-	Messages []Message `yaml:"-"`
-	Services []Service `yaml:"-"`
+	Name              string             `yaml:"name"`
+	Version           string             `yaml:"version"`
+	Package           string             `yaml:"package"`
+	Messages          []Message          `yaml:"-"`
+	Services          []Service          `yaml:"-"`
+	GeneratorMetadata *GeneratorMetadata `yaml:"-"`
 }
 
 // Service represents a service with RPC methods

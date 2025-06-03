@@ -41,6 +41,10 @@ func (g *Generator) Generate(schema *idl.Schema, templateReader io.Reader, outpu
 	}
 
 	outputFile := filepath.Join(outputDir, g.getOutputFilename(extension, metadata.OutputFileSuffix, schema))
+	transformedSchema.GeneratorMetadata = &idl.GeneratorMetadata{
+		OutputFilePath: outputFile,
+	}
+
 	file, err := os.Create(outputFile)
 	if err != nil {
 		return fmt.Errorf("failed to create output file: %w", err)
@@ -104,7 +108,7 @@ func (g *Generator) getOutputFilename(extension, suffix string, schema *idl.Sche
 	baseName := strings.ToLower(schema.Name)
 	fileName := baseName + "." + extension
 	if suffix != "" {
-		fileName = strings.TrimSuffix(fileName, "."+extension) + suffix + "." + extension
+		fileName = baseName + suffix + "." + extension
 	}
 	return fileName
 }
