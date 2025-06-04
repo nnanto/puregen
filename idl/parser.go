@@ -120,11 +120,8 @@ func (p *Parser) validate(schema *Schema) error {
 	// Validate service method input/output types
 	for _, service := range schema.Services {
 		for _, method := range service.Methods {
-			if method.Input == "" {
-				return fmt.Errorf("input type is required for %s.%s", service.Name, method.Name)
-			}
-			if method.Output == "" {
-				return fmt.Errorf("output type is required for %s.%s", service.Name, method.Name)
+			if method.Input == "" && method.Output == "" {
+				return fmt.Errorf("both input and output types cannot be empty for %s.%s", service.Name, method.Name)
 			}
 		}
 	}
