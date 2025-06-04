@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -13,10 +14,11 @@ import (
 var version = "dev" // This will be set during build time
 
 var (
-	inputFile     string
-	templatePaths string
-	outputDir     string
-	validateFile  string
+	inputFile             string
+	templatePaths         string
+	outputDir             string
+	validateFile          string
+	additionalContextJSON string
 )
 
 var rootCmd = &cobra.Command{
@@ -44,6 +46,16 @@ var generateCmd = &cobra.Command{
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error parsing IDL file: %v\n", err)
 			os.Exit(1)
+		}
+
+		// Parse additional context JSON if provided
+		if additionalContextJSON != "" {
+			var additionalContext map[string]interface{}
+			if err := json.Unmarshal([]byte(additionalContextJSON), &additionalContext); err != nil {
+				fmt.Fprintf(os.Stderr, "Error parsing additional context JSON: %v\n", err)
+				os.Exit(1)
+			}
+			schema.AdditionalContext = additionalContext
 		}
 
 		gen := generator.New()
@@ -147,6 +159,7 @@ func init() {
 	generateCmd.Flags().StringVarP(&inputFile, "input", "i", "", "Input YAML IDL file (required)")
 	generateCmd.Flags().StringVarP(&templatePaths, "templates", "t", "", "Template file paths (comma-separated for multiple templates) (required)")
 	generateCmd.Flags().StringVarP(&outputDir, "output", "o", "generated", "Output directory for generated files")
+	generateCmd.Flags().StringVar(&additionalContextJSON, "additional-context-json", "", "Additional context as JSON to pass to the template")
 
 	generateCmd.MarkFlagRequired("input")
 	generateCmd.MarkFlagRequired("templates")

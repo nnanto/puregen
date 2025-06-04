@@ -13,12 +13,13 @@ type GeneratorMetadata struct {
 
 // Schema represents the root IDL schema
 type Schema struct {
-	Name              string             `yaml:"name"`
-	Version           string             `yaml:"version"`
-	Package           string             `yaml:"package"`
-	Messages          []Message          `yaml:"-"`
-	Services          []Service          `yaml:"-"`
-	GeneratorMetadata *GeneratorMetadata `yaml:"-"`
+	Name              string                 `yaml:"name"`
+	Version           string                 `yaml:"version"`
+	Package           string                 `yaml:"package"`
+	Messages          []Message              `yaml:"-"`
+	Services          []Service              `yaml:"-"`
+	GeneratorMetadata *GeneratorMetadata     `yaml:"-"`
+	AdditionalContext map[string]interface{} `yaml:"-"`
 }
 
 // Service represents a service with RPC methods

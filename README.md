@@ -120,6 +120,9 @@ puregen generate -i <idl-file> -t <template-file> -o <output-directory>
 # Multiple templates (comma-separated)
 puregen generate --input <idl-file> --templates <template1,template2,template3> --output <output-directory>
 
+# With additional context JSON for templates
+puregen generate -i <idl-file> -t <template-file> -o <output-directory> --additional-context-json '{"namespace":"com.example","version":"v1"}'
+
 # Interactive IDL creation
 puregen creator --output-file <output-yaml-file>
 
@@ -135,6 +138,9 @@ puregen validate -i my_service.yaml
 # Generate multiple languages at once
 puregen generate -i user_service.yaml -t templates/go.tmpl,templates/typescript.tmpl,templates/python.tmpl -o ./generated
 
+# With additional context for template customization
+puregen generate -i user_service.yaml -t templates/go.tmpl -o ./generated --additional-context-json '{"packageName":"models","importPath":"github.com/company/project"}'
+
 # Check version
 puregen version
 ```
@@ -142,6 +148,10 @@ puregen version
 ### Available Commands
 
 - `puregen generate` - Generate code from IDL files using templates
+  - `--input, -i` - Input YAML IDL file (required)
+  - `--templates, -t` - Template file paths, comma-separated for multiple templates (required)
+  - `--output, -o` - Output directory for generated files (default: "generated")
+  - `--additional-context-json` - Additional context as JSON to pass to templates
 - `puregen creator` - Interactively create a new IDL file
 - `puregen validate` - Validate an IDL file for type consistency and potential issues
 - `puregen version` - Show version information
@@ -186,6 +196,34 @@ PureGen comes with sample templates :
 - `templates/go.tmpl` - Go structs and interfaces
 - `templates/typescript.tmpl` - TypeScript interfaces
 - `templates/python.tmpl` - Python dataclasses
+
+### Using Additional Context
+
+You can pass additional context data to your templates using the `--additional-context-json` flag. This allows you to customize template behavior without modifying the IDL file:
+
+```bash
+# Pass namespace and package information
+puregen generate -i service.yaml -t templates/go.tmpl -o ./gen \
+  --additional-context-json '{"namespace":"com.company.api","packageName":"models"}'
+
+# Pass multiple configuration values
+puregen generate -i service.yaml -t templates/typescript.tmpl -o ./types \
+  --additional-context-json '{"exportDefault":true,"useInterfaces":true,"addValidation":false}'
+```
+
+In your templates, access this data via `.AdditionalContext`:
+
+```go
+{{if .AdditionalContext.namespace}}
+namespace {{.AdditionalContext.namespace}};
+{{end}}
+
+{{if .AdditionalContext.packageName}}
+package {{.AdditionalContext.packageName}}
+{{else}}
+package {{lower .Name}}
+{{end}}
+```
 
 ### Generated Code Example
 

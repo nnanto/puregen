@@ -56,9 +56,10 @@ The main data passed to your template is a `Schema` struct with the following st
 
 ```go
 type Schema struct {
-    Name     string     // Schema name
-    Messages []Message  // List of message definitions
-    Services []Service  // List of service definitions
+    Name              string                 // Schema name
+    Messages          []Message              // List of message definitions
+    Services          []Service              // List of service definitions
+    AdditionalContext map[string]interface{} // Additional JSON context passed via --additional-context-json
 }
 
 type Message struct {
@@ -105,6 +106,73 @@ type Method struct {
 
 // Number of services
 {{len .Services}}
+
+// Access additional context passed via --additional-context-json
+{{.AdditionalContext}}
+```
+
+### Using Additional Context
+
+The `AdditionalContext` field contains any JSON data passed via the `--additional-context-json` flag. This allows you to pass custom configuration, metadata, or other data to your templates.
+
+#### Command Line Usage
+```bash
+puregen generate --schema schema.yaml --template template.go --additional-context-json '{"package":"myapi","version":"1.0.0","author":"John Doe"}'
+```
+
+#### Accessing in Templates
+```go
+// Access string values
+Package: {{index .AdditionalContext "package"}}
+Version: {{index .AdditionalContext "version"}}
+Author: {{index .AdditionalContext "author"}}
+
+// Type assertion for complex types
+{{$config := index .AdditionalContext "config"}}
+{{if $config}}
+{{range $key, $value := $config}}
+Config {{$key}}: {{$value}}
+{{end}}
+{{end}}
+
+// Conditional logic based on additional context
+{{if index .AdditionalContext "enableLogging"}}
+// Generate logging code
+{{end}}
+```
+
+#### Complex JSON Example
+```bash
+puregen generate --schema api.yaml --template go.tmpl --additional-context-json '{
+  "package": "userapi",
+  "version": "2.0.0",
+  "features": {
+    "authentication": true,
+    "logging": true,
+    "metrics": false
+  },
+  "endpoints": ["v1", "v2"],
+  "author": {
+    "name": "API Team",
+    "email": "api-team@company.com"
+  }
+}'
+```
+
+```go
+// In template
+{{$features := index .AdditionalContext "features"}}
+{{if index $features "authentication"}}
+// Generate authentication middleware
+{{end}}
+
+{{$author := index .AdditionalContext "author"}}
+// Author: {{index $author "name"}} <{{index $author "email"}}>
+
+{{$endpoints := index .AdditionalContext "endpoints"}}
+{{range $endpoints}}
+// Endpoint: {{.}}
+{{end}}
 ```
 
 ### Iterating Over Messages
@@ -261,7 +329,7 @@ Safely gets value from map with string key.
 
 ## Complete Example Template
 
-Here's a complete example that generates a Go struct:
+Here's a complete example that generates a Go struct with additional context:
 
 ```go
 {{define "metadata"}}
@@ -277,9 +345,11 @@ Here's a complete example that generates a Go struct:
 }
 {{end}}
 
-package {{.Name | lower}}
+package {{index .AdditionalContext "package" | default (.Name | lower)}}
 
 // Generated code - do not modify
+// Version: {{index .AdditionalContext "version" | default "unknown"}}
+{{$author := index .AdditionalContext "author"}}{{if $author}}// Author: {{$author}}{{end}}
 
 {{range .Messages}}
 // {{.Name}}{{if .Description}} - {{.Description}}{{end}}
@@ -298,6 +368,16 @@ type {{.Name | pascal}}Service interface {
 {{end}}
 }
 {{end}}
+
+{{$features := index .AdditionalContext "features"}}
+{{if $features}}
+// Features configuration
+const (
+{{if index $features "authentication"}}    AuthenticationEnabled = true{{end}}
+{{if index $features "logging"}}    LoggingEnabled = true{{end}}
+{{if index $features "metrics"}}    MetricsEnabled = true{{end}}
+)
+{{end}}
 ```
 
 ## Best Practices
@@ -314,12 +394,31 @@ type {{.Name | pascal}}Service interface {
 
 6. **Validate types**: Use conditional logic to handle different field types appropriately.
 
+7. **Leverage additional context**: Use `--additional-context-json` to make templates more flexible and reusable.
+
+8. **Provide defaults**: Use the `default` function when accessing additional context to handle missing values gracefully.
+
 ## Common Patterns
 
 ### Conditional Generation
 ```go
 {{if .Description}}// {{.Description}}{{end}}
 {{if $field.Required}}*{{end}}{{$field.Type}}
+```
+
+### Using Additional Context with Defaults
+```go
+// Package name from context or schema name as fallback
+package {{index .AdditionalContext "package" | default (.Name | lower)}}
+
+// Version with default
+// Version: {{index .AdditionalContext "version" | default "1.0.0"}}
+
+// Feature flags
+{{$features := index .AdditionalContext "features"}}
+{{if and $features (index $features "enableDebug")}}
+// Debug mode enabled
+{{end}}
 ```
 
 ### Complex Type Handling
@@ -339,6 +438,17 @@ type {{.Name | pascal}}Service interface {
 Service: {{.Name}}
 {{range .Methods}}
     Method: {{.Name}}
+{{end}}
+{{end}}
+```
+
+### Working with JSON Arrays in Additional Context
+```go
+{{$endpoints := index .AdditionalContext "endpoints"}}
+{{if $endpoints}}
+// Available endpoints:
+{{range $endpoints}}
+// - {{.}}
 {{end}}
 {{end}}
 ```
