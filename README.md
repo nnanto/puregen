@@ -97,6 +97,7 @@ package example.v1;
 option go_package = "github.com/nnanto/puregen/examples/proto/gen/go";
 option java_package = "com.example.proto.v1";
 
+// User represents a user in the system
 message User {
   int32 id = 1;
   string name = 2;
@@ -105,12 +106,14 @@ message User {
   UserProfile profile = 5;
 }
 
+// UserProfile contains additional user information
 message UserProfile {
   string bio = 1;
   string avatar_url = 2;
   int64 created_at = 3;
 }
 
+// CreateUserRequest is the request message for creating a user
 message CreateUserRequest {
   string name = 1;
   string email = 2;
@@ -131,7 +134,12 @@ message GetUserResponse {
 }
 
 service UserService {
+  // CreateUser creates a new user
+  // metadata: {"method":"POST", "path":"/users"}
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+
+  // GetUser retrieves a user by ID
+  // metadata: {"method":"GET", "path":"/users/{id}"}
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
 }
 ```
