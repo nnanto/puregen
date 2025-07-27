@@ -2,6 +2,7 @@ package generator
 
 import (
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
@@ -108,7 +109,16 @@ func generateJavaMethodConstants(gen *protogen.Plugin, file *protogen.File, serv
 		metadata := parseMethodMetadata(method.Comments)
 		if metadata != nil {
 			g.P("        Map<String, String> ", strings.ToLower(method.GoName), "Metadata = new HashMap<>();")
-			for key, value := range metadata {
+
+			// Sort keys for consistent output
+			var keys []string
+			for key := range metadata {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+
+			for _, key := range keys {
+				value := metadata[key]
 				g.P("        ", strings.ToLower(method.GoName), "Metadata.put(\"", key, "\", \"", value, "\");")
 			}
 			g.P("        METHOD_METADATA.put(", constName, ", ", strings.ToLower(method.GoName), "Metadata);")

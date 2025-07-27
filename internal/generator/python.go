@@ -2,6 +2,7 @@ package generator
 
 import (
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
@@ -137,7 +138,16 @@ func generatePythonMethodConstants(g *protogen.GeneratedFile, service *protogen.
 		metadata := parseMethodMetadata(method.Comments)
 		if metadata != nil {
 			g.P("        ", constName, ": {")
-			for key, value := range metadata {
+
+			// Sort keys for consistent output
+			var keys []string
+			for key := range metadata {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+
+			for _, key := range keys {
+				value := metadata[key]
 				g.P("            \"", key, "\": \"", value, "\",")
 			}
 			g.P("        },")

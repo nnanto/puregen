@@ -195,8 +195,8 @@ const (
 
 var MethodMetadata = map[string]map[string]string{
 	UserService_CreateUser: {
-		"path":   "/users",
 		"method": "POST",
+		"path":   "/users",
 	},
 	UserService_GetUser: {
 		"method": "GET",
