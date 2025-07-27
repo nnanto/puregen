@@ -16,10 +16,11 @@ puregen is a protobuf plugin that generates simple, dependency-minimal code for 
 
 ### Prerequisites
 
-- Go 1.19 or later
-- Protocol Buffers compiler (`protoc`)
+- Protocol Buffers compiler (`protoc`). Install it from [the official site](https://protobuf.dev/installation/).
 
 ### Build the Plugin
+
+#### From Source
 
 ```bash
 # Clone the repository
@@ -31,6 +32,22 @@ go build -o protoc-gen-puregen ./cmd/protoc-gen-puregen
 
 # Make it available in your PATH (optional)
 sudo mv protoc-gen-puregen /usr/local/bin/
+```
+
+#### Pre-built Binaries
+
+You can download pre-built binaries for your platform from the [releases page](https://github.com/nnanto/puregen/releases).
+
+```bash
+curl -L https://github.com/nnanto/puregen/releases/download/latest/protoc-gen-puregen-linux-amd64.tar.gz | tar -xz
+          sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
+
+# Or for macOS
+curl -L https://github.com/nnanto/puregen/releases/download/latest/protoc-gen-puregen-darwin-amd64.tar.gz | tar -xz
+sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
+
+# Run the generator
+protoc --puregen_out=./examples/generated --puregen_opt=language=python examples/proto/*.proto
 ```
 
 ## Usage

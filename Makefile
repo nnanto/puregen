@@ -1,5 +1,8 @@
 .PHONY: build test clean install example
 
+VERSION?=$(shell git describe --tags --abbrev=0 2>/dev/null || echo "dev")
+LDFLAGS=-ldflags="-s -w -X main.version=$(VERSION)"
+
 BUILD_FILE=./build/protoc-gen-puregen
 # Build the plugin
 build:
@@ -64,3 +67,14 @@ lint:
 # Show version
 version: build
 	$(BUILD_FILE) --version
+
+newtag:
+	@echo "Creating new tag...Last tag: $(VERSION)"
+	@read -p "Enter new version tag (e.g., v1.0.0): " new_tag; \
+	if [ -z "$$new_tag" ]; then \
+		echo "Tag cannot be empty"; \
+		exit 1; \
+	fi; \
+	git tag "$$new_tag"; \
+	git push origin "$$new_tag"; \
+	echo "Tag $$new_tag created and pushed."

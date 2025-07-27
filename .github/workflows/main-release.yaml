@@ -90,6 +90,9 @@ jobs:
           # Or for macOS
           curl -L https://github.com/nnanto/puregen/releases/download/dev/protoc-gen-puregen-darwin-amd64.tar.gz | tar -xz
           sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
+
+          # Run the generator
+          protoc --puregen_out=./examples/generated --puregen_opt=language=python examples/proto/*.proto
           ```
           
           ### Windows
