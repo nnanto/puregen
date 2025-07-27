@@ -7,25 +7,33 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Response for single flight booking
 public class FlightBookingResponse_SingleFlightBooking {
+    // Flight details
     @JsonProperty("flightNumber")
     private String flightNumber;
 
+    // Airline name
     @JsonProperty("airline")
     private String airline;
 
+    // Flight price
     @JsonProperty("price")
     private double price;
 
+    // Departure time
     @JsonProperty("departureTime")
     private long departureTime;
 
+    // Arrival time
     @JsonProperty("arrivalTime")
     private long arrivalTime;
 
+    // Error message
     @JsonProperty("error")
     private Error error;
 
+    // Hotel recommendations associated with the flight
     @JsonProperty("hotelRecommendations")
     private HotelReservationResponse_SingleHotelReservationResponse hotelRecommendations;
 

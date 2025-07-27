@@ -3,12 +3,14 @@
 package com.puregen.examples.user.v1;
 
 public class DefaultUserServiceService implements UserServiceService {
+    // CreateUser creates a new user
     @Override
     public CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception {
         // TODO: Implement createUser
         throw new UnsupportedOperationException("Method createUser not implemented");
     }
 
+    // GetUser retrieves a user by ID
     @Override
     public GetUserResponse getUser(Map<String, Object> ctx, GetUserRequest request) throws Exception {
         // TODO: Implement getUser

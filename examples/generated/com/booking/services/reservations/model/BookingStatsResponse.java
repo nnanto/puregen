@@ -8,12 +8,15 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
 public class BookingStatsResponse {
+    // Total amount charged
     @JsonProperty("totalAmountCharged")
     private double totalAmountCharged;
 
+    // Total number of guests
     @JsonProperty("totalGuests")
     private int totalGuests;
 
+    // Total bookings
     @JsonProperty("totalBookings")
     private int totalBookings;
 

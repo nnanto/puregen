@@ -7,6 +7,7 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // User message represents a user in the system
 public class User {
     @JsonProperty("id")
     private int id;

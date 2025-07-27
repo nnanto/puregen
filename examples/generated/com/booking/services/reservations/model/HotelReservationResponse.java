@@ -7,16 +7,21 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Response for hotel reservation
 public class HotelReservationResponse {
+    // List of results for each search location
     @JsonProperty("result")
     private List<HotelReservationResponse_SingleHotelReservationResponse> result = new ArrayList<>();
 
+    // Status of the request
     @JsonProperty("status")
     private BookingStatus status;
 
+    // Error message
     @JsonProperty("error")
     private Error error;
 
+    // Booking stats
     @JsonProperty("bookingStats")
     private BookingStatsResponse bookingStats;
 

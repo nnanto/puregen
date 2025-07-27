@@ -7,16 +7,21 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Response for flight booking
 public class FlightBookingResponse {
+    // List of flight bookings for each route
     @JsonProperty("FlightBooking")
     private List<FlightBookingResponse_SingleFlightBooking> flightBooking = new ArrayList<>();
 
+    // Error message
     @JsonProperty("error")
     private Error error;
 
+    // Status of the request
     @JsonProperty("status")
     private BookingStatus status;
 
+    // Booking stats
     @JsonProperty("bookingStats")
     private BookingStatsResponse bookingStats;
 

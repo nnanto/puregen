@@ -11,10 +11,12 @@ public class UserServiceClient {
         this.transport = transport;
     }
 
+    // CreateUser creates a new user
     public CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception {
         return transport.send(ctx, UserServiceMethods.UserService_CreateUser, request, CreateUserResponse.class);
     }
 
+    // GetUser retrieves a user by ID
     public GetUserResponse getUser(Map<String, Object> ctx, GetUserRequest request) throws Exception {
         return transport.send(ctx, UserServiceMethods.UserService_GetUser, request, GetUserResponse.class);
     }

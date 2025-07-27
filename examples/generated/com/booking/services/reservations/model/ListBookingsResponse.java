@@ -7,13 +7,17 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Response for list bookings
 public class ListBookingsResponse {
+    // List of confirmed booking IDs
     @JsonProperty("confirmedBookingIds")
     private List<String> confirmedBookingIds = new ArrayList<>();
 
+    // Pending booking IDs
     @JsonProperty("pendingBookingIds")
     private List<String> pendingBookingIds = new ArrayList<>();
 
+    // Error message
     @JsonProperty("error")
     private Error error;
 

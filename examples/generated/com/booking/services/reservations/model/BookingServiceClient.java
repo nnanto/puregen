@@ -11,38 +11,47 @@ public class BookingServiceClient {
         this.transport = transport;
     }
 
+    // Starts hotel reservation process for given search criteria and returns operation ID
     public HotelReservationResponse startHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_StartHotelReservation, request, HotelReservationResponse.class);
     }
 
+    // Describes hotel reservation operations
     public HotelReservationResponse describeHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_DescribeHotelReservation, request, HotelReservationResponse.class);
     }
 
+    // Gets hotel reservation details for given operation ID
     public HotelReservationResponse getHotelReservationResult(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_GetHotelReservationResult, request, HotelReservationResponse.class);
     }
 
+    // Starts flight booking operation and returns operation ID
     public FlightBookingResponse startFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_StartFlightBooking, request, FlightBookingResponse.class);
     }
 
+    // Describes flight booking operations
     public FlightBookingResponse describeFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_DescribeFlightBooking, request, FlightBookingResponse.class);
     }
 
+    // Gets flight booking results for given operation ID
     public FlightBookingResponse getFlightBookingResult(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_GetFlightBookingResult, request, FlightBookingResponse.class);
     }
 
+    // Starts travel package booking operation and returns operation ID
     public TravelPackageBookingResponse startTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_StartTravelPackageBooking, request, TravelPackageBookingResponse.class);
     }
 
+    // Describes travel package booking operations
     public TravelPackageBookingResponse describeTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_DescribeTravelPackageBooking, request, TravelPackageBookingResponse.class);
     }
 
+    // Gets travel package booking results for given operation ID
     public TravelPackageBookingResponse getTravelPackageBookingResult(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
         return transport.send(ctx, BookingServiceMethods.BookingService_GetTravelPackageBookingResult, request, TravelPackageBookingResponse.class);
     }

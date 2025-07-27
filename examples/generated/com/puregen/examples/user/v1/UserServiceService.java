@@ -2,7 +2,10 @@
 
 package com.puregen.examples.user.v1;
 
+    // UserService provides operations for managing users
 public interface UserServiceService {
+    // CreateUser creates a new user
     CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception;
+    // GetUser retrieves a user by ID
     GetUserResponse getUser(Map<String, Object> ctx, GetUserRequest request) throws Exception;
 }

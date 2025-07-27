@@ -3,54 +3,63 @@
 package com.booking.services.reservations.model;
 
 public class DefaultBookingServiceService implements BookingServiceService {
+    // Starts hotel reservation process for given search criteria and returns operation ID
     @Override
     public HotelReservationResponse startHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
         // TODO: Implement startHotelReservation
         throw new UnsupportedOperationException("Method startHotelReservation not implemented");
     }
 
+    // Describes hotel reservation operations
     @Override
     public HotelReservationResponse describeHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
         // TODO: Implement describeHotelReservation
         throw new UnsupportedOperationException("Method describeHotelReservation not implemented");
     }
 
+    // Gets hotel reservation details for given operation ID
     @Override
     public HotelReservationResponse getHotelReservationResult(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
         // TODO: Implement getHotelReservationResult
         throw new UnsupportedOperationException("Method getHotelReservationResult not implemented");
     }
 
+    // Starts flight booking operation and returns operation ID
     @Override
     public FlightBookingResponse startFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
         // TODO: Implement startFlightBooking
         throw new UnsupportedOperationException("Method startFlightBooking not implemented");
     }
 
+    // Describes flight booking operations
     @Override
     public FlightBookingResponse describeFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
         // TODO: Implement describeFlightBooking
         throw new UnsupportedOperationException("Method describeFlightBooking not implemented");
     }
 
+    // Gets flight booking results for given operation ID
     @Override
     public FlightBookingResponse getFlightBookingResult(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
         // TODO: Implement getFlightBookingResult
         throw new UnsupportedOperationException("Method getFlightBookingResult not implemented");
     }
 
+    // Starts travel package booking operation and returns operation ID
     @Override
     public TravelPackageBookingResponse startTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
         // TODO: Implement startTravelPackageBooking
         throw new UnsupportedOperationException("Method startTravelPackageBooking not implemented");
     }
 
+    // Describes travel package booking operations
     @Override
     public TravelPackageBookingResponse describeTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
         // TODO: Implement describeTravelPackageBooking
         throw new UnsupportedOperationException("Method describeTravelPackageBooking not implemented");
     }
 
+    // Gets travel package booking results for given operation ID
     @Override
     public TravelPackageBookingResponse getTravelPackageBookingResult(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
         // TODO: Implement getTravelPackageBookingResult

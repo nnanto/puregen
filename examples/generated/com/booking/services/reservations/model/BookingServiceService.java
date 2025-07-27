@@ -2,14 +2,27 @@
 
 package com.booking.services.reservations.model;
 
+    /**
+     * Booking Service provides comprehensive reservation management capabilities including
+     * hotel bookings, flight reservations, and travel package management.
+     */
 public interface BookingServiceService {
+    // Starts hotel reservation process for given search criteria and returns operation ID
     HotelReservationResponse startHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception;
+    // Describes hotel reservation operations
     HotelReservationResponse describeHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception;
+    // Gets hotel reservation details for given operation ID
     HotelReservationResponse getHotelReservationResult(Map<String, Object> ctx, HotelReservationRequest request) throws Exception;
+    // Starts flight booking operation and returns operation ID
     FlightBookingResponse startFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception;
+    // Describes flight booking operations
     FlightBookingResponse describeFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception;
+    // Gets flight booking results for given operation ID
     FlightBookingResponse getFlightBookingResult(Map<String, Object> ctx, FlightBookingRequest request) throws Exception;
+    // Starts travel package booking operation and returns operation ID
     TravelPackageBookingResponse startTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception;
+    // Describes travel package booking operations
     TravelPackageBookingResponse describeTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception;
+    // Gets travel package booking results for given operation ID
     TravelPackageBookingResponse getTravelPackageBookingResult(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception;
 }

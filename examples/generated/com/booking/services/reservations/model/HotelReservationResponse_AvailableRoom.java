@@ -7,13 +7,17 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Room availability with hotel details
 public class HotelReservationResponse_AvailableRoom {
+    // Hotel information
     @JsonProperty("hotel")
     private HotelReservationResponse_Hotel hotel;
 
+    // Room type
     @JsonProperty("roomType")
     private HotelReservationRequest_RoomType roomType;
 
+    // Available rooms count
     @JsonProperty("availableRooms")
     private int availableRooms;
 

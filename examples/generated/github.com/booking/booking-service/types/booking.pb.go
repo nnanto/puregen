@@ -102,9 +102,12 @@ func (x BookingStatus) IsValid() bool {
 
 // Messages
 
+// Payment information
 type PaymentInfo struct {
+	// Payment method (e.g., credit card, PayPal)
 	PaymentMethod string `json:"paymentMethod"`
-	PaymentToken  string `json:"paymentToken"`
+	// Card token or payment reference
+	PaymentToken string `json:"paymentToken"`
 }
 
 func NewPaymentInfo() *PaymentInfo {
@@ -124,9 +127,12 @@ func (m *PaymentInfo) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Error Response
 type Error struct {
+	// Error message
 	Message string `json:"message"`
-	Code    string `json:"code"`
+	// Error code
+	Code string `json:"code"`
 }
 
 func NewError() *Error {
@@ -146,11 +152,16 @@ func (m *Error) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Information about the user making the booking request
 type BookingHeader struct {
-	UserId           string `json:"userId"`
-	ApplicationName  string `json:"applicationName"`
-	RequestId        string `json:"requestId"`
-	RequestTimestamp int64  `json:"requestTimestamp"`
+	// User who initiated the booking request
+	UserId string `json:"userId"`
+	// Application from which the request originated
+	ApplicationName string `json:"applicationName"`
+	// Booking request ID
+	RequestId string `json:"requestId"`
+	// Request timestamp
+	RequestTimestamp int64 `json:"requestTimestamp"`
 }
 
 func NewBookingHeader() *BookingHeader {
@@ -171,9 +182,12 @@ func (m *BookingHeader) FromJSON(data []byte) error {
 }
 
 type BookingOperationRequest struct {
-	OperationId string       `json:"operationId"`
+	// Operation ID
+	OperationId string `json:"operationId"`
+	// Payment info used during original request
 	PaymentInfo *PaymentInfo `json:"paymentInfo"`
-	Confirm     bool         `json:"confirm"`
+	// Confirm the booking
+	Confirm bool `json:"confirm"`
 }
 
 func NewBookingOperationRequest() *BookingOperationRequest {
@@ -193,10 +207,14 @@ func (m *BookingOperationRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Response for booking operations
 type BookingOperationResponse struct {
-	OperationId string        `json:"operationId"`
-	Status      BookingStatus `json:"status"`
-	Error       *Error        `json:"error"`
+	// Operation ID
+	OperationId string `json:"operationId"`
+	// Status of the booking
+	Status BookingStatus `json:"status"`
+	// Error message
+	Error *Error `json:"error"`
 }
 
 func NewBookingOperationResponse() *BookingOperationResponse {
@@ -217,6 +235,7 @@ func (m *BookingOperationResponse) FromJSON(data []byte) error {
 }
 
 type ListBookingsRequest struct {
+	// Payment info used during original request
 	PaymentInfo *PaymentInfo `json:"paymentInfo"`
 }
 
@@ -237,10 +256,14 @@ func (m *ListBookingsRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Response for list bookings
 type ListBookingsResponse struct {
+	// List of confirmed booking IDs
 	ConfirmedBookingIds []string `json:"confirmedBookingIds"`
-	PendingBookingIds   []string `json:"pendingBookingIds"`
-	Error               *Error   `json:"error"`
+	// Pending booking IDs
+	PendingBookingIds []string `json:"pendingBookingIds"`
+	// Error message
+	Error *Error `json:"error"`
 }
 
 func NewListBookingsResponse() *ListBookingsResponse {
@@ -261,7 +284,9 @@ func (m *ListBookingsResponse) FromJSON(data []byte) error {
 }
 
 type BookingConfirmationRequest struct {
-	BookingIds  []string     `json:"bookingIds"`
+	// Booking ID
+	BookingIds []string `json:"bookingIds"`
+	// Payment info used during original request
 	PaymentInfo *PaymentInfo `json:"paymentInfo"`
 }
 
@@ -283,9 +308,12 @@ func (m *BookingConfirmationRequest) FromJSON(data []byte) error {
 }
 
 type BookingStatsResponse struct {
+	// Total amount charged
 	TotalAmountCharged float64 `json:"totalAmountCharged"`
-	TotalGuests        int32   `json:"totalGuests"`
-	TotalBookings      int32   `json:"totalBookings"`
+	// Total number of guests
+	TotalGuests int32 `json:"totalGuests"`
+	// Total bookings
+	TotalBookings int32 `json:"totalBookings"`
 }
 
 func NewBookingStatsResponse() *BookingStatsResponse {
@@ -350,14 +378,21 @@ func (x HotelReservationRequest_RoomType) IsValid() bool {
 	return ok
 }
 
+// Request for hotel reservation
 type HotelReservationRequest struct {
-	HotelLocations   []string                           `json:"hotelLocations"`
-	RoomTypes        []HotelReservationRequest_RoomType `json:"roomTypes"`
-	MaxPricePerNight float64                            `json:"maxPricePerNight"`
-	PaymentInfo      *PaymentInfo                       `json:"paymentInfo"`
-	CheckInDate      int64                              `json:"checkInDate"`
-	CheckOutDate     int64                              `json:"checkOutDate"`
-	NumberOfGuests   int32                              `json:"numberOfGuests"`
+	// Hotel search criteria
+	HotelLocations []string `json:"hotelLocations"`
+	// List of preferred room types
+	RoomTypes []HotelReservationRequest_RoomType `json:"roomTypes"`
+	// Maximum price per night
+	MaxPricePerNight float64 `json:"maxPricePerNight"`
+	// Required payment information
+	PaymentInfo *PaymentInfo `json:"paymentInfo"`
+	// Check-in and check-out dates (Unix timestamp)
+	CheckInDate  int64 `json:"checkInDate"`
+	CheckOutDate int64 `json:"checkOutDate"`
+	// Number of guests
+	NumberOfGuests int32 `json:"numberOfGuests"`
 }
 
 func NewHotelReservationRequest() *HotelReservationRequest {
@@ -377,11 +412,16 @@ func (m *HotelReservationRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Response for hotel reservation
 type HotelReservationResponse struct {
-	Result       []*HotelReservationResponse_SingleHotelReservationResponse `json:"result"`
-	Status       BookingStatus                                              `json:"status"`
-	Error        *Error                                                     `json:"error"`
-	BookingStats *BookingStatsResponse                                      `json:"bookingStats"`
+	// List of results for each search location
+	Result []*HotelReservationResponse_SingleHotelReservationResponse `json:"result"`
+	// Status of the request
+	Status BookingStatus `json:"status"`
+	// Error message
+	Error *Error `json:"error"`
+	// Booking stats
+	BookingStats *BookingStatsResponse `json:"bookingStats"`
 }
 
 func NewHotelReservationResponse() *HotelReservationResponse {
@@ -401,11 +441,16 @@ func (m *HotelReservationResponse) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Hotel information
 type HotelReservationResponse_Hotel struct {
-	Name          string  `json:"name"`
-	Rating        float64 `json:"rating"`
+	// Name of the hotel
+	Name string `json:"name"`
+	// Hotel rating (1-5 stars)
+	Rating float64 `json:"rating"`
+	// Price per night
 	PricePerNight float64 `json:"pricePerNight"`
-	Address       string  `json:"address"`
+	// Hotel address
+	Address string `json:"address"`
 }
 
 func NewHotelReservationResponse_Hotel() *HotelReservationResponse_Hotel {
@@ -425,10 +470,14 @@ func (m *HotelReservationResponse_Hotel) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Room availability with hotel details
 type HotelReservationResponse_AvailableRoom struct {
-	Hotel          *HotelReservationResponse_Hotel  `json:"hotel"`
-	RoomType       HotelReservationRequest_RoomType `json:"roomType"`
-	AvailableRooms int32                            `json:"availableRooms"`
+	// Hotel information
+	Hotel *HotelReservationResponse_Hotel `json:"hotel"`
+	// Room type
+	RoomType HotelReservationRequest_RoomType `json:"roomType"`
+	// Available rooms count
+	AvailableRooms int32 `json:"availableRooms"`
 }
 
 func NewHotelReservationResponse_AvailableRoom() *HotelReservationResponse_AvailableRoom {
@@ -448,9 +497,12 @@ func (m *HotelReservationResponse_AvailableRoom) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Hotel reservation result for single location
 type HotelReservationResponse_SingleHotelReservationResponse struct {
+	// List of available rooms
 	AvailableRooms []*HotelReservationResponse_AvailableRoom `json:"availableRooms"`
-	Error          *Error                                    `json:"error"`
+	// Error message
+	Error *Error `json:"error"`
 }
 
 func NewHotelReservationResponse_SingleHotelReservationResponse() *HotelReservationResponse_SingleHotelReservationResponse {
@@ -470,13 +522,19 @@ func (m *HotelReservationResponse_SingleHotelReservationResponse) FromJSON(data 
 	return json.Unmarshal(data, m)
 }
 
+// Request for flight booking
 type FlightBookingRequest struct {
-	FlightRoutes                []string     `json:"flightRoutes"`
-	PaymentInfo                 *PaymentInfo `json:"paymentInfo"`
-	IncludeHotelRecommendations bool         `json:"includeHotelRecommendations"`
-	DepartureDate               int64        `json:"departureDate"`
-	ReturnDate                  int64        `json:"returnDate"`
-	NumberOfPassengers          int32        `json:"numberOfPassengers"`
+	// Flight search criteria
+	FlightRoutes []string `json:"flightRoutes"`
+	// Required payment information
+	PaymentInfo *PaymentInfo `json:"paymentInfo"`
+	// Include hotel recommendations
+	IncludeHotelRecommendations bool `json:"includeHotelRecommendations"`
+	// Departure and return dates (Unix timestamp)
+	DepartureDate int64 `json:"departureDate"`
+	ReturnDate    int64 `json:"returnDate"`
+	// Number of passengers
+	NumberOfPassengers int32 `json:"numberOfPassengers"`
 }
 
 func NewFlightBookingRequest() *FlightBookingRequest {
@@ -496,11 +554,16 @@ func (m *FlightBookingRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Response for flight booking
 type FlightBookingResponse struct {
+	// List of flight bookings for each route
 	FlightBooking []*FlightBookingResponse_SingleFlightBooking `json:"FlightBooking"`
-	Error         *Error                                       `json:"error"`
-	Status        BookingStatus                                `json:"status"`
-	BookingStats  *BookingStatsResponse                        `json:"bookingStats"`
+	// Error message
+	Error *Error `json:"error"`
+	// Status of the request
+	Status BookingStatus `json:"status"`
+	// Booking stats
+	BookingStats *BookingStatsResponse `json:"bookingStats"`
 }
 
 func NewFlightBookingResponse() *FlightBookingResponse {
@@ -520,13 +583,21 @@ func (m *FlightBookingResponse) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Response for single flight booking
 type FlightBookingResponse_SingleFlightBooking struct {
-	FlightNumber         string                                                   `json:"flightNumber"`
-	Airline              string                                                   `json:"airline"`
-	Price                float64                                                  `json:"price"`
-	DepartureTime        int64                                                    `json:"departureTime"`
-	ArrivalTime          int64                                                    `json:"arrivalTime"`
-	Error                *Error                                                   `json:"error"`
+	// Flight details
+	FlightNumber string `json:"flightNumber"`
+	// Airline name
+	Airline string `json:"airline"`
+	// Flight price
+	Price float64 `json:"price"`
+	// Departure time
+	DepartureTime int64 `json:"departureTime"`
+	// Arrival time
+	ArrivalTime int64 `json:"arrivalTime"`
+	// Error message
+	Error *Error `json:"error"`
+	// Hotel recommendations associated with the flight
 	HotelRecommendations *HotelReservationResponse_SingleHotelReservationResponse `json:"hotelRecommendations"`
 }
 
@@ -547,9 +618,12 @@ func (m *FlightBookingResponse_SingleFlightBooking) FromJSON(data []byte) error 
 	return json.Unmarshal(data, m)
 }
 
+// Request for travel package booking
 type TravelPackageBookingRequest struct {
-	Destinations []string     `json:"destinations"`
-	PaymentInfo  *PaymentInfo `json:"paymentInfo"`
+	// Travel destinations
+	Destinations []string `json:"destinations"`
+	// Required payment information
+	PaymentInfo *PaymentInfo `json:"paymentInfo"`
 }
 
 func NewTravelPackageBookingRequest() *TravelPackageBookingRequest {
@@ -569,11 +643,16 @@ func (m *TravelPackageBookingRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Response for travel package booking
 type TravelPackageBookingResponse struct {
+	// List of travel packages for each destination
 	TravelPackages []*TravelPackageBookingResponse_SingleTravelPackageResponse `json:"travelPackages"`
-	Error          *Error                                                      `json:"error"`
-	Status         BookingStatus                                               `json:"status"`
-	BookingStats   *BookingStatsResponse                                       `json:"bookingStats"`
+	// Error message
+	Error *Error `json:"error"`
+	// Status of the request
+	Status BookingStatus `json:"status"`
+	// Booking stats
+	BookingStats *BookingStatsResponse `json:"bookingStats"`
 }
 
 func NewTravelPackageBookingResponse() *TravelPackageBookingResponse {
@@ -593,12 +672,18 @@ func (m *TravelPackageBookingResponse) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// Response for single travel package
 type TravelPackageBookingResponse_SingleTravelPackageResponse struct {
-	PackageName  string  `json:"packageName"`
-	Description  string  `json:"description"`
-	TotalPrice   float64 `json:"totalPrice"`
-	DurationDays int32   `json:"durationDays"`
-	Error        *Error  `json:"error"`
+	// Package name
+	PackageName string `json:"packageName"`
+	// Package description
+	Description string `json:"description"`
+	// Total package price
+	TotalPrice float64 `json:"totalPrice"`
+	// Package duration in days
+	DurationDays int32 `json:"durationDays"`
+	// Error message
+	Error *Error `json:"error"`
 }
 
 func NewTravelPackageBookingResponse_SingleTravelPackageResponse() *TravelPackageBookingResponse_SingleTravelPackageResponse {
@@ -620,60 +705,80 @@ func (m *TravelPackageBookingResponse_SingleTravelPackageResponse) FromJSON(data
 
 // Services
 
+// Booking Service provides comprehensive reservation management capabilities including
+// hotel bookings, flight reservations, and travel package management.
 type BookingServiceService interface {
+	// Starts hotel reservation process for given search criteria and returns operation ID
 	StartHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error)
+	// Describes hotel reservation operations
 	DescribeHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error)
+	// Gets hotel reservation details for given operation ID
 	GetHotelReservationResult(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error)
+	// Starts flight booking operation and returns operation ID
 	StartFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error)
+	// Describes flight booking operations
 	DescribeFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error)
+	// Gets flight booking results for given operation ID
 	GetFlightBookingResult(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error)
+	// Starts travel package booking operation and returns operation ID
 	StartTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error)
+	// Describes travel package booking operations
 	DescribeTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error)
+	// Gets travel package booking results for given operation ID
 	GetTravelPackageBookingResult(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error)
 }
 
 type DefaultBookingServiceService struct{}
 
+// Starts hotel reservation process for given search criteria and returns operation ID
 func (s *DefaultBookingServiceService) StartHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
 	// TODO: Implement StartHotelReservation
 	return &HotelReservationResponse{}, fmt.Errorf("method StartHotelReservation not implemented")
 }
 
+// Describes hotel reservation operations
 func (s *DefaultBookingServiceService) DescribeHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
 	// TODO: Implement DescribeHotelReservation
 	return &HotelReservationResponse{}, fmt.Errorf("method DescribeHotelReservation not implemented")
 }
 
+// Gets hotel reservation details for given operation ID
 func (s *DefaultBookingServiceService) GetHotelReservationResult(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
 	// TODO: Implement GetHotelReservationResult
 	return &HotelReservationResponse{}, fmt.Errorf("method GetHotelReservationResult not implemented")
 }
 
+// Starts flight booking operation and returns operation ID
 func (s *DefaultBookingServiceService) StartFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
 	// TODO: Implement StartFlightBooking
 	return &FlightBookingResponse{}, fmt.Errorf("method StartFlightBooking not implemented")
 }
 
+// Describes flight booking operations
 func (s *DefaultBookingServiceService) DescribeFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
 	// TODO: Implement DescribeFlightBooking
 	return &FlightBookingResponse{}, fmt.Errorf("method DescribeFlightBooking not implemented")
 }
 
+// Gets flight booking results for given operation ID
 func (s *DefaultBookingServiceService) GetFlightBookingResult(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
 	// TODO: Implement GetFlightBookingResult
 	return &FlightBookingResponse{}, fmt.Errorf("method GetFlightBookingResult not implemented")
 }
 
+// Starts travel package booking operation and returns operation ID
 func (s *DefaultBookingServiceService) StartTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
 	// TODO: Implement StartTravelPackageBooking
 	return &TravelPackageBookingResponse{}, fmt.Errorf("method StartTravelPackageBooking not implemented")
 }
 
+// Describes travel package booking operations
 func (s *DefaultBookingServiceService) DescribeTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
 	// TODO: Implement DescribeTravelPackageBooking
 	return &TravelPackageBookingResponse{}, fmt.Errorf("method DescribeTravelPackageBooking not implemented")
 }
 
+// Gets travel package booking results for given operation ID
 func (s *DefaultBookingServiceService) GetTravelPackageBookingResult(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
 	// TODO: Implement GetTravelPackageBookingResult
 	return &TravelPackageBookingResponse{}, fmt.Errorf("method GetTravelPackageBookingResult not implemented")
@@ -707,6 +812,7 @@ func NewBookingServiceClient(transport Transport) *BookingServiceClient {
 	return &BookingServiceClient{transport: transport}
 }
 
+// Starts hotel reservation process for given search criteria and returns operation ID
 func (c *BookingServiceClient) StartHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_StartHotelReservation, req, (*HotelReservationResponse)(nil))
 	if err != nil {
@@ -718,6 +824,7 @@ func (c *BookingServiceClient) StartHotelReservation(ctx context.Context, req *H
 	return nil, fmt.Errorf("invalid response type for StartHotelReservation")
 }
 
+// Describes hotel reservation operations
 func (c *BookingServiceClient) DescribeHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_DescribeHotelReservation, req, (*HotelReservationResponse)(nil))
 	if err != nil {
@@ -729,6 +836,7 @@ func (c *BookingServiceClient) DescribeHotelReservation(ctx context.Context, req
 	return nil, fmt.Errorf("invalid response type for DescribeHotelReservation")
 }
 
+// Gets hotel reservation details for given operation ID
 func (c *BookingServiceClient) GetHotelReservationResult(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_GetHotelReservationResult, req, (*HotelReservationResponse)(nil))
 	if err != nil {
@@ -740,6 +848,7 @@ func (c *BookingServiceClient) GetHotelReservationResult(ctx context.Context, re
 	return nil, fmt.Errorf("invalid response type for GetHotelReservationResult")
 }
 
+// Starts flight booking operation and returns operation ID
 func (c *BookingServiceClient) StartFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_StartFlightBooking, req, (*FlightBookingResponse)(nil))
 	if err != nil {
@@ -751,6 +860,7 @@ func (c *BookingServiceClient) StartFlightBooking(ctx context.Context, req *Flig
 	return nil, fmt.Errorf("invalid response type for StartFlightBooking")
 }
 
+// Describes flight booking operations
 func (c *BookingServiceClient) DescribeFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_DescribeFlightBooking, req, (*FlightBookingResponse)(nil))
 	if err != nil {
@@ -762,6 +872,7 @@ func (c *BookingServiceClient) DescribeFlightBooking(ctx context.Context, req *F
 	return nil, fmt.Errorf("invalid response type for DescribeFlightBooking")
 }
 
+// Gets flight booking results for given operation ID
 func (c *BookingServiceClient) GetFlightBookingResult(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_GetFlightBookingResult, req, (*FlightBookingResponse)(nil))
 	if err != nil {
@@ -773,6 +884,7 @@ func (c *BookingServiceClient) GetFlightBookingResult(ctx context.Context, req *
 	return nil, fmt.Errorf("invalid response type for GetFlightBookingResult")
 }
 
+// Starts travel package booking operation and returns operation ID
 func (c *BookingServiceClient) StartTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_StartTravelPackageBooking, req, (*TravelPackageBookingResponse)(nil))
 	if err != nil {
@@ -784,6 +896,7 @@ func (c *BookingServiceClient) StartTravelPackageBooking(ctx context.Context, re
 	return nil, fmt.Errorf("invalid response type for StartTravelPackageBooking")
 }
 
+// Describes travel package booking operations
 func (c *BookingServiceClient) DescribeTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_DescribeTravelPackageBooking, req, (*TravelPackageBookingResponse)(nil))
 	if err != nil {
@@ -795,6 +908,7 @@ func (c *BookingServiceClient) DescribeTravelPackageBooking(ctx context.Context,
 	return nil, fmt.Errorf("invalid response type for DescribeTravelPackageBooking")
 }
 
+// Gets travel package booking results for given operation ID
 func (c *BookingServiceClient) GetTravelPackageBookingResult(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
 	result, err := c.transport.Send(ctx, BookingService_GetTravelPackageBookingResult, req, (*TravelPackageBookingResponse)(nil))
 	if err != nil {

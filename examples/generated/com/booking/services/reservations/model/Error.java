@@ -7,10 +7,13 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Error Response
 public class Error {
+    // Error message
     @JsonProperty("message")
     private String message;
 
+    // Error code
     @JsonProperty("code")
     private String code;
 

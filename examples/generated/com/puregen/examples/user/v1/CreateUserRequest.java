@@ -7,6 +7,7 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // CreateUserRequest is the request for creating a user
 public class CreateUserRequest {
     @JsonProperty("name")
     private String name;

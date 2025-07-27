@@ -7,10 +7,13 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Payment information
 public class PaymentInfo {
+    // Payment method (e.g., credit card, PayPal)
     @JsonProperty("paymentMethod")
     private String paymentMethod;
 
+    // Card token or payment reference
     @JsonProperty("paymentToken")
     private String paymentToken;
 

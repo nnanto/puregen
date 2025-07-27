@@ -7,10 +7,13 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Request for travel package booking
 public class TravelPackageBookingRequest {
+    // Travel destinations
     @JsonProperty("destinations")
     private List<String> destinations = new ArrayList<>();
 
+    // Required payment information
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 

@@ -7,22 +7,28 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Request for flight booking
 public class FlightBookingRequest {
+    // Flight search criteria
     @JsonProperty("flightRoutes")
     private List<String> flightRoutes = new ArrayList<>();
 
+    // Required payment information
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 
+    // Include hotel recommendations
     @JsonProperty("includeHotelRecommendations")
     private boolean includeHotelRecommendations;
 
+    // Departure and return dates (Unix timestamp)
     @JsonProperty("departureDate")
     private long departureDate;
 
     @JsonProperty("returnDate")
     private long returnDate;
 
+    // Number of passengers
     @JsonProperty("numberOfPassengers")
     private int numberOfPassengers;
 

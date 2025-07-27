@@ -7,25 +7,32 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Request for hotel reservation
 public class HotelReservationRequest {
+    // Hotel search criteria
     @JsonProperty("hotelLocations")
     private List<String> hotelLocations = new ArrayList<>();
 
+    // List of preferred room types
     @JsonProperty("roomTypes")
     private List<HotelReservationRequest_RoomType> roomTypes = new ArrayList<>();
 
+    // Maximum price per night
     @JsonProperty("maxPricePerNight")
     private double maxPricePerNight;
 
+    // Required payment information
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 
+    // Check-in and check-out dates (Unix timestamp)
     @JsonProperty("checkInDate")
     private long checkInDate;
 
     @JsonProperty("checkOutDate")
     private long checkOutDate;
 
+    // Number of guests
     @JsonProperty("numberOfGuests")
     private int numberOfGuests;
 

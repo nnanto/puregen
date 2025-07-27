@@ -7,6 +7,7 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // CreateUserResponse is the response for creating a user
 public class CreateUserResponse {
     @JsonProperty("user")
     private User user;

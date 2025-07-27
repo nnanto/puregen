@@ -8,12 +8,15 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
 public class BookingOperationRequest {
+    // Operation ID
     @JsonProperty("operationId")
     private String operationId;
 
+    // Payment info used during original request
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 
+    // Confirm the booking
     @JsonProperty("confirm")
     private boolean confirm;
 

@@ -7,10 +7,13 @@ import json
 
 # Messages
 
+# Payment information
 @dataclass
 class PaymentInfo:
     """Generated message class for PaymentInfo"""
+    # Payment method (e.g., credit card, PayPal)
     payment_method: str = ""
+    # Card token or payment reference
     payment_token: str = ""
 
     def validate(self) -> bool:
@@ -47,10 +50,13 @@ class PaymentInfo:
             kwargs['payment_token'] = data['paymentToken']
         return cls(**kwargs)
 
+# Error Response
 @dataclass
 class Error:
     """Generated message class for Error"""
+    # Error message
     message: str = ""
+    # Error code
     code: str = ""
 
     def validate(self) -> bool:
@@ -87,12 +93,17 @@ class Error:
             kwargs['code'] = data['code']
         return cls(**kwargs)
 
+# Information about the user making the booking request
 @dataclass
 class BookingHeader:
     """Generated message class for BookingHeader"""
+    # User who initiated the booking request
     user_id: str = ""
+    # Application from which the request originated
     application_name: str = ""
+    # Booking request ID
     request_id: str = ""
+    # Request timestamp
     request_timestamp: int = 0
 
     def validate(self) -> bool:
@@ -140,8 +151,11 @@ class BookingHeader:
 @dataclass
 class BookingOperationRequest:
     """Generated message class for BookingOperationRequest"""
+    # Operation ID
     operation_id: str = ""
+    # Payment info used during original request
     payment_info: Optional['PaymentInfo'] = None
+    # Confirm the booking
     confirm: bool = False
 
     def validate(self) -> bool:
@@ -182,11 +196,15 @@ class BookingOperationRequest:
             kwargs['confirm'] = data['confirm']
         return cls(**kwargs)
 
+# Response for booking operations
 @dataclass
 class BookingOperationResponse:
     """Generated message class for BookingOperationResponse"""
+    # Operation ID
     operation_id: str = ""
+    # Status of the booking
     status: int = 0
+    # Error message
     error: Optional['Error'] = None
 
     def validate(self) -> bool:
@@ -230,6 +248,7 @@ class BookingOperationResponse:
 @dataclass
 class ListBookingsRequest:
     """Generated message class for ListBookingsRequest"""
+    # Payment info used during original request
     payment_info: Optional['PaymentInfo'] = None
 
     def validate(self) -> bool:
@@ -262,11 +281,15 @@ class ListBookingsRequest:
             kwargs['payment_info'] = PaymentInfo.from_dict(data['paymentInfo']) if isinstance(data['paymentInfo'], dict) else data['paymentInfo']
         return cls(**kwargs)
 
+# Response for list bookings
 @dataclass
 class ListBookingsResponse:
     """Generated message class for ListBookingsResponse"""
+    # List of confirmed booking IDs
     confirmed_booking_ids: List[str] = field(default_factory=list)
+    # Pending booking IDs
     pending_booking_ids: List[str] = field(default_factory=list)
+    # Error message
     error: Optional['Error'] = None
 
     def validate(self) -> bool:
@@ -310,7 +333,9 @@ class ListBookingsResponse:
 @dataclass
 class BookingConfirmationRequest:
     """Generated message class for BookingConfirmationRequest"""
+    # Booking ID
     booking_ids: List[str] = field(default_factory=list)
+    # Payment info used during original request
     payment_info: Optional['PaymentInfo'] = None
 
     def validate(self) -> bool:
@@ -350,8 +375,11 @@ class BookingConfirmationRequest:
 @dataclass
 class BookingStatsResponse:
     """Generated message class for BookingStatsResponse"""
+    # Total amount charged
     total_amount_charged: float = 0.0
+    # Total number of guests
     total_guests: int = 0
+    # Total bookings
     total_bookings: int = 0
 
     def validate(self) -> bool:
@@ -392,15 +420,22 @@ class BookingStatsResponse:
             kwargs['total_bookings'] = data['totalBookings']
         return cls(**kwargs)
 
+# Request for hotel reservation
 @dataclass
 class HotelReservationRequest:
     """Generated message class for HotelReservationRequest"""
+    # Hotel search criteria
     hotel_locations: List[str] = field(default_factory=list)
+    # List of preferred room types
     room_types: List[int] = field(default_factory=list)
+    # Maximum price per night
     max_price_per_night: float = 0.0
+    # Required payment information
     payment_info: Optional['PaymentInfo'] = None
+    # Check-in and check-out dates (Unix timestamp)
     check_in_date: int = 0
     check_out_date: int = 0
+    # Number of guests
     number_of_guests: int = 0
 
     def validate(self) -> bool:
@@ -457,12 +492,17 @@ class HotelReservationRequest:
             kwargs['number_of_guests'] = data['numberOfGuests']
         return cls(**kwargs)
 
+# Response for hotel reservation
 @dataclass
 class HotelReservationResponse:
     """Generated message class for HotelReservationResponse"""
+    # List of results for each search location
     result: List['HotelReservationResponse_SingleHotelReservationResponse'] = field(default_factory=list)
+    # Status of the request
     status: int = 0
+    # Error message
     error: Optional['Error'] = None
+    # Booking stats
     booking_stats: Optional['BookingStatsResponse'] = None
 
     def validate(self) -> bool:
@@ -507,12 +547,17 @@ class HotelReservationResponse:
             kwargs['booking_stats'] = BookingStatsResponse.from_dict(data['bookingStats']) if isinstance(data['bookingStats'], dict) else data['bookingStats']
         return cls(**kwargs)
 
+# Hotel information
 @dataclass
 class HotelReservationResponse_Hotel:
     """Generated message class for HotelReservationResponse_Hotel"""
+    # Name of the hotel
     name: str = ""
+    # Hotel rating (1-5 stars)
     rating: float = 0.0
+    # Price per night
     price_per_night: float = 0.0
+    # Hotel address
     address: str = ""
 
     def validate(self) -> bool:
@@ -557,11 +602,15 @@ class HotelReservationResponse_Hotel:
             kwargs['address'] = data['address']
         return cls(**kwargs)
 
+# Room availability with hotel details
 @dataclass
 class HotelReservationResponse_AvailableRoom:
     """Generated message class for HotelReservationResponse_AvailableRoom"""
+    # Hotel information
     hotel: Optional['HotelReservationResponse_Hotel'] = None
+    # Room type
     room_type: int = 0
+    # Available rooms count
     available_rooms: int = 0
 
     def validate(self) -> bool:
@@ -602,10 +651,13 @@ class HotelReservationResponse_AvailableRoom:
             kwargs['available_rooms'] = data['availableRooms']
         return cls(**kwargs)
 
+# Hotel reservation result for single location
 @dataclass
 class HotelReservationResponse_SingleHotelReservationResponse:
     """Generated message class for HotelReservationResponse_SingleHotelReservationResponse"""
+    # List of available rooms
     available_rooms: List['HotelReservationResponse_AvailableRoom'] = field(default_factory=list)
+    # Error message
     error: Optional['Error'] = None
 
     def validate(self) -> bool:
@@ -642,14 +694,20 @@ class HotelReservationResponse_SingleHotelReservationResponse:
             kwargs['error'] = Error.from_dict(data['error']) if isinstance(data['error'], dict) else data['error']
         return cls(**kwargs)
 
+# Request for flight booking
 @dataclass
 class FlightBookingRequest:
     """Generated message class for FlightBookingRequest"""
+    # Flight search criteria
     flight_routes: List[str] = field(default_factory=list)
+    # Required payment information
     payment_info: Optional['PaymentInfo'] = None
+    # Include hotel recommendations
     include_hotel_recommendations: bool = False
+    # Departure and return dates (Unix timestamp)
     departure_date: int = 0
     return_date: int = 0
+    # Number of passengers
     number_of_passengers: int = 0
 
     def validate(self) -> bool:
@@ -702,12 +760,17 @@ class FlightBookingRequest:
             kwargs['number_of_passengers'] = data['numberOfPassengers']
         return cls(**kwargs)
 
+# Response for flight booking
 @dataclass
 class FlightBookingResponse:
     """Generated message class for FlightBookingResponse"""
+    # List of flight bookings for each route
     flight_booking: List['FlightBookingResponse_SingleFlightBooking'] = field(default_factory=list)
+    # Error message
     error: Optional['Error'] = None
+    # Status of the request
     status: int = 0
+    # Booking stats
     booking_stats: Optional['BookingStatsResponse'] = None
 
     def validate(self) -> bool:
@@ -752,15 +815,23 @@ class FlightBookingResponse:
             kwargs['booking_stats'] = BookingStatsResponse.from_dict(data['bookingStats']) if isinstance(data['bookingStats'], dict) else data['bookingStats']
         return cls(**kwargs)
 
+# Response for single flight booking
 @dataclass
 class FlightBookingResponse_SingleFlightBooking:
     """Generated message class for FlightBookingResponse_SingleFlightBooking"""
+    # Flight details
     flight_number: str = ""
+    # Airline name
     airline: str = ""
+    # Flight price
     price: float = 0.0
+    # Departure time
     departure_time: int = 0
+    # Arrival time
     arrival_time: int = 0
+    # Error message
     error: Optional['Error'] = None
+    # Hotel recommendations associated with the flight
     hotel_recommendations: Optional['HotelReservationResponse_SingleHotelReservationResponse'] = None
 
     def validate(self) -> bool:
@@ -817,10 +888,13 @@ class FlightBookingResponse_SingleFlightBooking:
             kwargs['hotel_recommendations'] = HotelReservationResponse_SingleHotelReservationResponse.from_dict(data['hotelRecommendations']) if isinstance(data['hotelRecommendations'], dict) else data['hotelRecommendations']
         return cls(**kwargs)
 
+# Request for travel package booking
 @dataclass
 class TravelPackageBookingRequest:
     """Generated message class for TravelPackageBookingRequest"""
+    # Travel destinations
     destinations: List[str] = field(default_factory=list)
+    # Required payment information
     payment_info: Optional['PaymentInfo'] = None
 
     def validate(self) -> bool:
@@ -857,12 +931,17 @@ class TravelPackageBookingRequest:
             kwargs['payment_info'] = PaymentInfo.from_dict(data['paymentInfo']) if isinstance(data['paymentInfo'], dict) else data['paymentInfo']
         return cls(**kwargs)
 
+# Response for travel package booking
 @dataclass
 class TravelPackageBookingResponse:
     """Generated message class for TravelPackageBookingResponse"""
+    # List of travel packages for each destination
     travel_packages: List['TravelPackageBookingResponse_SingleTravelPackageResponse'] = field(default_factory=list)
+    # Error message
     error: Optional['Error'] = None
+    # Status of the request
     status: int = 0
+    # Booking stats
     booking_stats: Optional['BookingStatsResponse'] = None
 
     def validate(self) -> bool:
@@ -907,13 +986,19 @@ class TravelPackageBookingResponse:
             kwargs['booking_stats'] = BookingStatsResponse.from_dict(data['bookingStats']) if isinstance(data['bookingStats'], dict) else data['bookingStats']
         return cls(**kwargs)
 
+# Response for single travel package
 @dataclass
 class TravelPackageBookingResponse_SingleTravelPackageResponse:
     """Generated message class for TravelPackageBookingResponse_SingleTravelPackageResponse"""
+    # Package name
     package_name: str = ""
+    # Package description
     description: str = ""
+    # Total package price
     total_price: float = 0.0
+    # Package duration in days
     duration_days: int = 0
+    # Error message
     error: Optional['Error'] = None
 
     def validate(self) -> bool:
@@ -964,49 +1049,62 @@ class TravelPackageBookingResponse_SingleTravelPackageResponse:
 
 # Services
 
+"""
+Booking Service provides comprehensive reservation management capabilities including
+hotel bookings, flight reservations, and travel package management.
+"""
 class BookingServiceService(ABC):
     """Abstract service interface for BookingService"""
 
+    # Starts hotel reservation process for given search criteria and returns operation ID
     @abstractmethod
     def start_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """StartHotelReservation method"""
         pass
 
+    # Describes hotel reservation operations
     @abstractmethod
     def describe_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """DescribeHotelReservation method"""
         pass
 
+    # Gets hotel reservation details for given operation ID
     @abstractmethod
     def get_hotel_reservation_result(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """GetHotelReservationResult method"""
         pass
 
+    # Starts flight booking operation and returns operation ID
     @abstractmethod
     def start_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """StartFlightBooking method"""
         pass
 
+    # Describes flight booking operations
     @abstractmethod
     def describe_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """DescribeFlightBooking method"""
         pass
 
+    # Gets flight booking results for given operation ID
     @abstractmethod
     def get_flight_booking_result(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """GetFlightBookingResult method"""
         pass
 
+    # Starts travel package booking operation and returns operation ID
     @abstractmethod
     def start_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """StartTravelPackageBooking method"""
         pass
 
+    # Describes travel package booking operations
     @abstractmethod
     def describe_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """DescribeTravelPackageBooking method"""
         pass
 
+    # Gets travel package booking results for given operation ID
     @abstractmethod
     def get_travel_package_booking_result(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """GetTravelPackageBookingResult method"""
@@ -1015,46 +1113,55 @@ class BookingServiceService(ABC):
 class DefaultBookingServiceService(BookingServiceService):
     """Default implementation of BookingServiceService"""
 
+    # Starts hotel reservation process for given search criteria and returns operation ID
     def start_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """StartHotelReservation method implementation"""
         # TODO: Implement start_hotel_reservation
         raise NotImplementedError("Method start_hotel_reservation not implemented")
 
+    # Describes hotel reservation operations
     def describe_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """DescribeHotelReservation method implementation"""
         # TODO: Implement describe_hotel_reservation
         raise NotImplementedError("Method describe_hotel_reservation not implemented")
 
+    # Gets hotel reservation details for given operation ID
     def get_hotel_reservation_result(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """GetHotelReservationResult method implementation"""
         # TODO: Implement get_hotel_reservation_result
         raise NotImplementedError("Method get_hotel_reservation_result not implemented")
 
+    # Starts flight booking operation and returns operation ID
     def start_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """StartFlightBooking method implementation"""
         # TODO: Implement start_flight_booking
         raise NotImplementedError("Method start_flight_booking not implemented")
 
+    # Describes flight booking operations
     def describe_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """DescribeFlightBooking method implementation"""
         # TODO: Implement describe_flight_booking
         raise NotImplementedError("Method describe_flight_booking not implemented")
 
+    # Gets flight booking results for given operation ID
     def get_flight_booking_result(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """GetFlightBookingResult method implementation"""
         # TODO: Implement get_flight_booking_result
         raise NotImplementedError("Method get_flight_booking_result not implemented")
 
+    # Starts travel package booking operation and returns operation ID
     def start_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """StartTravelPackageBooking method implementation"""
         # TODO: Implement start_travel_package_booking
         raise NotImplementedError("Method start_travel_package_booking not implemented")
 
+    # Describes travel package booking operations
     def describe_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """DescribeTravelPackageBooking method implementation"""
         # TODO: Implement describe_travel_package_booking
         raise NotImplementedError("Method describe_travel_package_booking not implemented")
 
+    # Gets travel package booking results for given operation ID
     def get_travel_package_booking_result(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """GetTravelPackageBookingResult method implementation"""
         # TODO: Implement get_travel_package_booking_result

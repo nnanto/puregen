@@ -7,6 +7,52 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
+// formatPythonComment formats a comment for Python code
+func formatPythonComment(comments protogen.CommentSet) []string {
+	var result []string
+
+	// Use leading comments if available, otherwise trailing
+	comment := comments.Leading
+	if comment == "" && comments.Trailing != "" {
+		comment = comments.Trailing
+	}
+
+	if comment == "" {
+		return result
+	}
+
+	// Split by lines and format each line
+	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
+
+	// If single line, use # style
+	if len(lines) == 1 {
+		result = append(result, "# "+lines[0])
+		return result
+	}
+
+	// Multi-line comment with """ """ style
+	result = append(result, "\"\"\"")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			result = append(result, "")
+		} else {
+			result = append(result, line)
+		}
+	}
+	result = append(result, "\"\"\"")
+
+	return result
+}
+
+// writePythonComment writes formatted comments to the generator
+func writePythonComment(g *protogen.GeneratedFile, comments protogen.CommentSet) {
+	commentLines := formatPythonComment(comments)
+	for _, line := range commentLines {
+		g.P(line)
+	}
+}
+
 // Track created package directories to avoid duplicates
 var createdPythonPackages = make(map[string]bool)
 
@@ -86,6 +132,9 @@ func generatePythonMethodConstants(g *protogen.GeneratedFile, service *protogen.
 }
 
 func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
+	// Generate message comment
+	writePythonComment(g, msg.Comments)
+
 	// Generate dataclass
 	g.P("@dataclass")
 	g.P("class ", msg.GoIdent.GoName, ":")
@@ -96,6 +145,13 @@ func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
 		g.P("    pass")
 	} else {
 		for _, field := range msg.Fields {
+			// Generate field comment
+			if commentLines := formatPythonComment(field.Comments); len(commentLines) > 0 {
+				for _, line := range commentLines {
+					g.P("    ", line)
+				}
+			}
+
 			fieldType := getPythonFieldType(field)
 			fieldName := getPythonFieldName(field.GoName)
 			defaultValue := getPythonDefaultValue(field)
@@ -181,12 +237,22 @@ func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
 func generatePythonService(g *protogen.GeneratedFile, service *protogen.Service) {
 	serviceName := service.GoName
 
+	// Generate service comment
+	writePythonComment(g, service.Comments)
+
 	// Generate abstract service interface
 	g.P("class ", serviceName, "Service(ABC):")
 	g.P("    \"\"\"Abstract service interface for ", serviceName, "\"\"\"")
 	g.P()
 
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatPythonComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P("    ", line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		methodName := getPythonMethodName(method.GoName)
@@ -204,6 +270,13 @@ func generatePythonService(g *protogen.GeneratedFile, service *protogen.Service)
 	g.P()
 
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatPythonComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P("    ", line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		methodName := getPythonMethodName(method.GoName)

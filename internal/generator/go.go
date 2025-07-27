@@ -1,8 +1,46 @@
 package generator
 
 import (
+	"strings"
+
 	"google.golang.org/protobuf/compiler/protogen"
 )
+
+// formatGoComment formats a comment for Go code
+func formatGoComment(comments protogen.CommentSet) []string {
+	var result []string
+
+	// Use leading comments if available, otherwise trailing
+	comment := comments.Leading
+	if comment == "" && comments.Trailing != "" {
+		comment = comments.Trailing
+	}
+
+	if comment == "" {
+		return result
+	}
+
+	// Split by lines and format each line
+	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			result = append(result, "//")
+		} else {
+			result = append(result, "// "+line)
+		}
+	}
+
+	return result
+}
+
+// writeGoComment writes formatted comments to the generator
+func writeGoComment(g *protogen.GeneratedFile, comments protogen.CommentSet) {
+	commentLines := formatGoComment(comments)
+	for _, line := range commentLines {
+		g.P(line)
+	}
+}
 
 // GenerateGoFile generates Go code for the given protobuf file
 func GenerateGoFile(gen *protogen.Plugin, file *protogen.File) {
@@ -152,9 +190,19 @@ func generateGoMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
 		generateGoEnum(g, enum)
 	}
 
+	// Generate message comment
+	writeGoComment(g, msg.Comments)
+
 	// Generate struct
 	g.P("type ", msg.GoIdent.GoName, " struct {")
 	for _, field := range msg.Fields {
+		// Generate field comment
+		if commentLines := formatGoComment(field.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P("	", line)
+			}
+		}
+
 		fieldType := getGoFieldType(field)
 		g.P("	", field.GoName, " ", fieldType, " `json:\"", field.Desc.JSONName(), "\"`")
 	}
@@ -194,9 +242,19 @@ func generateGoMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
 func generateGoService(g *protogen.GeneratedFile, service *protogen.Service) {
 	serviceName := service.GoName
 
+	// Generate service comment
+	writeGoComment(g, service.Comments)
+
 	// Generate interface
 	g.P("type ", serviceName, "Service interface {")
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatGoComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P("	", line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		g.P("	", method.GoName, "(ctx context.Context, req *", inputType, ") (*", outputType, ", error)")
@@ -209,6 +267,13 @@ func generateGoService(g *protogen.GeneratedFile, service *protogen.Service) {
 	g.P()
 
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatGoComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P(line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		g.P("func (s *Default", serviceName, "Service) ", method.GoName, "(ctx context.Context, req *", inputType, ") (*", outputType, ", error) {")
@@ -242,6 +307,13 @@ func generateGoClient(g *protogen.GeneratedFile, service *protogen.Service) {
 
 	// Generate client methods
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatGoComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P(line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		constName := serviceName + "_" + method.GoName

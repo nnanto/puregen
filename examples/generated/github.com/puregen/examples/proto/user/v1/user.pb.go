@@ -10,6 +10,7 @@ import (
 
 // Messages
 
+// User message represents a user in the system
 type User struct {
 	Id       int32        `json:"id"`
 	Name     string       `json:"name"`
@@ -36,6 +37,7 @@ func (m *User) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// UserProfile contains additional user information
 type UserProfile struct {
 	Bio       string `json:"bio"`
 	AvatarUrl string `json:"avatarUrl"`
@@ -59,6 +61,7 @@ func (m *UserProfile) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// CreateUserRequest is the request for creating a user
 type CreateUserRequest struct {
 	Name    string       `json:"name"`
 	Email   string       `json:"email"`
@@ -82,6 +85,7 @@ func (m *CreateUserRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// CreateUserResponse is the response for creating a user
 type CreateUserResponse struct {
 	User    *User  `json:"user"`
 	Success bool   `json:"success"`
@@ -105,6 +109,7 @@ func (m *CreateUserResponse) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// GetUserRequest is the request for getting a user
 type GetUserRequest struct {
 	Id int32 `json:"id"`
 }
@@ -126,6 +131,7 @@ func (m *GetUserRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
+// GetUserResponse is the response for getting a user
 type GetUserResponse struct {
 	User  *User `json:"user"`
 	Found bool  `json:"found"`
@@ -150,18 +156,23 @@ func (m *GetUserResponse) FromJSON(data []byte) error {
 
 // Services
 
+// UserService provides operations for managing users
 type UserServiceService interface {
+	// CreateUser creates a new user
 	CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error)
+	// GetUser retrieves a user by ID
 	GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error)
 }
 
 type DefaultUserServiceService struct{}
 
+// CreateUser creates a new user
 func (s *DefaultUserServiceService) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
 	// TODO: Implement CreateUser
 	return &CreateUserResponse{}, fmt.Errorf("method CreateUser not implemented")
 }
 
+// GetUser retrieves a user by ID
 func (s *DefaultUserServiceService) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
 	// TODO: Implement GetUser
 	return &GetUserResponse{}, fmt.Errorf("method GetUser not implemented")
@@ -188,6 +199,7 @@ func NewUserServiceClient(transport Transport) *UserServiceClient {
 	return &UserServiceClient{transport: transport}
 }
 
+// CreateUser creates a new user
 func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
 	result, err := c.transport.Send(ctx, UserService_CreateUser, req, (*CreateUserResponse)(nil))
 	if err != nil {
@@ -199,6 +211,7 @@ func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserReque
 	return nil, fmt.Errorf("invalid response type for CreateUser")
 }
 
+// GetUser retrieves a user by ID
 func (c *UserServiceClient) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
 	result, err := c.transport.Send(ctx, UserService_GetUser, req, (*GetUserResponse)(nil))
 	if err != nil {

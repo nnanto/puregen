@@ -7,19 +7,25 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Response for single travel package
 public class TravelPackageBookingResponse_SingleTravelPackageResponse {
+    // Package name
     @JsonProperty("packageName")
     private String packageName;
 
+    // Package description
     @JsonProperty("description")
     private String description;
 
+    // Total package price
     @JsonProperty("totalPrice")
     private double totalPrice;
 
+    // Package duration in days
     @JsonProperty("durationDays")
     private int durationDays;
 
+    // Error message
     @JsonProperty("error")
     private Error error;
 

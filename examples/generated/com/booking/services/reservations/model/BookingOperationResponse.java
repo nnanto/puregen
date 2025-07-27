@@ -7,13 +7,17 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Response for booking operations
 public class BookingOperationResponse {
+    // Operation ID
     @JsonProperty("operationId")
     private String operationId;
 
+    // Status of the booking
     @JsonProperty("status")
     private BookingStatus status;
 
+    // Error message
     @JsonProperty("error")
     private Error error;
 

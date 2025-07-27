@@ -7,6 +7,7 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // GetUserRequest is the request for getting a user
 public class GetUserRequest {
     @JsonProperty("id")
     private int id;

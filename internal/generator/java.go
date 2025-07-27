@@ -7,6 +7,52 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
+// formatJavaComment formats a comment for Java code
+func formatJavaComment(comments protogen.CommentSet) []string {
+	var result []string
+
+	// Use leading comments if available, otherwise trailing
+	comment := comments.Leading
+	if comment == "" && comments.Trailing != "" {
+		comment = comments.Trailing
+	}
+
+	if comment == "" {
+		return result
+	}
+
+	// Split by lines and format each line
+	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
+
+	// If single line, use // style
+	if len(lines) == 1 {
+		result = append(result, "    // "+lines[0])
+		return result
+	}
+
+	// Multi-line comment with /** */ style
+	result = append(result, "    /**")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			result = append(result, "     *")
+		} else {
+			result = append(result, "     * "+line)
+		}
+	}
+	result = append(result, "     */")
+
+	return result
+}
+
+// writeJavaComment writes formatted comments to the generator
+func writeJavaComment(g *protogen.GeneratedFile, comments protogen.CommentSet) {
+	commentLines := formatJavaComment(comments)
+	for _, line := range commentLines {
+		g.P(line)
+	}
+}
+
 // GenerateJavaFile generates Java code for the given protobuf file
 func GenerateJavaFile(gen *protogen.Plugin, file *protogen.File) {
 	if len(file.Messages) == 0 && len(file.Services) == 0 {
@@ -68,11 +114,21 @@ func generateJavaMessage(gen *protogen.Plugin, file *protogen.File, msg *protoge
 	g.P("import com.fasterxml.jackson.databind.*;")
 	g.P()
 
+	// Generate class comment
+	writeJavaComment(g, msg.Comments)
+
 	// Generate class
 	g.P("public class ", msg.GoIdent.GoName, " {")
 
 	// Generate fields
 	for _, field := range msg.Fields {
+		// Generate field comment
+		if commentLines := formatJavaComment(field.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P(line)
+			}
+		}
+
 		fieldType := getJavaFieldType(field)
 		fieldName := getJavaFieldName(field.GoName)
 		g.P("    @JsonProperty(\"", field.Desc.JSONName(), "\")")
@@ -180,8 +236,18 @@ func generateJavaService(gen *protogen.Plugin, file *protogen.File, service *pro
 	g.P("package ", javaPackage, ";")
 	g.P()
 
+	// Generate service comment
+	writeJavaComment(g, service.Comments)
+
 	g.P("public interface ", serviceName, "Service {")
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatJavaComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P(line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		g.P("    ", outputType, " ", getJavaMethodName(method.GoName), "(Map<String, Object> ctx, ", inputType, " request) throws Exception;")
@@ -199,6 +265,13 @@ func generateJavaService(gen *protogen.Plugin, file *protogen.File, service *pro
 
 	impl.P("public class Default", serviceName, "Service implements ", serviceName, "Service {")
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatJavaComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				impl.P(line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		methodName := getJavaMethodName(method.GoName)
@@ -251,6 +324,13 @@ func generateJavaClient(gen *protogen.Plugin, file *protogen.File, service *prot
 
 	// Generate client methods
 	for _, method := range service.Methods {
+		// Generate method comment
+		if commentLines := formatJavaComment(method.Comments); len(commentLines) > 0 {
+			for _, line := range commentLines {
+				g.P(line)
+			}
+		}
+
 		inputType := method.Input.GoIdent.GoName
 		outputType := method.Output.GoIdent.GoName
 		methodName := getJavaMethodName(method.GoName)

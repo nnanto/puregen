@@ -7,6 +7,7 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // UserProfile contains additional user information
 public class UserProfile {
     @JsonProperty("bio")
     private String bio;

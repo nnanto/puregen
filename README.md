@@ -20,21 +20,7 @@ puregen is a protobuf plugin that generates simple, dependency-minimal code for 
 
 ### Build the Plugin
 
-#### From Source
-
-```bash
-# Clone the repository
-git clone https://github.com/nnanto/puregen
-cd puregen
-
-# Build the plugin
-go build -o protoc-gen-puregen ./cmd/protoc-gen-puregen
-
-# Make it available in your PATH (optional)
-sudo mv protoc-gen-puregen /usr/local/bin/
-```
-
-#### Pre-built Binaries
+#### Pre-built Binaries (Recommended)
 
 You can download pre-built binaries for your platform from the [releases page](https://github.com/nnanto/puregen/releases).
 
@@ -48,6 +34,20 @@ sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
 
 # Run the generator
 protoc --puregen_out=./examples/generated --puregen_opt=language=python examples/proto/*.proto
+```
+
+#### From Source
+
+```bash
+# Clone the repository
+git clone https://github.com/nnanto/puregen
+cd puregen
+
+# Build the plugin
+go build -o protoc-gen-puregen ./cmd/protoc-gen-puregen
+
+# Make it available in your PATH (optional)
+sudo mv protoc-gen-puregen /usr/local/bin/
 ```
 
 ## Usage

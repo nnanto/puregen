@@ -7,16 +7,21 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Information about the user making the booking request
 public class BookingHeader {
+    // User who initiated the booking request
     @JsonProperty("userId")
     private String userId;
 
+    // Application from which the request originated
     @JsonProperty("applicationName")
     private String applicationName;
 
+    // Booking request ID
     @JsonProperty("requestId")
     private String requestId;
 
+    // Request timestamp
     @JsonProperty("requestTimestamp")
     private long requestTimestamp;
 

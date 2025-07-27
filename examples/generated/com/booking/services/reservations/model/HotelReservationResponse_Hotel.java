@@ -7,16 +7,21 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
+    // Hotel information
 public class HotelReservationResponse_Hotel {
+    // Name of the hotel
     @JsonProperty("name")
     private String name;
 
+    // Hotel rating (1-5 stars)
     @JsonProperty("rating")
     private double rating;
 
+    // Price per night
     @JsonProperty("pricePerNight")
     private double pricePerNight;
 
+    // Hotel address
     @JsonProperty("address")
     private String address;
 

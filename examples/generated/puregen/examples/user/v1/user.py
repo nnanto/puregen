@@ -7,6 +7,7 @@ import json
 
 # Messages
 
+# User message represents a user in the system
 @dataclass
 class User:
     """Generated message class for User"""
@@ -67,6 +68,7 @@ class User:
             kwargs['profile'] = UserProfile.from_dict(data['profile']) if isinstance(data['profile'], dict) else data['profile']
         return cls(**kwargs)
 
+# UserProfile contains additional user information
 @dataclass
 class UserProfile:
     """Generated message class for UserProfile"""
@@ -112,6 +114,7 @@ class UserProfile:
             kwargs['created_at'] = data['createdAt']
         return cls(**kwargs)
 
+# CreateUserRequest is the request for creating a user
 @dataclass
 class CreateUserRequest:
     """Generated message class for CreateUserRequest"""
@@ -157,6 +160,7 @@ class CreateUserRequest:
             kwargs['profile'] = UserProfile.from_dict(data['profile']) if isinstance(data['profile'], dict) else data['profile']
         return cls(**kwargs)
 
+# CreateUserResponse is the response for creating a user
 @dataclass
 class CreateUserResponse:
     """Generated message class for CreateUserResponse"""
@@ -202,6 +206,7 @@ class CreateUserResponse:
             kwargs['message'] = data['message']
         return cls(**kwargs)
 
+# GetUserRequest is the request for getting a user
 @dataclass
 class GetUserRequest:
     """Generated message class for GetUserRequest"""
@@ -237,6 +242,7 @@ class GetUserRequest:
             kwargs['id'] = data['id']
         return cls(**kwargs)
 
+# GetUserResponse is the response for getting a user
 @dataclass
 class GetUserResponse:
     """Generated message class for GetUserResponse"""
@@ -279,14 +285,17 @@ class GetUserResponse:
 
 # Services
 
+# UserService provides operations for managing users
 class UserServiceService(ABC):
     """Abstract service interface for UserService"""
 
+    # CreateUser creates a new user
     @abstractmethod
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
         """CreateUser method"""
         pass
 
+    # GetUser retrieves a user by ID
     @abstractmethod
     def get_user(self, ctx: Dict[str, Any], request: GetUserRequest) -> GetUserResponse:
         """GetUser method"""
@@ -295,11 +304,13 @@ class UserServiceService(ABC):
 class DefaultUserServiceService(UserServiceService):
     """Default implementation of UserServiceService"""
 
+    # CreateUser creates a new user
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
         """CreateUser method implementation"""
         # TODO: Implement create_user
         raise NotImplementedError("Method create_user not implemented")
 
+    # GetUser retrieves a user by ID
     def get_user(self, ctx: Dict[str, Any], request: GetUserRequest) -> GetUserResponse:
         """GetUser method implementation"""
         # TODO: Implement get_user

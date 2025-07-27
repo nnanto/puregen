@@ -8,9 +8,11 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
 public class BookingConfirmationRequest {
+    // Booking ID
     @JsonProperty("bookingIds")
     private List<String> bookingIds = new ArrayList<>();
 
+    // Payment info used during original request
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 
