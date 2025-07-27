@@ -1,6 +1,20 @@
 # puregen - Protobuf Code Generator
 
-puregen is a protobuf plugin that generates simple, dependency-minimal code for Go, Java, and Python from `.proto` files. The generated code focuses on simplicity and uses built-in language features rather than heavy dependencies.
+puregen is a protobuf plugin that generates **simple, dependency-minimal code** for Go, Java, and Python from `.proto` files. The generated code focuses on simplicity and uses built-in language features rather than heavy dependencies.
+
+puregen is ideal for projects that need simple, readable generated code without heavy protobuf runtime dependencies, with the flexibility to use any transport mechanism (HTTP, gRPC, message queues, etc.).
+
+## Comparison with Standard Generators
+
+| Feature | puregen | protoc-gen-go | protoc-gen-java |
+|---------|-----------|---------------|-----------------|
+| Dependencies | Minimal | protobuf runtime | protobuf runtime |
+| Code size | Small | Large | Large |
+| JSON support | Built-in | Requires jsonpb | Requires additional libs |
+| Transport abstraction | Pluggable | gRPC only | gRPC only |
+| Customization | Easy | Complex | Complex |
+| Learning curve | Low | Medium | Medium |
+
 
 ## Features
 
@@ -221,15 +235,3 @@ ls -la generated/
 
 MIT License - see LICENSE file for details.
 
-## Comparison with Standard Generators
-
-| Feature | puregen | protoc-gen-go | protoc-gen-java |
-|---------|-----------|---------------|-----------------|
-| Dependencies | Minimal | protobuf runtime | protobuf runtime |
-| Code size | Small | Large | Large |
-| JSON support | Built-in | Requires jsonpb | Requires additional libs |
-| Transport abstraction | Pluggable | gRPC only | gRPC only |
-| Customization | Easy | Complex | Complex |
-| Learning curve | Low | Medium | Medium |
-
-puregen is ideal for projects that need simple, readable generated code without heavy protobuf runtime dependencies, with the flexibility to use any transport mechanism (HTTP, gRPC, message queues, etc.).

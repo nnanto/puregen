@@ -364,7 +364,12 @@ func getPythonModuleName(file *protogen.File) string {
 		return strings.TrimSuffix(filepath.Base(file.Desc.Path()), ".proto")
 	}
 
-	// Replace dots with underscores for Python module naming
+	// Replace dots with slashes for Python package structure
+	pkg = strings.ReplaceAll(pkg, ".", "/")
+	// Ensure the package name is a valid Python identifier
+	pkg = strings.ReplaceAll(pkg, "-", "_")
+	// Remove leading slashes if any
+	pkg = strings.TrimPrefix(pkg, "/")
 	return pkg
 }
 
