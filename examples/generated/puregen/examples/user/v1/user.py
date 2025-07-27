@@ -289,13 +289,21 @@ class GetUserResponse:
 class UserServiceService(ABC):
     """Abstract service interface for UserService"""
 
-    # CreateUser creates a new user
+    """
+    CreateUser creates a new user
+    metadata: {"method":"POST", "path":"/users"}
+    """
     @abstractmethod
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
         """CreateUser method"""
         pass
 
-    # GetUser retrieves a user by ID
+    """
+    GetUser retrieves a user by ID
+    metadata:{"method":"GET", "path":"/users/{id}"}
+    This method retrieves a user by their unique ID.
+    It returns the user details if found, otherwise indicates not found.
+    """
     @abstractmethod
     def get_user(self, ctx: Dict[str, Any], request: GetUserRequest) -> GetUserResponse:
         """GetUser method"""
@@ -304,13 +312,21 @@ class UserServiceService(ABC):
 class DefaultUserServiceService(UserServiceService):
     """Default implementation of UserServiceService"""
 
-    # CreateUser creates a new user
+    """
+    CreateUser creates a new user
+    metadata: {"method":"POST", "path":"/users"}
+    """
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
         """CreateUser method implementation"""
         # TODO: Implement create_user
         raise NotImplementedError("Method create_user not implemented")
 
-    # GetUser retrieves a user by ID
+    """
+    GetUser retrieves a user by ID
+    metadata:{"method":"GET", "path":"/users/{id}"}
+    This method retrieves a user by their unique ID.
+    It returns the user details if found, otherwise indicates not found.
+    """
     def get_user(self, ctx: Dict[str, Any], request: GetUserRequest) -> GetUserResponse:
         """GetUser method implementation"""
         # TODO: Implement get_user
@@ -322,6 +338,17 @@ class UserServiceMethods:
     """Method name constants for UserService"""
     UserService_CreateUser = "UserService_CreateUser"
     UserService_GetUser = "UserService_GetUser"
+
+    METHOD_METADATA = {
+        UserService_CreateUser: {
+            "method": "POST",
+            "path": "/users",
+        },
+        UserService_GetUser: {
+            "method": "GET",
+            "path": "/users/{id}",
+        },
+    }
 
 # Client
 

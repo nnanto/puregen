@@ -1181,6 +1181,9 @@ class BookingServiceMethods:
     BookingService_DescribeTravelPackageBooking = "BookingService_DescribeTravelPackageBooking"
     BookingService_GetTravelPackageBookingResult = "BookingService_GetTravelPackageBookingResult"
 
+    METHOD_METADATA = {
+    }
+
 # Client
 
 class Transport(ABC):

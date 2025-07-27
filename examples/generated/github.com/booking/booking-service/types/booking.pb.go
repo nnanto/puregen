@@ -798,6 +798,8 @@ const (
 	BookingService_GetTravelPackageBookingResult = "BookingService_GetTravelPackageBookingResult"
 )
 
+var MethodMetadata = map[string]map[string]string{}
+
 // Client
 
 type Transport interface {

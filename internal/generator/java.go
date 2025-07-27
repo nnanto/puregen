@@ -87,6 +87,8 @@ func generateJavaMethodConstants(gen *protogen.Plugin, file *protogen.File, serv
 	g.P()
 	g.P("package ", javaPackage, ";")
 	g.P()
+	g.P("import java.util.*;")
+	g.P()
 
 	g.P("public final class ", serviceName, "Methods {")
 	g.P("    private ", serviceName, "Methods() {} // Prevent instantiation")
@@ -96,6 +98,23 @@ func generateJavaMethodConstants(gen *protogen.Plugin, file *protogen.File, serv
 		constName := serviceName + "_" + method.GoName
 		g.P("    public static final String ", constName, " = \"", constName, "\";")
 	}
+	g.P()
+
+	// Generate method metadata map
+	g.P("    public static final Map<String, Map<String, String>> METHOD_METADATA = new HashMap<>();")
+	g.P("    static {")
+	for _, method := range service.Methods {
+		constName := serviceName + "_" + method.GoName
+		metadata := parseMethodMetadata(method.Comments)
+		if metadata != nil {
+			g.P("        Map<String, String> ", strings.ToLower(method.GoName), "Metadata = new HashMap<>();")
+			for key, value := range metadata {
+				g.P("        ", strings.ToLower(method.GoName), "Metadata.put(\"", key, "\", \"", value, "\");")
+			}
+			g.P("        METHOD_METADATA.put(", constName, ", ", strings.ToLower(method.GoName), "Metadata);")
+		}
+	}
+	g.P("    }")
 	g.P("}")
 }
 

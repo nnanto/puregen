@@ -2,6 +2,8 @@
 
 package com.booking.services.reservations.model;
 
+import java.util.*;
+
 public final class BookingServiceMethods {
     private BookingServiceMethods() {} // Prevent instantiation
 
@@ -14,4 +16,8 @@ public final class BookingServiceMethods {
     public static final String BookingService_StartTravelPackageBooking = "BookingService_StartTravelPackageBooking";
     public static final String BookingService_DescribeTravelPackageBooking = "BookingService_DescribeTravelPackageBooking";
     public static final String BookingService_GetTravelPackageBookingResult = "BookingService_GetTravelPackageBookingResult";
+
+    public static final Map<String, Map<String, String>> METHOD_METADATA = new HashMap<>();
+    static {
+    }
 }

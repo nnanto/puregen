@@ -11,12 +11,20 @@ public class UserServiceClient {
         this.transport = transport;
     }
 
-    // CreateUser creates a new user
+    /**
+     * CreateUser creates a new user
+     * metadata: {"method":"POST", "path":"/users"}
+     */
     public CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception {
         return transport.send(ctx, UserServiceMethods.UserService_CreateUser, request, CreateUserResponse.class);
     }
 
-    // GetUser retrieves a user by ID
+    /**
+     * GetUser retrieves a user by ID
+     * metadata:{"method":"GET", "path":"/users/{id}"}
+     * This method retrieves a user by their unique ID.
+     * It returns the user details if found, otherwise indicates not found.
+     */
     public GetUserResponse getUser(Map<String, Object> ctx, GetUserRequest request) throws Exception {
         return transport.send(ctx, UserServiceMethods.UserService_GetUser, request, GetUserResponse.class);
     }

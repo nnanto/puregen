@@ -129,6 +129,22 @@ func generatePythonMethodConstants(g *protogen.GeneratedFile, service *protogen.
 		g.P("    ", constName, " = \"", constName, "\"")
 	}
 	g.P()
+
+	// Generate method metadata dictionary
+	g.P("    METHOD_METADATA = {")
+	for _, method := range service.Methods {
+		constName := serviceName + "_" + method.GoName
+		metadata := parseMethodMetadata(method.Comments)
+		if metadata != nil {
+			g.P("        ", constName, ": {")
+			for key, value := range metadata {
+				g.P("            \"", key, "\": \"", value, "\",")
+			}
+			g.P("        },")
+		}
+	}
+	g.P("    }")
+	g.P()
 }
 
 func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {

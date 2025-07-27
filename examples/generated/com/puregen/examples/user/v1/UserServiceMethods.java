@@ -2,9 +2,23 @@
 
 package com.puregen.examples.user.v1;
 
+import java.util.*;
+
 public final class UserServiceMethods {
     private UserServiceMethods() {} // Prevent instantiation
 
     public static final String UserService_CreateUser = "UserService_CreateUser";
     public static final String UserService_GetUser = "UserService_GetUser";
+
+    public static final Map<String, Map<String, String>> METHOD_METADATA = new HashMap<>();
+    static {
+        Map<String, String> createuserMetadata = new HashMap<>();
+        createuserMetadata.put("method", "POST");
+        createuserMetadata.put("path", "/users");
+        METHOD_METADATA.put(UserService_CreateUser, createuserMetadata);
+        Map<String, String> getuserMetadata = new HashMap<>();
+        getuserMetadata.put("method", "GET");
+        getuserMetadata.put("path", "/users/{id}");
+        METHOD_METADATA.put(UserService_GetUser, getuserMetadata);
+    }
 }

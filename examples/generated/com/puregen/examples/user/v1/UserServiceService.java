@@ -4,8 +4,16 @@ package com.puregen.examples.user.v1;
 
     // UserService provides operations for managing users
 public interface UserServiceService {
-    // CreateUser creates a new user
+    /**
+     * CreateUser creates a new user
+     * metadata: {"method":"POST", "path":"/users"}
+     */
     CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception;
-    // GetUser retrieves a user by ID
+    /**
+     * GetUser retrieves a user by ID
+     * metadata:{"method":"GET", "path":"/users/{id}"}
+     * This method retrieves a user by their unique ID.
+     * It returns the user details if found, otherwise indicates not found.
+     */
     GetUserResponse getUser(Map<String, Object> ctx, GetUserRequest request) throws Exception;
 }

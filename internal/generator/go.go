@@ -1,10 +1,39 @@
 package generator
 
 import (
+	"encoding/json"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
 )
+
+// parseMethodMetadata extracts metadata from method comments
+func parseMethodMetadata(comments protogen.CommentSet) map[string]string {
+	// Use leading comments if available, otherwise trailing
+	comment := comments.Leading
+	if comment == "" && comments.Trailing != "" {
+		comment = comments.Trailing
+	}
+
+	if comment == "" {
+		return nil
+	}
+
+	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "metadata:") {
+			jsonStr := strings.TrimPrefix(line, "metadata:")
+			jsonStr = strings.TrimSpace(jsonStr)
+
+			var metadata map[string]string
+			if err := json.Unmarshal([]byte(jsonStr), &metadata); err == nil {
+				return metadata
+			}
+		}
+	}
+	return nil
+}
 
 // formatGoComment formats a comment for Go code
 func formatGoComment(comments protogen.CommentSet) []string {
@@ -119,6 +148,22 @@ func generateGoMethodConstants(g *protogen.GeneratedFile, service *protogen.Serv
 		g.P("	", constName, " = \"", constName, "\"")
 	}
 	g.P(")")
+	g.P()
+
+	// Generate method metadata map
+	g.P("var MethodMetadata = map[string]map[string]string{")
+	for _, method := range service.Methods {
+		constName := serviceName + "_" + method.GoName
+		metadata := parseMethodMetadata(method.Comments)
+		if metadata != nil {
+			g.P("	", constName, ": {")
+			for key, value := range metadata {
+				g.P("		\"", key, "\": \"", value, "\",")
+			}
+			g.P("	},")
+		}
+	}
+	g.P("}")
 	g.P()
 }
 

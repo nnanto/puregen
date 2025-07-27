@@ -51,8 +51,12 @@ message GetUserResponse {
 // UserService provides operations for managing users
 service UserService {
   // CreateUser creates a new user
+  // metadata: {"method":"POST", "path":"/users"}
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   
   // GetUser retrieves a user by ID
+  // metadata:{"method":"GET", "path":"/users/{id}"}
+  // This method retrieves a user by their unique ID.
+  // It returns the user details if found, otherwise indicates not found.
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
 }

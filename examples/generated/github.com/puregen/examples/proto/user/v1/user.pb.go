@@ -159,20 +159,28 @@ func (m *GetUserResponse) FromJSON(data []byte) error {
 // UserService provides operations for managing users
 type UserServiceService interface {
 	// CreateUser creates a new user
+	// metadata: {"method":"POST", "path":"/users"}
 	CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error)
 	// GetUser retrieves a user by ID
+	// metadata:{"method":"GET", "path":"/users/{id}"}
+	// This method retrieves a user by their unique ID.
+	// It returns the user details if found, otherwise indicates not found.
 	GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error)
 }
 
 type DefaultUserServiceService struct{}
 
 // CreateUser creates a new user
+// metadata: {"method":"POST", "path":"/users"}
 func (s *DefaultUserServiceService) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
 	// TODO: Implement CreateUser
 	return &CreateUserResponse{}, fmt.Errorf("method CreateUser not implemented")
 }
 
 // GetUser retrieves a user by ID
+// metadata:{"method":"GET", "path":"/users/{id}"}
+// This method retrieves a user by their unique ID.
+// It returns the user details if found, otherwise indicates not found.
 func (s *DefaultUserServiceService) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
 	// TODO: Implement GetUser
 	return &GetUserResponse{}, fmt.Errorf("method GetUser not implemented")
@@ -184,6 +192,17 @@ const (
 	UserService_CreateUser = "UserService_CreateUser"
 	UserService_GetUser    = "UserService_GetUser"
 )
+
+var MethodMetadata = map[string]map[string]string{
+	UserService_CreateUser: {
+		"path":   "/users",
+		"method": "POST",
+	},
+	UserService_GetUser: {
+		"method": "GET",
+		"path":   "/users/{id}",
+	},
+}
 
 // Client
 
@@ -200,6 +219,7 @@ func NewUserServiceClient(transport Transport) *UserServiceClient {
 }
 
 // CreateUser creates a new user
+// metadata: {"method":"POST", "path":"/users"}
 func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
 	result, err := c.transport.Send(ctx, UserService_CreateUser, req, (*CreateUserResponse)(nil))
 	if err != nil {
@@ -212,6 +232,9 @@ func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserReque
 }
 
 // GetUser retrieves a user by ID
+// metadata:{"method":"GET", "path":"/users/{id}"}
+// This method retrieves a user by their unique ID.
+// It returns the user details if found, otherwise indicates not found.
 func (c *UserServiceClient) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
 	result, err := c.transport.Send(ctx, UserService_GetUser, req, (*GetUserResponse)(nil))
 	if err != nil {
