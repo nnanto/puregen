@@ -1,341 +1,218 @@
-# PureGen - IDL Parser and Code Generator
+# puregen - Protobuf Code Generator
 
-PureGen is a code generation tool that transforms YAML into code for any target language. Define your data structures and services once, then generate consistent, type-safe code across multiple languages and platforms.
+puregen is a protobuf plugin that generates simple, dependency-minimal code for Go, Java, and Python from `.proto` files. The generated code focuses on simplicity and uses built-in language features rather than heavy dependencies.
 
-## Why PureGen?
+## Features
 
-- **Language Agnostic**: Generate code for any language using Go templates
-- **Type Safety**: Ensures consistent types across your entire system
-- **DRY Principle**: Define once, generate everywhere
-- **Flexible Templates**: Write custom templates for your specific needs
-- **Service Contracts**: Define RPC services alongside your data structures
-- **Field Validation**: Built-in support for required fields, arrays, and custom types
-- **Interactive Creation**: Create IDL files interactively with the creator command
-- **Validation**: Validate IDL files for type consistency
+- **Multi-language support**: Generate code for Go, Java, and Python
+- **Minimal dependencies**: Uses only built-in libraries and standard patterns
+- **Simple data structures**: Generated classes/structs are easy to understand and modify
+- **JSON serialization**: Built-in JSON marshaling/unmarshaling support
+- **Service interfaces**: Clean interface definitions for RPC services
+- **Client generation**: Ready-to-use clients with pluggable transport
+- **Validation support**: Basic validation method scaffolding
 
 ## Installation
 
-### Released Binaries (Recommended)
+### Prerequisites
 
-Download the latest release for your platform:
+- Go 1.19 or later
+- Protocol Buffers compiler (`protoc`)
 
-**Linux (x64)**
-```bash
-curl -L https://github.com/nnanto/puregen/releases/download/latest/puregen-linux-amd64.tar.gz | tar -xz
-sudo mv puregen-linux-amd64 /usr/local/bin/puregen
-```
-
-**macOS (Apple Silicon)**
-```bash
-curl -L https://github.com/nnanto/puregen/releases/download/latest/puregen-darwin-arm64.tar.gz | tar -xz
-sudo mv puregen-darwin-arm64 /usr/local/bin/puregen
-```
-
-**macOS (Intel)**
-```bash
-curl -L https://github.com/nnanto/puregen/releases/download/latest/puregen-darwin-amd64.tar.gz | tar -xz
-sudo mv puregen-darwin-amd64 /usr/local/bin/puregen
-```
-
-**Windows**
-Download `puregen-windows-amd64.zip` from the [releases page](https://github.com/nnanto/puregen/releases/latest), extract it, and add the executable to your PATH.
-
-### From Source
+### Build the Plugin
 
 ```bash
-git clone https://github.com/nnanto/puregen.git
+# Clone the repository
+git clone https://github.com/nnanto/puregen
 cd puregen
-go mod tidy
-make build
+
+# Build the plugin
+go build -o protoc-gen-puregen ./cmd/protoc-gen-puregen
+
+# Make it available in your PATH (optional)
+sudo mv protoc-gen-puregen /usr/local/bin/
 ```
-
-## Quick Start
-
-1. **Create an IDL file** (`user_service.yaml`):
-```yaml
-name: "UserService"
-version: "1.0"
-
-messages:
-  User:
-    description: "User entity with profile information"
-    fields:
-      id:
-        type: "string"
-        required: true
-        description: "Unique user identifier"
-      name:
-        type: "string"
-        required: true
-      email:
-        type: "string"
-        required: true
-      tags:
-        type: "string"
-        repeated: true
-        description: "User tags for categorization"
-      active:
-        type: "bool"
-        required: true
-
-  GetUserRequest:
-    fields:
-      id:
-        type: "string"
-        required: true
-
-services:
-  UserService:
-    description: "User management service"
-    methods:
-      GetUser:
-        description: "Retrieve a user by ID"
-        input: "GetUserRequest"
-        output: "User"
-      ListUsers:
-        description: "Stream all users"
-        input: "void"
-        output: "User"
-        streaming: true
-```
-
-2. **Generate code using a template**:
-```bash
-puregen generate --input user_service.yaml --templates templates/typescript.tmpl --output ./generated
-```
-
-3. **Result**: PureGen generates type-safe code in your target language!
 
 ## Usage
 
-### Command Line
+### Basic Generation
+
+Generate code for all supported languages:
 
 ```bash
-# Basic code generation
-puregen generate --input <idl-file> --templates <template-file> --output <output-directory>
-
-# Short flags
-puregen generate -i <idl-file> -t <template-file> -o <output-directory>
-
-# Multiple templates (comma-separated)
-puregen generate --input <idl-file> --templates <template1,template2,template3> --output <output-directory>
-
-# With additional context JSON for templates
-puregen generate -i <idl-file> -t <template-file> -o <output-directory> --additional-context-json '{"namespace":"com.example","version":"v1"}'
-
-# Interactive IDL creation
-puregen creator --output-file <output-yaml-file>
-
-# Validate IDL file
-puregen validate --input <idl-file>
-
-# Examples
-puregen generate -i service.yaml -t templates/go.tmpl -o ./gen
-puregen generate -i api.yaml -t templates/typescript.tmpl -o ./src/types
-puregen creator -o my_service.yaml
-puregen validate -i my_service.yaml
-
-# Generate multiple languages at once
-puregen generate -i user_service.yaml -t templates/go.tmpl,templates/typescript.tmpl,templates/python.tmpl -o ./generated
-
-# With additional context for template customization
-puregen generate -i user_service.yaml -t templates/go.tmpl -o ./generated --additional-context-json '{"packageName":"models","importPath":"github.com/company/project"}'
-
-# Check version
-puregen version
+protoc --puregen_out=./generated --puregen_opt=language=all user.proto
 ```
 
-### Available Commands
-
-- `puregen generate` - Generate code from IDL files using templates
-  - `--input, -i` - Input YAML IDL file (required)
-  - `--templates, -t` - Template file paths, comma-separated for multiple templates (required)
-  - `--output, -o` - Output directory for generated files (default: "generated")
-  - `--additional-context-json` - Additional context as JSON to pass to templates
-- `puregen creator` - Interactively create a new IDL file
-- `puregen validate` - Validate an IDL file for type consistency and potential issues
-- `puregen version` - Show version information
-- `puregen help` - Show help information
-
-### Creator Mode
-
-Use the interactive creator to build IDL files step by step:
+Generate code for a specific language:
 
 ```bash
-puregen creator --output-file my_service.yaml
+# Go only
+protoc --puregen_out=./generated --puregen_opt=language=go user.proto
+
+# Java only
+protoc --puregen_out=./generated --puregen_opt=language=java user.proto
+
+# Python only
+protoc --puregen_out=./generated --puregen_opt=language=python user.proto
 ```
 
-The creator will guide you through:
-- Setting service name and version
-- Defining messages with typed fields
-- Creating service methods
-- Setting up field validation rules
+### Example Proto File
 
-### Validation
+```protobuf
+syntax = "proto3";
 
-Validate your IDL files to catch potential issues:
+package example.v1;
 
-```bash
-puregen validate --input my_service.yaml
-```
+option go_package = "github.com/nnanto/puregen/examples/proto/gen/go";
+option java_package = "com.example.proto.v1";
 
-The validator checks for:
-- **Type consistency**: Ensures all field types are either primitive types or defined messages
-- **Missing references**: Warns about custom types that aren't defined in the Messages section
-- **Syntax errors**: Basic YAML and structure validation
-
-Example validation output:
-```
-Warning: Field 'profile' in message 'User' has type 'UserProfile' which is not primitive and not defined in Messages
-Warning: Field 'settings' in message 'User' has type '[]AppSettings' which is not primitive and not defined in Messages
-```
-
-### Available Templates
-
-PureGen comes with sample templates :
-- `templates/go.tmpl` - Go structs and interfaces
-- `templates/typescript.tmpl` - TypeScript interfaces
-- `templates/python.tmpl` - Python dataclasses
-
-### Using Additional Context
-
-You can pass additional context data to your templates using the `--additional-context-json` flag. This allows you to customize template behavior without modifying the IDL file:
-
-```bash
-# Pass namespace and package information
-puregen generate -i service.yaml -t templates/go.tmpl -o ./gen \
-  --additional-context-json '{"namespace":"com.company.api","packageName":"models"}'
-
-# Pass multiple configuration values
-puregen generate -i service.yaml -t templates/typescript.tmpl -o ./types \
-  --additional-context-json '{"exportDefault":true,"useInterfaces":true,"addValidation":false}'
-```
-
-In your templates, access this data via `.AdditionalContext`:
-
-```go
-{{if .AdditionalContext.namespace}}
-namespace {{.AdditionalContext.namespace}};
-{{end}}
-
-{{if .AdditionalContext.packageName}}
-package {{.AdditionalContext.packageName}}
-{{else}}
-package {{lower .Name}}
-{{end}}
-```
-
-### Generated Code Example
-
-From the IDL above, TypeScript generation produces:
-
-```typescript
-// Generated by PureGen - do not modify
-
-export interface User {
-  /** Unique user identifier */
-  id: string;
-  name: string;
-  email: string;
-  /** User tags for categorization */
-  tags?: string[];
-  active: boolean;
+message User {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+  bool is_active = 4;
+  UserProfile profile = 5;
 }
 
-export interface GetUserRequest {
-  id: string;
+message UserProfile {
+  string bio = 1;
+  string avatar_url = 2;
+  int64 created_at = 3;
 }
 
-/** User management service */
-export interface UserService {
-  /** Retrieve a user by ID */
-  getUser(input: GetUserRequest): Promise<User>;
-  /** Stream all users */
-  listUsers(): AsyncIterable<User>;
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+  UserProfile profile = 3;
+}
+
+message CreateUserResponse {
+  User user = 1;
+  string message = 2;
+}
+
+message GetUserRequest {
+  int32 id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
 }
 ```
 
+## Using the Generated Code
 
-## IDL Format
+### As Models Only
+Simple data structures with validation and serialization
+- **[Go Models Example](doc/golang/models-example.md)** - Creating and working with generated Go structs
+- **[Java Models Example](doc/java/models-example.md)** - Using generated Java classes with builder pattern
+- **[Python Models Example](doc/python/models-example.md)** - Working with generated Python dataclasses
 
-### Messages
+### As Server Implementation
+Service implementations with HTTP endpoints
 
-Define your data structures with typed fields:
+- **[Go Server Example](doc/golang/server-example.md)** - HTTP server implementation with generated service interface
+- **[Java Server Example](doc/java/server-example.md)** - Java HTTP server using generated service classes
+- **[Python Server Example](doc/python/server-example.md)** - Flask-based server with generated service interface
 
-```yaml
-messages:
-  User:
-    description: "User entity"
-    fields:
-      id:
-        type: "string"
-        required: true
-        description: "Primary key"
-      tags:
-        type: "string"
-        repeated: true
-      metadata:
-        type: "UserMetadata"  # Custom type reference
-```
+### As Client with Custom Transport
+Client libraries with pluggable transport
 
-### Services
+- **[Go Client Example](doc/golang/client-example.md)** - HTTP client with custom transport implementation
+- **[Java Client Example](doc/java/client-example.md)** - Java HTTP client with transport abstraction
+- **[Python Client Example](doc/python/client-example.md)** - Python client with requests-based transport
 
-Define RPC services with methods:
+You can define custom transports for different protocols (HTTP, gRPC, etc.) by implementing the `Transport` interface in each language.
+Example: [Name-Based Routing Transport](examples/transport/name_based_routing_transport/README.md)
 
-```yaml
-services:
-  UserService:
-    description: "User management service"
-    methods:
-      GetUser:
-        description: "Fetch user by ID"
-        input: "GetUserRequest"
-        output: "User"
-      StreamUsers:
-        description: "Stream all users"
-        input: "ListUsersRequest"
-        output: "User"
-        streaming: true
-      DeleteUser:
-        input: "DeleteUserRequest"
-        output: "void"  # No return value
-```
 
-## Supported Field Types
+## Generated Code Features
 
-- **Primitives**: `string`, `int`, `int32`, `int64`, `float`, `float32`, `float64`, `bool`, `byte`, `bytes`
-- **Custom Types**: Reference other messages by name
-- **Arrays**: Use `repeated: true` for array/slice types or prefix with `[]`
-- **Optional**: Fields without `required: true` are optional
+### Go
 
-## Writing Custom Templates
+- Struct definitions with JSON tags
+- Constructor functions (`NewMessageName()`)
+- Validation methods
+- JSON serialization (`ToJSON()`, `FromJSON()`)
+- Service interfaces with default implementations
+- Clients with pluggable Transport interface
 
-Create your own templates for any language or framework. See [Writing Templates Guide](./writing_template.md) for detailed documentation.
+### Java
 
-Example template snippet:
-```go
-{{range .Messages}}
-class {{.Name | pascal}} {
-{{range $name, $field := .Fields}}
-  {{$name}}: {{$field.Type}}{{if not $field.Required}}?{{end}};
-{{end}}
-}
-{{end}}
-```
+- POJO classes with Jackson annotations
+- Builder pattern support
+- Getters and setters
+- JSON serialization methods
+- Service interfaces with default implementations
+- Clients with generic Transport interface
 
-## Testing
+### Python
+
+- Dataclasses with type hints
+- JSON serialization support
+- Validation methods
+- Service abstract base classes
+- Clients with abstract Transport base class
+
+## Testing the Plugin
+
+Test with the provided example:
 
 ```bash
-go test ./...
+# Generate code for the example proto file
+cd examples
+protoc --puregen_out=./generated --puregen_opt=language=all proto/user.proto
+
+# Check the generated files
+ls -la generated/
 ```
 
-## Contributing
+## Development
+
+### Project Structure
+
+```
+├── cmd/protoc-gen-puregen/   # Main plugin entry point
+├── internal/generator/         # Code generation logic
+│   ├── go.go                  # Go code generator
+│   ├── java.go                # Java code generator
+│   └── python.go              # Python code generator
+├── examples/                   # Example proto files and usage
+└── README.md
+```
+
+### Adding New Language Support
+
+1. Create a new generator file in `internal/generator/`
+2. Implement the `GenerateXXXFile` function
+3. Add the language option to the main plugin
+
+### Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Add tests for your changes
-4. Submit a pull request
+3. Make your changes
+4. Add tests for new functionality
+5. Submit a pull request
 
 ## License
 
 MIT License - see LICENSE file for details.
+
+## Comparison with Standard Generators
+
+| Feature | puregen | protoc-gen-go | protoc-gen-java |
+|---------|-----------|---------------|-----------------|
+| Dependencies | Minimal | protobuf runtime | protobuf runtime |
+| Code size | Small | Large | Large |
+| JSON support | Built-in | Requires jsonpb | Requires additional libs |
+| Transport abstraction | Pluggable | gRPC only | gRPC only |
+| Customization | Easy | Complex | Complex |
+| Learning curve | Low | Medium | Medium |
+
+puregen is ideal for projects that need simple, readable generated code without heavy protobuf runtime dependencies, with the flexibility to use any transport mechanism (HTTP, gRPC, message queues, etc.).

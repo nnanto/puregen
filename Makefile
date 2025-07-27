@@ -1,63 +1,66 @@
-.PHONY: build clean test release-local install dev
+.PHONY: build test clean install example
 
-# Variables
-BINARY_NAME=puregen
-VERSION?=$(shell git describe --tags --abbrev=0 2>/dev/null || echo "dev")
-LDFLAGS=-ldflags="-s -w -X main.version=$(VERSION)"
-DIST_DIR=dist
-CMD_PATH=./cmd/$(BINARY_NAME)
-
-# Default target
+BUILD_FILE=./build/protoc-gen-puregen
+# Build the plugin
 build:
-	go build $(LDFLAGS) -o $(BINARY_NAME) $(CMD_PATH)
+	go build -o $(BUILD_FILE) ./cmd/protoc-gen-puregen
+
+# Install the plugin to GOPATH/bin
+install: build
+	go install ./cmd/protoc-gen-puregen
 
 # Clean build artifacts
 clean:
-	rm -f $(BINARY_NAME)
-	rm -rf $(DIST_DIR)
+	rm -f protoc-gen-puregen
+	rm -rf examples/generated
+
+# Test with example proto file
+example: build
+	mkdir -p examples/generated
+	$(BUILD_FILE) --help || true
+	protoc --plugin=$(BUILD_FILE) \
+		--puregen_out=examples/generated \
+		--puregen_opt=language=all \
+		-I examples/proto \
+		examples/proto/*.proto
+
+# Test specific languages
+example-go: build
+	mkdir -p examples/generated
+	protoc --plugin=$(BUILD_FILE) \
+		--puregen_out=examples/generated \
+		--puregen_opt=language=go \
+		-I examples/proto \
+		examples/proto/*.proto
+
+example-java: build
+	mkdir -p examples/generated
+	protoc --plugin=$(BUILD_FILE) \
+		--puregen_out=examples/generated \
+		--puregen_opt=language=java \
+		-I examples/proto \
+		examples/proto/*.proto
+
+example-python: build
+	mkdir -p examples/generated
+	protoc --plugin=$(BUILD_FILE) \
+		--puregen_out=examples/generated \
+		--puregen_opt=language=python \
+		-I examples/proto \
+		examples/proto/*.proto
+
+# Format code
+fmt:
+	go fmt ./...
 
 # Run tests
 test:
-	go test -v ./...
+	go test ./...
 
-# Build for all platforms (local release)
-release-local: clean
-	mkdir -p $(DIST_DIR)
+# Lint code
+lint:
+	golangci-lint run
 
-	# Linux
-	GOOS=linux GOARCH=amd64 go build $(LDFLAGS) -o $(DIST_DIR)/$(BINARY_NAME)-linux-amd64 $(CMD_PATH)
-	GOOS=linux GOARCH=arm64 go build $(LDFLAGS) -o $(DIST_DIR)/$(BINARY_NAME)-linux-arm64 $(CMD_PATH)
-
-	# macOS
-	GOOS=darwin GOARCH=amd64 go build $(LDFLAGS) -o $(DIST_DIR)/$(BINARY_NAME)-darwin-amd64 $(CMD_PATH)
-	GOOS=darwin GOARCH=arm64 go build $(LDFLAGS) -o $(DIST_DIR)/$(BINARY_NAME)-darwin-arm64 $(CMD_PATH)
-
-	# Windows
-	GOOS=windows GOARCH=amd64 go build $(LDFLAGS) -o $(DIST_DIR)/$(BINARY_NAME)-windows-amd64.exe $(CMD_PATH)
-
-	# Create archives
-	cd $(DIST_DIR) && \
-	tar -czf $(BINARY_NAME)-linux-amd64.tar.gz $(BINARY_NAME)-linux-amd64 && \
-	tar -czf $(BINARY_NAME)-linux-arm64.tar.gz $(BINARY_NAME)-linux-arm64 && \
-	tar -czf $(BINARY_NAME)-darwin-amd64.tar.gz $(BINARY_NAME)-darwin-amd64 && \
-	tar -czf $(BINARY_NAME)-darwin-arm64.tar.gz $(BINARY_NAME)-darwin-arm64 && \
-	zip $(BINARY_NAME)-windows-amd64.zip $(BINARY_NAME)-windows-amd64.exe
-
-# Install locally
-install: build
-	sudo mv $(BINARY_NAME) /usr/local/bin/
-
-# Development build with race detection
-dev:
-	go build -race $(LDFLAGS) -o $(BINARY_NAME) $(CMD_PATH)
-
-newtag:
-	@echo "Creating new tag...Last tag: $(VERSION)"
-	@read -p "Enter new version tag (e.g., v1.0.0): " new_tag; \
-	if [ -z "$$new_tag" ]; then \
-		echo "Tag cannot be empty"; \
-		exit 1; \
-	fi; \
-	git tag "$$new_tag"; \
-	git push origin "$$new_tag"; \
-	echo "Tag $$new_tag created and pushed."
+# Show version
+version: build
+	$(BUILD_FILE) --version

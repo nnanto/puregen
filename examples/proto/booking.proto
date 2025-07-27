@@ -1,0 +1,358 @@
+syntax = "proto3";
+
+package puregen.booking.reservations;
+
+option go_package = "github.com/booking/booking-service/types";
+option java_package = "com.booking.services.reservations.model";
+
+import "google/protobuf/descriptor.proto";
+
+option java_multiple_files = true;
+
+
+
+
+/*
+  Booking Service provides comprehensive reservation management capabilities including
+  hotel bookings, flight reservations, and travel package management.
+
+ */
+service BookingService {
+
+
+  // Starts hotel reservation process for given search criteria and returns operation ID
+  rpc StartHotelReservation(HotelReservationRequest) returns (HotelReservationResponse) {
+
+  }
+
+  // Describes hotel reservation operations
+  rpc DescribeHotelReservation(HotelReservationRequest) returns (HotelReservationResponse) {
+
+  }
+
+  // Gets hotel reservation details for given operation ID
+  rpc GetHotelReservationResult(HotelReservationRequest) returns (HotelReservationResponse) {
+
+  }
+
+  /**
+    * Flight booking and travel package operations
+   */
+
+  // Starts flight booking operation and returns operation ID
+  rpc StartFlightBooking(FlightBookingRequest) returns (FlightBookingResponse) {
+
+  }
+
+  // Describes flight booking operations
+  rpc DescribeFlightBooking(FlightBookingRequest) returns (FlightBookingResponse) {
+
+  }
+
+  // Gets flight booking results for given operation ID
+  rpc GetFlightBookingResult(FlightBookingRequest) returns (FlightBookingResponse) {
+
+  }
+
+  // Starts travel package booking operation and returns operation ID
+  rpc StartTravelPackageBooking(TravelPackageBookingRequest) returns (TravelPackageBookingResponse) {
+
+  }
+
+  // Describes travel package booking operations
+  rpc DescribeTravelPackageBooking(TravelPackageBookingRequest) returns (TravelPackageBookingResponse) {
+
+  }
+
+  // Gets travel package booking results for given operation ID
+  rpc GetTravelPackageBookingResult(TravelPackageBookingRequest) returns (TravelPackageBookingResponse) {
+
+  }
+}
+
+
+// Operation types for booking system
+enum OperationType {
+  // Unknown operation type
+  OperationType_UNKNOWN = 0;
+
+  // Hotel reservation operation
+  OperationType_HOTEL_RESERVATION = 1;
+
+  // Flight booking operation
+  OperationType_FLIGHT_BOOKING = 2;
+
+  // Travel package booking operation
+  OperationType_TRAVEL_PACKAGE = 3;
+}
+
+// Payment information
+message PaymentInfo {
+  // Payment method (e.g., credit card, PayPal)
+  string paymentMethod = 1;
+  // Card token or payment reference
+  string paymentToken = 2;
+}
+
+// Error Response
+message Error {
+  // Error message
+  string message = 1;
+  // Error code
+  string code = 2;
+}
+
+// Status of the booking request
+enum BookingStatus {
+  // Unknown status
+  BookingStatus_UNKNOWN = 0;
+  // Booking confirmed
+  BookingStatus_CONFIRMED = 1;
+  // Booking failed
+  BookingStatus_FAILED = 2;
+  // Booking pending
+  BookingStatus_PENDING = 3;
+  // Booking partially confirmed
+  BookingStatus_PARTIAL_CONFIRMATION = 4;
+  // Booking cancelled
+  BookingStatus_CANCELLED = 5;
+}
+
+// Information about the user making the booking request
+message BookingHeader {
+  // User who initiated the booking request
+  string userId = 1;
+  // Application from which the request originated
+  string applicationName = 2;
+  // Booking request ID
+  string requestId = 3;
+  // Request timestamp
+  int64 requestTimestamp = 4;
+}
+
+message BookingOperationRequest{
+  // Operation ID
+  string operationId = 1;
+  // Payment info used during original request
+  PaymentInfo paymentInfo = 2;
+  // Confirm the booking
+  bool confirm = 3;
+}
+
+// Response for booking operations
+message BookingOperationResponse{
+  // Operation ID
+  string operationId = 1;
+  // Status of the booking
+  BookingStatus status = 2;
+  // Error message
+  Error error = 3;
+}
+
+message ListBookingsRequest{
+  // Payment info used during original request
+  PaymentInfo paymentInfo = 1;
+}
+
+// Response for list bookings
+message ListBookingsResponse{
+  // List of confirmed booking IDs
+  repeated string confirmedBookingIds = 1;
+
+  // Pending booking IDs
+  repeated string pendingBookingIds = 2;
+
+  // Error message
+  Error error = 3;
+}
+
+message BookingConfirmationRequest{
+  // Booking ID
+  repeated string bookingIds = 1;
+  // Payment info used during original request
+  PaymentInfo paymentInfo = 2;
+}
+
+message BookingStatsResponse{
+  // Total amount charged
+  double totalAmountCharged = 1;
+  // Total number of guests
+  int32 totalGuests = 2;
+  // Total bookings
+  int32 totalBookings = 3;
+}
+
+// Request for hotel reservation
+message HotelReservationRequest {
+
+  // Enum for room types
+  enum RoomType {
+    // Unknown room type
+    RoomType_UNKNOWN = 0;
+    // Standard room
+    RoomType_STANDARD = 1;
+    // Deluxe room
+    RoomType_DELUXE = 2;
+    // Suite
+    RoomType_SUITE = 3;
+    // Executive room
+    RoomType_EXECUTIVE = 4;
+  }
+
+  // Hotel search criteria
+  repeated string hotelLocations = 1;
+
+  // List of preferred room types
+  repeated RoomType roomTypes = 2;
+
+  // Maximum price per night
+  double maxPricePerNight = 3;
+
+  // Required payment information
+  PaymentInfo paymentInfo = 4;
+
+  // Check-in and check-out dates (Unix timestamp)
+  int64 checkInDate = 5;
+  int64 checkOutDate = 6;
+
+  // Number of guests
+  int32 numberOfGuests = 7;
+}
+
+// Response for hotel reservation
+message HotelReservationResponse {
+
+  // Hotel information
+  message Hotel {
+    // Name of the hotel
+    string name = 1;
+    // Hotel rating (1-5 stars)
+    double rating = 2;
+    // Price per night
+    double pricePerNight = 3;
+    // Hotel address
+    string address = 4;
+  }
+
+  // Room availability with hotel details
+  message AvailableRoom {
+    // Hotel information
+    Hotel hotel = 1;
+    // Room type
+    HotelReservationRequest.RoomType roomType = 2;
+    // Available rooms count
+    int32 availableRooms = 3;
+  }
+
+  // Hotel reservation result for single location
+  message SingleHotelReservationResponse {
+    // List of available rooms
+    repeated AvailableRoom availableRooms = 1;
+    // Error message
+    Error error = 2;
+  }
+
+  // List of results for each search location
+  repeated SingleHotelReservationResponse result = 2;
+  // Status of the request
+  BookingStatus status = 3;
+  // Error message
+  Error error = 4;
+  // Booking stats
+  BookingStatsResponse bookingStats = 5;
+}
+
+// Request for flight booking
+message FlightBookingRequest {
+  // Flight search criteria
+  repeated string flightRoutes = 1;
+
+  // Required payment information
+  PaymentInfo paymentInfo = 2;
+
+  // Include hotel recommendations
+  bool includeHotelRecommendations = 3;
+
+  // Departure and return dates (Unix timestamp)
+  int64 departureDate = 4;
+  int64 returnDate = 5;
+
+  // Number of passengers
+  int32 numberOfPassengers = 6;
+}
+
+// Response for flight booking
+message FlightBookingResponse {
+
+  // Response for single flight booking
+  message SingleFlightBooking {
+    // Flight details
+    string flightNumber = 1;
+    // Airline name
+    string airline = 2;
+    // Flight price
+    double price = 3;
+    // Departure time
+    int64 departureTime = 4;
+    // Arrival time
+    int64 arrivalTime = 5;
+
+    // Error message
+    Error error = 6;
+
+    // Hotel recommendations associated with the flight
+    HotelReservationResponse.SingleHotelReservationResponse hotelRecommendations = 7;
+  }
+
+  // List of flight bookings for each route
+  repeated SingleFlightBooking FlightBooking = 1;
+
+  // Error message
+  Error error = 3;
+
+  // Status of the request
+  BookingStatus status = 4;
+
+  // Booking stats
+  BookingStatsResponse bookingStats = 5;
+}
+
+// Request for travel package booking
+message TravelPackageBookingRequest {
+  // Travel destinations
+  repeated string destinations = 1;
+
+  // Required payment information
+  PaymentInfo paymentInfo = 2;
+}
+
+// Response for travel package booking
+message TravelPackageBookingResponse {
+
+  // Response for single travel package
+  message SingleTravelPackageResponse {
+    // Package name
+    string packageName = 1;
+    // Package description
+    string description = 2;
+    // Total package price
+    double totalPrice = 3;
+    // Package duration in days
+    int32 durationDays = 4;
+
+    // Error message
+    Error error = 5;
+  }
+
+  // List of travel packages for each destination
+  repeated SingleTravelPackageResponse travelPackages = 1;
+
+  // Error message
+  Error error = 3;
+
+  // Status of the request
+  BookingStatus status = 4;
+
+  // Booking stats
+  BookingStatsResponse bookingStats = 5;
+}

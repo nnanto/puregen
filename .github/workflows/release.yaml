@@ -41,21 +41,21 @@ jobs:
       run: |
         # Create dist directory
         mkdir -p dist
-        CMD_PATH=./cmd/puregen
+        CMD_PATH=./cmd/protoc-gen-puregen
         # Build for different platforms
-        GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/puregen-linux-amd64 $CMD_PATH
-        GOOS=linux GOARCH=arm64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/puregen-linux-arm64 $CMD_PATH
-        GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/puregen-darwin-amd64 $CMD_PATH
-        GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/puregen-darwin-arm64 $CMD_PATH
-        GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/puregen-windows-amd64.exe $CMD_PATH
+        GOOS=linux GOARCH=amd64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/protoc-gen-puregen-linux-amd64 $CMD_PATH
+        GOOS=linux GOARCH=arm64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/protoc-gen-puregen-linux-arm64 $CMD_PATH
+        GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/protoc-gen-puregen-darwin-amd64 $CMD_PATH
+        GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/protoc-gen-puregen-darwin-arm64 $CMD_PATH
+        GOOS=windows GOARCH=amd64 go build -ldflags="-s -w -X main.version=${{ steps.version.outputs.VERSION }}" -o dist/protoc-gen-puregen-windows-amd64.exe $CMD_PATH
 
         # Create archives
         cd dist
-        tar -czf puregen-linux-amd64.tar.gz puregen-linux-amd64
-        tar -czf puregen-linux-arm64.tar.gz puregen-linux-arm64
-        tar -czf puregen-darwin-amd64.tar.gz puregen-darwin-amd64
-        tar -czf puregen-darwin-arm64.tar.gz puregen-darwin-arm64
-        zip puregen-windows-amd64.zip puregen-windows-amd64.exe
+        tar -czf protoc-gen-puregen-linux-amd64.tar.gz protoc-gen-puregen-linux-amd64
+        tar -czf protoc-gen-puregen-linux-arm64.tar.gz protoc-gen-puregen-linux-arm64
+        tar -czf protoc-gen-puregen-darwin-amd64.tar.gz protoc-gen-puregen-darwin-amd64
+        tar -czf protoc-gen-puregen-darwin-arm64.tar.gz protoc-gen-puregen-darwin-arm64
+        zip protoc-gen-puregen-windows-amd64.zip protoc-gen-puregen-windows-amd64.exe
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -78,12 +78,12 @@ jobs:
           
           ### Linux/macOS
             ```bash
-            curl -L https://github.com/nnanto/puregen/releases/download/${{ steps.version.outputs.VERSION }}/puregen-linux-amd64.tar.gz | tar -xz
-            sudo mv puregen-* /usr/local/bin/puregen
+            curl -L https://github.com/nnanto/puregen/releases/download/${{ steps.version.outputs.VERSION }}/protoc-gen-puregen-linux-amd64.tar.gz | tar -xz
+            sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
 
             # Or for macOS
-            curl -L https://github.com/nnanto/puregen/releases/download/${{ steps.version.outputs.VERSION }}/puregen-darwin-amd64.tar.gz | tar -xz
-            sudo mv puregen-* /usr/local/bin/puregen
+            curl -L https://github.com/nnanto/puregen/releases/download/${{ steps.version.outputs.VERSION }}/protoc-gen-puregen-darwin-amd64.tar.gz | tar -xz
+            sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
             ```
           
           ### Windows
@@ -129,12 +129,12 @@ jobs:
           
           ### Linux/macOS
           ```bash
-          curl -L https://github.com/nnanto/puregen/releases/download/latest/puregen-linux-amd64.tar.gz | tar -xz
-          sudo mv puregen-* /usr/local/bin/puregen
+          curl -L https://github.com/nnanto/puregen/releases/download/latest/protoc-gen-puregen-linux-amd64.tar.gz | tar -xz
+          sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
 
           # Or for macOS
-          curl -L https://github.com/nnanto/puregen/releases/download/latest/puregen-darwin-amd64.tar.gz | tar -xz
-          sudo mv puregen-* /usr/local/bin/puregen
+          curl -L https://github.com/nnanto/puregen/releases/download/latest/protoc-gen-puregen-darwin-amd64.tar.gz | tar -xz
+          sudo mv protoc-gen-puregen-* /usr/local/bin/protoc-gen-puregen
           ```
           
           ### Windows

@@ -1,40 +1,26 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+/generated
+/build
 
-# Test binary, built with `go test -c`
-*.test
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
 
-# Output of the go coverage tool
-*.out
+# Linux
+*~
+.Trash-*
+.directory
 
-# Dependency directories
-vendor/
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
 
-# Go workspace file
-go.work
-
-# Build artifacts
-dist/
-build/
-
-# IDE files
-.vscode/
+# IDE
 .idea/
+.vscode/
 *.swp
 *.swo
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Binary file (not directory)
-/puregen
