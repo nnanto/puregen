@@ -214,8 +214,8 @@ func GeneratePythonFile(gen *protogen.Plugin, file *protogen.File) {
 		for _, message := range samePackageMessages {
 			// Get the module name for the message (based on its file)
 			msgFilename := strings.TrimSuffix(filepath.Base(message.Desc.ParentFile().Path()), ".proto")
-			// Use full package path instead of relative import
-			packagePath := getPythonModuleName(file)
+			// Use full package path with dots for import
+			packagePath := getPythonImportModuleName(file)
 			g.P("from ", packagePath, ".", msgFilename, " import ", message.GoIdent.GoName)
 		}
 	}
@@ -544,6 +544,20 @@ func getPythonModuleName(file *protogen.File) string {
 	pkg = strings.ReplaceAll(pkg, "-", "_")
 	// Remove leading slashes if any
 	pkg = strings.TrimPrefix(pkg, "/")
+	return pkg
+}
+
+func getPythonImportModuleName(file *protogen.File) string {
+	// Convert proto package to Python import module name (with dots)
+	pkg := string(file.Desc.Package())
+	if pkg == "" {
+		// Use filename without extension
+		return strings.TrimSuffix(filepath.Base(file.Desc.Path()), ".proto")
+	}
+
+	// Keep dots for Python import statements
+	// Ensure the package name is a valid Python identifier
+	pkg = strings.ReplaceAll(pkg, "-", "_")
 	return pkg
 }
 

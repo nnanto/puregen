@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
 from abc import ABC, abstractmethod
 import json
-from groups.principal import Principal
+from puregen.examples.groups.principal import Principal
 
 # Imported Messages (redefined locally)
 

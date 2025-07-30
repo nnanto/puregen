@@ -19,6 +19,7 @@ clean:
 
 # Test with example proto file
 example: build
+	rm -rf examples/generated/*
 	mkdir -p examples/generated
 	$(BUILD_FILE) --help || true
 	protoc --plugin=$(BUILD_FILE) \

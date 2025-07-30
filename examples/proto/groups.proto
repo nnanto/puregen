@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package groups;
+package puregen.examples.groups;
 
 import "principal.proto";
 import "error.proto";
 
-option go_package = "example/groups";
+option go_package = "puregen/examples/groups";
 
 
 // Group represents a group entity
