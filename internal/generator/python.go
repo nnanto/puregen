@@ -57,6 +57,132 @@ func writePythonComment(g *protogen.GeneratedFile, comments protogen.CommentSet)
 // Track created package directories to avoid duplicates
 var createdPythonPackages = make(map[string]bool)
 
+// collectSamePackageMessagesPython collects messages from the same package that need to be imported
+func collectSamePackageMessagesPython(file *protogen.File) []*protogen.Message {
+	visited := make(map[string]bool)
+	var samePackageMessages []*protogen.Message
+
+	// Check all messages in the file for same package message references
+	for _, message := range file.Messages {
+		collectSamePackageFromMessagePython(message, file, visited, &samePackageMessages)
+	}
+
+	// Check service methods for same package message references
+	for _, service := range file.Services {
+		for _, method := range service.Methods {
+			collectSamePackageFromMessagePython(method.Input, file, visited, &samePackageMessages)
+			collectSamePackageFromMessagePython(method.Output, file, visited, &samePackageMessages)
+		}
+	}
+
+	return samePackageMessages
+}
+
+// collectSamePackageFromMessagePython recursively collects same package messages from a message and its fields
+func collectSamePackageFromMessagePython(msg *protogen.Message, currentFile *protogen.File, visited map[string]bool, samePackageMessages *[]*protogen.Message) {
+	if msg == nil {
+		return
+	}
+
+	messageKey := string(msg.Desc.FullName())
+
+	// If this message is from the same package but different file and we haven't seen it before
+	if !visited[messageKey] && isSamePackageMessagePython(msg, currentFile) {
+		visited[messageKey] = true
+		*samePackageMessages = append(*samePackageMessages, msg)
+	}
+
+	// Recursively check fields for same package message types
+	for _, field := range msg.Fields {
+		if field.Message != nil {
+			collectSamePackageFromMessagePython(field.Message, currentFile, visited, samePackageMessages)
+		}
+	}
+
+	// Check nested messages
+	for _, nested := range msg.Messages {
+		collectSamePackageFromMessagePython(nested, currentFile, visited, samePackageMessages)
+	}
+}
+
+// isSamePackageMessagePython checks if a message is from the same package but different file
+func isSamePackageMessagePython(msg *protogen.Message, currentFile *protogen.File) bool {
+	if msg.Desc.ParentFile() == nil {
+		return false
+	}
+
+	// Check if the message's package is the same as the current file's package
+	msgPackage := msg.Desc.ParentFile().Package()
+	currentPackage := currentFile.Desc.Package()
+
+	// Check if the message's file is different from the current file
+	msgFile := msg.Desc.ParentFile()
+	currentFileDesc := currentFile.Desc
+
+	return msgPackage == currentPackage && msgFile != currentFileDesc
+}
+
+// collectImportedMessagesPython recursively collects all messages that are imported from other packages
+func collectImportedMessagesPython(file *protogen.File) []*protogen.Message {
+	visited := make(map[string]bool)
+	var importedMessages []*protogen.Message
+
+	// Check all messages in the file for imported message references
+	for _, message := range file.Messages {
+		collectImportedFromMessagePython(message, file, visited, &importedMessages)
+	}
+
+	// Check service methods for imported message references
+	for _, service := range file.Services {
+		for _, method := range service.Methods {
+			collectImportedFromMessagePython(method.Input, file, visited, &importedMessages)
+			collectImportedFromMessagePython(method.Output, file, visited, &importedMessages)
+		}
+	}
+
+	return importedMessages
+}
+
+// collectImportedFromMessagePython recursively collects imported messages from a message and its fields
+func collectImportedFromMessagePython(msg *protogen.Message, currentFile *protogen.File, visited map[string]bool, importedMessages *[]*protogen.Message) {
+	if msg == nil {
+		return
+	}
+
+	messageKey := string(msg.Desc.FullName())
+
+	// If this message is from an imported file and we haven't seen it before
+	if !visited[messageKey] && isImportedMessagePython(msg, currentFile) {
+		visited[messageKey] = true
+		*importedMessages = append(*importedMessages, msg)
+	}
+
+	// Recursively check fields for imported message types
+	for _, field := range msg.Fields {
+		if field.Message != nil {
+			collectImportedFromMessagePython(field.Message, currentFile, visited, importedMessages)
+		}
+	}
+
+	// Check nested messages
+	for _, nested := range msg.Messages {
+		collectImportedFromMessagePython(nested, currentFile, visited, importedMessages)
+	}
+}
+
+// isImportedMessagePython checks if a message is imported from another package
+func isImportedMessagePython(msg *protogen.Message, currentFile *protogen.File) bool {
+	if msg.Desc.ParentFile() == nil {
+		return false
+	}
+
+	// Check if the message's package is different from the current file's package
+	msgPackage := msg.Desc.ParentFile().Package()
+	currentPackage := currentFile.Desc.Package()
+
+	return msgPackage != currentPackage
+}
+
 // GeneratePythonFile generates Python code for the given protobuf file
 func GeneratePythonFile(gen *protogen.Plugin, file *protogen.File) {
 	if len(file.Messages) == 0 && len(file.Services) == 0 {
@@ -81,7 +207,29 @@ func GeneratePythonFile(gen *protogen.Plugin, file *protogen.File) {
 	g.P("from typing import Optional, List, Dict, Any")
 	g.P("from abc import ABC, abstractmethod")
 	g.P("import json")
+
+	// Collect and generate imports for same package messages
+	samePackageMessages := collectSamePackageMessagesPython(file)
+	if len(samePackageMessages) > 0 {
+		for _, message := range samePackageMessages {
+			// Get the module name for the message (based on its file)
+			msgFilename := strings.TrimSuffix(filepath.Base(message.Desc.ParentFile().Path()), ".proto")
+			// Use full package path instead of relative import
+			packagePath := getPythonModuleName(file)
+			g.P("from ", packagePath, ".", msgFilename, " import ", message.GoIdent.GoName)
+		}
+	}
 	g.P()
+
+	// Collect and generate imported messages first
+	importedMessages := collectImportedMessagesPython(file)
+	if len(importedMessages) > 0 {
+		g.P("# Imported Messages (redefined locally)")
+		g.P()
+		for _, message := range importedMessages {
+			generatePythonMessage(g, message)
+		}
+	}
 
 	// Generate messages
 	if len(file.Messages) > 0 {

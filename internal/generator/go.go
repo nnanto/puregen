@@ -36,6 +36,67 @@ func parseMethodMetadata(comments protogen.CommentSet) map[string]string {
 	return nil
 }
 
+// collectImportedMessages recursively collects all messages that are imported from other packages
+func collectImportedMessages(file *protogen.File) []*protogen.Message {
+	visited := make(map[string]bool)
+	var importedMessages []*protogen.Message
+
+	// Check all messages in the file for imported message references
+	for _, message := range file.Messages {
+		collectImportedFromMessage(message, file, visited, &importedMessages)
+	}
+
+	// Check service methods for imported message references
+	for _, service := range file.Services {
+		for _, method := range service.Methods {
+			collectImportedFromMessage(method.Input, file, visited, &importedMessages)
+			collectImportedFromMessage(method.Output, file, visited, &importedMessages)
+		}
+	}
+
+	return importedMessages
+}
+
+// collectImportedFromMessage recursively collects imported messages from a message and its fields
+func collectImportedFromMessage(msg *protogen.Message, currentFile *protogen.File, visited map[string]bool, importedMessages *[]*protogen.Message) {
+	if msg == nil {
+		return
+	}
+
+	messageKey := string(msg.Desc.FullName())
+
+	// If this message is from an imported file and we haven't seen it before
+	if !visited[messageKey] && isImportedMessage(msg, currentFile) {
+		visited[messageKey] = true
+		*importedMessages = append(*importedMessages, msg)
+	}
+
+	// Recursively check fields for imported message types
+	for _, field := range msg.Fields {
+		if field.Message != nil {
+			collectImportedFromMessage(field.Message, currentFile, visited, importedMessages)
+		}
+	}
+
+	// Check nested messages
+	for _, nested := range msg.Messages {
+		collectImportedFromMessage(nested, currentFile, visited, importedMessages)
+	}
+}
+
+// isImportedMessage checks if a message is imported from another package
+func isImportedMessage(msg *protogen.Message, currentFile *protogen.File) bool {
+	if msg.Desc.ParentFile() == nil {
+		return false
+	}
+
+	// Check if the message's package is different from the current file's package
+	msgPackage := msg.Desc.ParentFile().Package()
+	currentPackage := currentFile.Desc.Package()
+
+	return msgPackage != currentPackage
+}
+
 // formatGoComment formats a comment for Go code
 func formatGoComment(comments protogen.CommentSet) []string {
 	var result []string
@@ -89,11 +150,25 @@ func GenerateGoFile(gen *protogen.Plugin, file *protogen.File) {
 
 	// Generate imports
 	g.P("import (")
-	g.P(`"context"`)
+	if len(file.Services) > 0 {
+		g.P(`"context"`)
+	}
 	g.P(`"encoding/json"`)
-	g.P(`"fmt"`)
+	if len(file.Services) > 0 {
+		g.P(`"fmt"`)
+	}
 	g.P(")")
 	g.P()
+
+	// Collect and generate imported messages first
+	importedMessages := collectImportedMessages(file)
+	if len(importedMessages) > 0 {
+		g.P("// Imported Messages (redefined locally)")
+		g.P()
+		for _, msg := range importedMessages {
+			generateGoMessage(g, msg)
+		}
+	}
 
 	// Generate enums
 	if len(file.Enums) > 0 {

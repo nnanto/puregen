@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package groups;
+
+import "principal.proto";
+import "error.proto";
+
+option go_package = "example/groups";
+
+
+// Group represents a group entity
+message Group {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    int64 created_at = 4;
+}
+
+// CreateGroupRequest is the request for creating a group
+message CreateGroupRequest {
+    string name = 1;
+    string description = 2;
+    Principal owner = 3; // Principal who owns the group
+}
+
+// CreateGroupResponse is the response for creating a group
+message CreateGroupResponse {
+    Group group = 1;
+    company.examples.proto.error.v1.Error error = 2; // Error details if creation fails
+}
+
+// ListGroupsRequest is the request for listing groups
+message ListGroupsRequest {
+    int32 page_size = 1;
+    string page_token = 2;
+}
+
+// ListGroupsResponse is the response for listing groups
+message ListGroupsResponse {
+    repeated Group groups = 1;
+    string next_page_token = 2;
+}
+
+// GroupService provides operations on groups
+service GroupService {
+    // CreateGroup creates a new group
+    rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse) {}
+    
+    // ListGroups lists all groups with pagination
+    rpc ListGroups(ListGroupsRequest) returns (ListGroupsResponse) {}
+}

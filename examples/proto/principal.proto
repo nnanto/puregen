@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package groups;
+
+option go_package = "example/groups";
+
+message Principal {
+    string id = 1; // Unique identifier for the principal
+    string name = 2; // Name of the principal
+    string type = 3; // Type of the principal (e.g., "user", "group")
+    repeated string roles = 4; // Roles assigned to the principal
+}
