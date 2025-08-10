@@ -275,6 +275,26 @@ func generatePythonEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
 		g.P("        return value in [item.value for item in cls]")
 		g.P()
 	}
+
+	// Generate enum metadata if available
+	enumMetadata := parseEnumMetadata(enum.Comments)
+	if enumMetadata != nil {
+		g.P("# Metadata for ", enumName)
+		g.P(enumName, "Metadata = {")
+		// Sort keys for consistent output
+		var keys []string
+		for key := range enumMetadata {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+
+		for _, key := range keys {
+			value := enumMetadata[key]
+			g.P("    \"", key, "\": \"", value, "\",")
+		}
+		g.P("}")
+		g.P()
+	}
 }
 
 func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
@@ -377,6 +397,49 @@ func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
 	// Generate nested messages
 	for _, nested := range msg.Messages {
 		generatePythonMessage(g, nested)
+	}
+
+	// Generate message metadata if available
+	messageMetadata := parseMessageMetadata(msg.Comments)
+	if messageMetadata != nil {
+		g.P("# Metadata for ", msg.GoIdent.GoName)
+		g.P(msg.GoIdent.GoName, "Metadata = {")
+		// Sort keys for consistent output
+		var keys []string
+		for key := range messageMetadata {
+			keys = append(keys, key)
+		}
+		sort.Strings(keys)
+
+		for _, key := range keys {
+			value := messageMetadata[key]
+			g.P("    \"", key, "\": \"", value, "\",")
+		}
+		g.P("}")
+		g.P()
+	}
+
+	// Generate field metadata if available
+	for _, field := range msg.Fields {
+		fieldMetadata := parseFieldMetadata(field.Comments)
+		if fieldMetadata != nil {
+			fieldName := field.GoName // Use original field name directly
+			g.P("# Metadata for field ", field.GoName, " in ", msg.GoIdent.GoName)
+			g.P(msg.GoIdent.GoName, fieldName, "Metadata = {")
+			// Sort keys for consistent output
+			var keys []string
+			for key := range fieldMetadata {
+				keys = append(keys, key)
+			}
+			sort.Strings(keys)
+
+			for _, key := range keys {
+				value := fieldMetadata[key]
+				g.P("    \"", key, "\": \"", value, "\",")
+			}
+			g.P("}")
+			g.P()
+		}
 	}
 }
 

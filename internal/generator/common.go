@@ -9,6 +9,26 @@ import (
 
 // parseMethodMetadata extracts metadata from method comments using puregen:metadata: directive
 func parseMethodMetadata(comments protogen.CommentSet) map[string]string {
+	return parseMetadata(comments)
+}
+
+// parseMessageMetadata extracts metadata from message comments using puregen:metadata: directive
+func parseMessageMetadata(comments protogen.CommentSet) map[string]string {
+	return parseMetadata(comments)
+}
+
+// parseEnumMetadata extracts metadata from enum comments using puregen:metadata: directive
+func parseEnumMetadata(comments protogen.CommentSet) map[string]string {
+	return parseMetadata(comments)
+}
+
+// parseFieldMetadata extracts metadata from field comments using puregen:metadata: directive
+func parseFieldMetadata(comments protogen.CommentSet) map[string]string {
+	return parseMetadata(comments)
+}
+
+// parseMetadata is a generic function to extract metadata from comments using puregen:metadata: directive
+func parseMetadata(comments protogen.CommentSet) map[string]string {
 	// Use leading comments if available, otherwise trailing
 	comment := comments.Leading
 	if comment == "" && comments.Trailing != "" {

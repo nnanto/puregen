@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package example.metadata;
+
+option go_package = "example/metadata";
+
+// Example enum with metadata for validation and UI
+// puregen:metadata: {"validation": "required", "ui_type": "dropdown", "category": "status"}
+enum TaskStatus {
+    UNKNOWN = 0;
+    PENDING = 1;
+    IN_PROGRESS = 2;
+    COMPLETED = 3;
+    CANCELLED = 4;
+}
+
+// Example message with metadata for database mapping
+// puregen:metadata: {"table": "tasks", "cache": "true", "partition_key": "user_id"}
+message Task {
+    // Primary key field with validation metadata
+    // puregen:metadata: {"index": "primary", "validation": "uuid", "db_column": "task_id"}
+    string id = 1;
+    
+    // Required field with length constraints
+    // puregen:metadata: {"validation": "required", "min_length": "1", "max_length": "200"}
+    string title = 2;
+    
+    // Optional field with UI metadata
+    // puregen:metadata: {"ui_widget": "textarea", "placeholder": "Enter task description..."}
+    string description = 3;
+    
+    // Status field with validation and default value
+    // puregen:metadata: {"validation": "enum", "default": "PENDING", "required": "true"}
+    TaskStatus status = 4;
+    
+    // Timestamp field with format metadata
+    // puregen:metadata: {"format": "unix_timestamp", "index": "secondary"}
+    int64 created_at = 5;
+}
+
+// Example service with method metadata
+service TaskService {
+    // Create task endpoint with HTTP mapping
+    // puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
+    rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+    
+    // Get task endpoint with caching
+    // puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
+    rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
+}
+
+message CreateTaskRequest {
+    // Required fields for task creation
+    // puregen:metadata: {"validation": "required", "trim_whitespace": "true"}
+    string title = 1;
+    string description = 2;
+}
+
+message CreateTaskResponse {
+    Task task = 1;
+}
+
+message GetTaskRequest {
+    // puregen:metadata: {"validation": "uuid"}
+    string id = 1;
+}
+
+message GetTaskResponse {
+    Task task = 1;
+}
