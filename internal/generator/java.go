@@ -54,66 +54,7 @@ func writeJavaComment(g *protogen.GeneratedFile, comments protogen.CommentSet) {
 	}
 }
 
-// collectImportedMessagesJava recursively collects all messages that are imported from other packages
-func collectImportedMessagesJava(file *protogen.File) []*protogen.Message {
-	visited := make(map[string]bool)
-	var importedMessages []*protogen.Message
 
-	// Check all messages in the file for imported message references
-	for _, message := range file.Messages {
-		collectImportedFromMessageJava(message, file, visited, &importedMessages)
-	}
-
-	// Check service methods for imported message references
-	for _, service := range file.Services {
-		for _, method := range service.Methods {
-			collectImportedFromMessageJava(method.Input, file, visited, &importedMessages)
-			collectImportedFromMessageJava(method.Output, file, visited, &importedMessages)
-		}
-	}
-
-	return importedMessages
-}
-
-// collectImportedFromMessageJava recursively collects imported messages from a message and its fields
-func collectImportedFromMessageJava(msg *protogen.Message, currentFile *protogen.File, visited map[string]bool, importedMessages *[]*protogen.Message) {
-	if msg == nil {
-		return
-	}
-
-	messageKey := string(msg.Desc.FullName())
-
-	// If this message is from an imported file and we haven't seen it before
-	if !visited[messageKey] && isImportedMessageJava(msg, currentFile) {
-		visited[messageKey] = true
-		*importedMessages = append(*importedMessages, msg)
-	}
-
-	// Recursively check fields for imported message types
-	for _, field := range msg.Fields {
-		if field.Message != nil {
-			collectImportedFromMessageJava(field.Message, currentFile, visited, importedMessages)
-		}
-	}
-
-	// Check nested messages
-	for _, nested := range msg.Messages {
-		collectImportedFromMessageJava(nested, currentFile, visited, importedMessages)
-	}
-}
-
-// isImportedMessageJava checks if a message is imported from another package
-func isImportedMessageJava(msg *protogen.Message, currentFile *protogen.File) bool {
-	if msg.Desc.ParentFile() == nil {
-		return false
-	}
-
-	// Check if the message's package is different from the current file's package
-	msgPackage := msg.Desc.ParentFile().Package()
-	currentPackage := currentFile.Desc.Package()
-
-	return msgPackage != currentPackage
-}
 
 // GenerateJavaFile generates Java code for the given protobuf file
 func GenerateJavaFile(gen *protogen.Plugin, file *protogen.File, commonNamespace string) {
@@ -131,7 +72,7 @@ func GenerateJavaFile(gen *protogen.Plugin, file *protogen.File, commonNamespace
 	packageDir := strings.ReplaceAll(javaPackage, ".", "/")
 
 	// Collect and generate imported messages first
-	importedMessages := collectImportedMessagesJava(file)
+	importedMessages := collectImportedMessages(file)
 	for _, message := range importedMessages {
 		generateJavaMessage(gen, file, message, javaPackage, packageDir)
 	}
