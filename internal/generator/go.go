@@ -2,6 +2,7 @@ package generator
 
 import (
 	"sort"
+	"strconv"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
@@ -333,7 +334,28 @@ func generateGoMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
 
 	// Generate constructor
 	g.P("func New", msg.GoIdent.GoName, "() *", msg.GoIdent.GoName, " {")
-	g.P("	return &", msg.GoIdent.GoName, "{}")
+	
+	// Check if any fields have default values
+	hasDefaults := false
+	for _, field := range msg.Fields {
+		if getGoDefaultValue(field) != "" {
+			hasDefaults = true
+			break
+		}
+	}
+	
+	if hasDefaults {
+		g.P("	return &", msg.GoIdent.GoName, "{")
+		for _, field := range msg.Fields {
+			defaultValue := getGoDefaultValue(field)
+			if defaultValue != "" {
+				g.P("		", field.GoName, ": ", defaultValue, ",")
+			}
+		}
+		g.P("	}")
+	} else {
+		g.P("	return &", msg.GoIdent.GoName, "{}")
+	}
 	g.P("}")
 	g.P()
 
@@ -575,6 +597,39 @@ func getGoFieldType(field *protogen.Field) string {
 	}
 
 	return baseType
+}
+
+// getGoDefaultValue returns the Go default value for a field based on puregen directive
+func getGoDefaultValue(field *protogen.Field) string {
+	directive := parseFieldDirective(field.Comments)
+	if directive != nil && directive.Value != "" {
+		// Convert the value to Go syntax based on field type
+		switch field.Desc.Kind().String() {
+		case "string":
+			// Properly escape the string for Go
+			escaped := strings.ReplaceAll(directive.Value, `"`, `\"`)
+			return `"` + escaped + `"`
+		case "bool":
+			if directive.Value == "true" || directive.Value == "false" {
+				return directive.Value
+			}
+		case "int32", "int64", "uint32", "uint64", "sint32", "sint64", "fixed32", "fixed64", "sfixed32", "sfixed64":
+			// Validate that it's a valid number
+			if _, err := strconv.ParseInt(directive.Value, 10, 64); err == nil {
+				return directive.Value
+			}
+		case "float", "double":
+			// Validate that it's a valid float
+			if _, err := strconv.ParseFloat(directive.Value, 64); err == nil {
+				return directive.Value
+			}
+		}
+	}
+	// Special case: check for empty string directive
+	if directive != nil && directive.Value == "" && field.Desc.Kind().String() == "string" {
+		return `""`
+	}
+	return ""
 }
 
 // Track created transport namespaces to avoid duplicates for Go

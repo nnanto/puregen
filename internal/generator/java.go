@@ -3,6 +3,7 @@ package generator
 import (
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -351,7 +352,18 @@ func generateJavaMessage(gen *protogen.Plugin, file *protogen.File, msg *protoge
 	}
 
 	// Generate default constructor
-	g.P("    public ", msg.GoIdent.GoName, "() {}")
+	g.P("    public ", msg.GoIdent.GoName, "() {")
+	
+	// Check if any fields have default values and initialize them
+	for _, field := range msg.Fields {
+		defaultValue := getJavaDefaultValue(field)
+		if defaultValue != "" {
+			fieldName := getJavaFieldName(field.GoName)
+			g.P("        this.", fieldName, " = ", defaultValue, ";")
+		}
+	}
+	
+	g.P("    }")
 	g.P()
 
 	// Generate getters and setters
@@ -779,6 +791,49 @@ func getJavaFieldName(goName string) string {
 
 func getJavaMethodName(goName string) string {
 	return getJavaFieldName(goName)
+}
+
+// getJavaDefaultValue returns the Java default value for a field based on puregen directive
+func getJavaDefaultValue(field *protogen.Field) string {
+	directive := parseFieldDirective(field.Comments)
+	if directive != nil && directive.Value != "" {
+		// Convert the value to Java syntax based on field type
+		switch field.Desc.Kind().String() {
+		case "string":
+			// Properly escape the string for Java
+			escaped := strings.ReplaceAll(directive.Value, `"`, `\"`)
+			return `"` + escaped + `"`
+		case "bool":
+			if directive.Value == "true" || directive.Value == "false" {
+				return directive.Value
+			}
+		case "int32":
+			if _, err := strconv.ParseInt(directive.Value, 10, 32); err == nil {
+				return directive.Value
+			}
+		case "int64":
+			if _, err := strconv.ParseInt(directive.Value, 10, 64); err == nil {
+				return directive.Value + "L"
+			}
+		case "uint32", "uint64", "sint32", "sint64", "fixed32", "fixed64", "sfixed32", "sfixed64":
+			if _, err := strconv.ParseInt(directive.Value, 10, 64); err == nil {
+				return directive.Value
+			}
+		case "float":
+			if _, err := strconv.ParseFloat(directive.Value, 32); err == nil {
+				return directive.Value + "f"
+			}
+		case "double":
+			if _, err := strconv.ParseFloat(directive.Value, 64); err == nil {
+				return directive.Value
+			}
+		}
+	}
+	// Special case: check for empty string directive
+	if directive != nil && directive.Value == "" && field.Desc.Kind().String() == "string" {
+		return `""`
+	}
+	return ""
 }
 
 // Track created transport namespaces to avoid duplicates for Java

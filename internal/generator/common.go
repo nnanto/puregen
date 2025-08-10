@@ -58,11 +58,40 @@ func parseMetadata(comments protogen.CommentSet) map[string]string {
 // PuregenDirective represents a parsed puregen directive from comments
 type PuregenDirective struct {
 	EnumType string `json:"enumType,omitempty"`
+	Value    string `json:"value,omitempty"`
 	// Add other directive fields as needed
 }
 
 // parsePuregenDirective extracts puregen directives from comments
 func parsePuregenDirective(comments protogen.CommentSet) *PuregenDirective {
+	// Use leading comments if available, otherwise trailing
+	comment := comments.Leading
+	if comment == "" && comments.Trailing != "" {
+		comment = comments.Trailing
+	}
+
+	if comment == "" {
+		return nil
+	}
+
+	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "puregen:generate:") {
+			jsonStr := strings.TrimPrefix(line, "puregen:generate:")
+			jsonStr = strings.TrimSpace(jsonStr)
+
+			var directive PuregenDirective
+			if err := json.Unmarshal([]byte(jsonStr), &directive); err == nil {
+				return &directive
+			}
+		}
+	}
+	return nil
+}
+
+// parseFieldDirective extracts puregen directives from field comments
+func parseFieldDirective(comments protogen.CommentSet) *PuregenDirective {
 	// Use leading comments if available, otherwise trailing
 	comment := comments.Leading
 	if comment == "" && comments.Trailing != "" {

@@ -3,6 +3,7 @@ package generator
 import (
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 
 	"google.golang.org/protobuf/compiler/protogen"
@@ -717,6 +718,39 @@ func getPythonMethodName(goName string) string {
 }
 
 func getPythonDefaultValue(field *protogen.Field) string {
+	// First check for puregen value directive
+	directive := parseFieldDirective(field.Comments)
+	if directive != nil && directive.Value != "" {
+		// Convert the value to Python syntax based on field type
+		switch field.Desc.Kind().String() {
+		case "string":
+			// Properly escape the string for Python
+			escaped := strings.ReplaceAll(directive.Value, `"`, `\"`)
+			return `"` + escaped + `"`
+		case "bool":
+			if directive.Value == "true" {
+				return "True"
+			} else if directive.Value == "false" {
+				return "False"
+			}
+		case "int32", "sint32", "sfixed32", "int64", "sint64", "sfixed64",
+			"uint32", "fixed32", "uint64", "fixed64":
+			if _, err := strconv.ParseInt(directive.Value, 10, 64); err == nil {
+				return directive.Value
+			}
+		case "float", "double":
+			if _, err := strconv.ParseFloat(directive.Value, 64); err == nil {
+				return directive.Value
+			}
+		}
+	}
+	
+	// Special case: check for empty string directive
+	if directive != nil && directive.Value == "" && field.Desc.Kind().String() == "string" {
+		return `""`
+	}
+
+	// Fall back to standard default values
 	if field.Desc.IsList() {
 		return "field(default_factory=list)"
 	}
