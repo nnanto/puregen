@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package test.casing;
+
+option go_package = "github.com/test/casing";
+option java_package = "com.test.casing";
+
+message TestMessage {
+    // puregen:metadata: {"urls": "http://example.com/api/test"}
+    string APIHost = 1;
+    string TPMData = 2;
+    string XMLContent = 3;
+    string URLPath = 4;
+    string HTTPSEnabled = 5;
+    string UUIDValue = 6;
+    string JSONData = 7;
+    string APIKey = 8;
+    string SQLQuery = 9;
+    string HTMLContent = 10;
+}

@@ -1,10 +1,10 @@
 # HTTP Transport implementation for Python
 # This transport handles method routing based on method names and service names
 
-import requests
-from typing import Dict, Any, Type, TypeVar
 from abc import ABC, abstractmethod
-import re
+from typing import Any, Dict, Type, TypeVar
+
+import requests
 
 T = TypeVar("T")
 
@@ -182,6 +182,21 @@ class HTTPTransport(Transport):
 
     def _camel_to_snake_case(self, camel_case: str) -> str:
         """Convert camelCase to snake_case for URL paths"""
-        # Insert underscore before uppercase letters (except the first character)
-        snake_case = re.sub("([a-z0-9])([A-Z])", r"\1_\2", camel_case)
-        return snake_case.lower()
+        # Handle consecutive uppercase letters properly (e.g., APIHost -> api_host, not a_p_i_host)
+        if not camel_case:
+            return camel_case
+
+        result = []
+        for i, char in enumerate(camel_case):
+            if i > 0 and char.isupper():
+                # Check if the previous character was lowercase or if this is the end of consecutive caps
+                prev_is_lower = i > 0 and camel_case[i - 1].islower()
+                next_is_lower = i < len(camel_case) - 1 and camel_case[i + 1].islower()
+
+                # Add underscore if:
+                # 1. Previous char is lowercase (transition from lower to upper)
+                # 2. Current char is uppercase and next char is lowercase (end of consecutive caps)
+                if prev_is_lower or (next_is_lower and i > 0):
+                    result.append("_")
+            result.append(char)
+        return "".join(result).lower()

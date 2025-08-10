@@ -750,7 +750,31 @@ func getJavaFieldName(goName string) string {
 	}
 
 	// Convert to camelCase
-	return strings.ToLower(goName[:1]) + goName[1:]
+	// Handle consecutive uppercase letters properly (e.g., APIHost -> apiHost, not aPIHost)
+	runes := []rune(goName)
+	var result strings.Builder
+	
+	for i, r := range runes {
+		if i == 0 {
+			// First character is always lowercase
+			result.WriteRune(unicode.ToLower(r))
+		} else if 'A' <= r && r <= 'Z' {
+			// Check if this is part of consecutive uppercase letters
+			nextIsLower := i < len(runes)-1 && 'a' <= runes[i+1] && runes[i+1] <= 'z'
+			prevIsUpper := i > 0 && 'A' <= runes[i-1] && runes[i-1] <= 'Z'
+			
+			// Keep uppercase if it's the start of a new word (not consecutive caps)
+			// Make lowercase if it's in the middle of consecutive caps
+			if prevIsUpper && !nextIsLower {
+				result.WriteRune(unicode.ToLower(r))
+			} else {
+				result.WriteRune(r)
+			}
+		} else {
+			result.WriteRune(r)
+		}
+	}
+	return result.String()
 }
 
 func getJavaMethodName(goName string) string {

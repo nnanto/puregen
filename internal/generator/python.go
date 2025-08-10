@@ -686,10 +686,26 @@ func getPythonFieldType(field *protogen.Field) string {
 
 func getPythonFieldName(goName string) string {
 	// Convert PascalCase to snake_case
+	// Handle consecutive uppercase letters properly (e.g., APIHost -> api_host, not a_p_i_host)
+	if len(goName) == 0 {
+		return goName
+	}
+	
 	var result strings.Builder
-	for i, r := range goName {
+	runes := []rune(goName)
+	
+	for i, r := range runes {
 		if i > 0 && 'A' <= r && r <= 'Z' {
-			result.WriteRune('_')
+			// Check if the previous character was lowercase or if this is the end of consecutive caps
+			prevIsLower := i > 0 && 'a' <= runes[i-1] && runes[i-1] <= 'z'
+			nextIsLower := i < len(runes)-1 && 'a' <= runes[i+1] && runes[i+1] <= 'z'
+			
+			// Add underscore if:
+			// 1. Previous char is lowercase (transition from lower to upper)
+			// 2. Current char is uppercase and next char is lowercase (end of consecutive caps)
+			if prevIsLower || (nextIsLower && i > 0) {
+				result.WriteRune('_')
+			}
 		}
 		result.WriteRune(r)
 	}
