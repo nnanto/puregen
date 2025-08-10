@@ -760,7 +760,7 @@ const (
 	BookingService_GetTravelPackageBookingResult = "BookingService_GetTravelPackageBookingResult"
 )
 
-var MethodMetadata = map[string]map[string]string{}
+var BookingServiceMethodMetadata = map[string]map[string]string{}
 
 // Client
 
@@ -778,7 +778,7 @@ func NewBookingServiceClient(transport Transport) *BookingServiceClient {
 
 // Starts hotel reservation process for given search criteria and returns operation ID
 func (c *BookingServiceClient) StartHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_StartHotelReservation]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_StartHotelReservation]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_StartHotelReservation, req, (*HotelReservationResponse)(nil))
@@ -793,7 +793,7 @@ func (c *BookingServiceClient) StartHotelReservation(ctx context.Context, req *H
 
 // Describes hotel reservation operations
 func (c *BookingServiceClient) DescribeHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_DescribeHotelReservation]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_DescribeHotelReservation]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_DescribeHotelReservation, req, (*HotelReservationResponse)(nil))
@@ -808,7 +808,7 @@ func (c *BookingServiceClient) DescribeHotelReservation(ctx context.Context, req
 
 // Gets hotel reservation details for given operation ID
 func (c *BookingServiceClient) GetHotelReservationResult(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_GetHotelReservationResult]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_GetHotelReservationResult]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_GetHotelReservationResult, req, (*HotelReservationResponse)(nil))
@@ -823,7 +823,7 @@ func (c *BookingServiceClient) GetHotelReservationResult(ctx context.Context, re
 
 // Starts flight booking operation and returns operation ID
 func (c *BookingServiceClient) StartFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_StartFlightBooking]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_StartFlightBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_StartFlightBooking, req, (*FlightBookingResponse)(nil))
@@ -838,7 +838,7 @@ func (c *BookingServiceClient) StartFlightBooking(ctx context.Context, req *Flig
 
 // Describes flight booking operations
 func (c *BookingServiceClient) DescribeFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_DescribeFlightBooking]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_DescribeFlightBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_DescribeFlightBooking, req, (*FlightBookingResponse)(nil))
@@ -853,7 +853,7 @@ func (c *BookingServiceClient) DescribeFlightBooking(ctx context.Context, req *F
 
 // Gets flight booking results for given operation ID
 func (c *BookingServiceClient) GetFlightBookingResult(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_GetFlightBookingResult]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_GetFlightBookingResult]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_GetFlightBookingResult, req, (*FlightBookingResponse)(nil))
@@ -868,7 +868,7 @@ func (c *BookingServiceClient) GetFlightBookingResult(ctx context.Context, req *
 
 // Starts travel package booking operation and returns operation ID
 func (c *BookingServiceClient) StartTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_StartTravelPackageBooking]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_StartTravelPackageBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_StartTravelPackageBooking, req, (*TravelPackageBookingResponse)(nil))
@@ -883,7 +883,7 @@ func (c *BookingServiceClient) StartTravelPackageBooking(ctx context.Context, re
 
 // Describes travel package booking operations
 func (c *BookingServiceClient) DescribeTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_DescribeTravelPackageBooking]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_DescribeTravelPackageBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_DescribeTravelPackageBooking, req, (*TravelPackageBookingResponse)(nil))
@@ -898,7 +898,7 @@ func (c *BookingServiceClient) DescribeTravelPackageBooking(ctx context.Context,
 
 // Gets travel package booking results for given operation ID
 func (c *BookingServiceClient) GetTravelPackageBookingResult(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
-	if metadata, exists := MethodMetadata[BookingService_GetTravelPackageBookingResult]; exists {
+	if metadata, exists := BookingServiceMethodMetadata[BookingService_GetTravelPackageBookingResult]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, BookingService_GetTravelPackageBookingResult, req, (*TravelPackageBookingResponse)(nil))

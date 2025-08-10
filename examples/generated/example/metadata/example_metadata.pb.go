@@ -262,7 +262,7 @@ const (
 	TaskService_GetTask    = "TaskService_GetTask"
 )
 
-var MethodMetadata = map[string]map[string]string{
+var TaskServiceMethodMetadata = map[string]map[string]string{
 	TaskService_CreateTask: {
 		"auth":   "required",
 		"method": "POST",
@@ -292,7 +292,7 @@ func NewTaskServiceClient(transport Transport) *TaskServiceClient {
 
 // Create task endpoint with HTTP mapping
 func (c *TaskServiceClient) CreateTask(ctx context.Context, req *CreateTaskRequest) (*CreateTaskResponse, error) {
-	if metadata, exists := MethodMetadata[TaskService_CreateTask]; exists {
+	if metadata, exists := TaskServiceMethodMetadata[TaskService_CreateTask]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, TaskService_CreateTask, req, (*CreateTaskResponse)(nil))
@@ -307,7 +307,7 @@ func (c *TaskServiceClient) CreateTask(ctx context.Context, req *CreateTaskReque
 
 // Get task endpoint with caching
 func (c *TaskServiceClient) GetTask(ctx context.Context, req *GetTaskRequest) (*GetTaskResponse, error) {
-	if metadata, exists := MethodMetadata[TaskService_GetTask]; exists {
+	if metadata, exists := TaskServiceMethodMetadata[TaskService_GetTask]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, TaskService_GetTask, req, (*GetTaskResponse)(nil))

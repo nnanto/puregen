@@ -193,7 +193,7 @@ const (
 	TaskService_ListTasks  = "TaskService_ListTasks"
 )
 
-var MethodMetadata = map[string]map[string]string{}
+var TaskServiceMethodMetadata = map[string]map[string]string{}
 
 // Client
 
@@ -210,7 +210,7 @@ func NewTaskServiceClient(transport Transport) *TaskServiceClient {
 }
 
 func (c *TaskServiceClient) CreateTask(ctx context.Context, req *Task) (*Task, error) {
-	if metadata, exists := MethodMetadata[TaskService_CreateTask]; exists {
+	if metadata, exists := TaskServiceMethodMetadata[TaskService_CreateTask]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, TaskService_CreateTask, req, (*Task)(nil))
@@ -224,7 +224,7 @@ func (c *TaskServiceClient) CreateTask(ctx context.Context, req *Task) (*Task, e
 }
 
 func (c *TaskServiceClient) ListTasks(ctx context.Context, req *TaskList) (*TaskList, error) {
-	if metadata, exists := MethodMetadata[TaskService_ListTasks]; exists {
+	if metadata, exists := TaskServiceMethodMetadata[TaskService_ListTasks]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, TaskService_ListTasks, req, (*TaskList)(nil))

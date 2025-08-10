@@ -189,7 +189,7 @@ const (
 	GroupService_ListGroups  = "GroupService_ListGroups"
 )
 
-var MethodMetadata = map[string]map[string]string{}
+var GroupServiceMethodMetadata = map[string]map[string]string{}
 
 // Client
 
@@ -207,7 +207,7 @@ func NewGroupServiceClient(transport Transport) *GroupServiceClient {
 
 // CreateGroup creates a new group
 func (c *GroupServiceClient) CreateGroup(ctx context.Context, req *CreateGroupRequest) (*CreateGroupResponse, error) {
-	if metadata, exists := MethodMetadata[GroupService_CreateGroup]; exists {
+	if metadata, exists := GroupServiceMethodMetadata[GroupService_CreateGroup]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, GroupService_CreateGroup, req, (*CreateGroupResponse)(nil))
@@ -222,7 +222,7 @@ func (c *GroupServiceClient) CreateGroup(ctx context.Context, req *CreateGroupRe
 
 // ListGroups lists all groups with pagination
 func (c *GroupServiceClient) ListGroups(ctx context.Context, req *ListGroupsRequest) (*ListGroupsResponse, error) {
-	if metadata, exists := MethodMetadata[GroupService_ListGroups]; exists {
+	if metadata, exists := GroupServiceMethodMetadata[GroupService_ListGroups]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, GroupService_ListGroups, req, (*ListGroupsResponse)(nil))

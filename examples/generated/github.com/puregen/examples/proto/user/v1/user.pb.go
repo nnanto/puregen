@@ -189,7 +189,7 @@ const (
 	UserService_GetUser    = "UserService_GetUser"
 )
 
-var MethodMetadata = map[string]map[string]string{
+var UserServiceMethodMetadata = map[string]map[string]string{
 	UserService_CreateUser: {
 		"method": "POST",
 		"path":   "/users",
@@ -216,7 +216,7 @@ func NewUserServiceClient(transport Transport) *UserServiceClient {
 
 // CreateUser creates a new user
 func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
-	if metadata, exists := MethodMetadata[UserService_CreateUser]; exists {
+	if metadata, exists := UserServiceMethodMetadata[UserService_CreateUser]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, UserService_CreateUser, req, (*CreateUserResponse)(nil))
@@ -233,7 +233,7 @@ func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserReque
 // This method retrieves a user by their unique ID.
 // It returns the user details if found, otherwise indicates not found.
 func (c *UserServiceClient) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
-	if metadata, exists := MethodMetadata[UserService_GetUser]; exists {
+	if metadata, exists := UserServiceMethodMetadata[UserService_GetUser]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
 	result, err := c.transport.Send(ctx, UserService_GetUser, req, (*GetUserResponse)(nil))

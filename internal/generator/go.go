@@ -168,7 +168,7 @@ func generateGoMethodConstants(g *protogen.GeneratedFile, service *protogen.Serv
 	g.P()
 
 	// Generate method metadata map
-	g.P("var MethodMetadata = map[string]map[string]string{")
+	g.P("var ", serviceName, "MethodMetadata = map[string]map[string]string{")
 	for _, method := range service.Methods {
 		constName := serviceName + "_" + method.GoName
 		metadata := parseMethodMetadata(method.Comments)
@@ -540,7 +540,7 @@ func generateGoClient(g *protogen.GeneratedFile, service *protogen.Service, comm
 		outputType := method.Output.GoIdent.GoName
 		constName := serviceName + "_" + method.GoName
 		g.P("func (c *", serviceName, "Client) ", method.GoName, "(ctx context.Context, req *", inputType, ") (*", outputType, ", error) {")
-		g.P("	if metadata, exists := MethodMetadata[", constName, "]; exists {")
+		g.P("	if metadata, exists := ", serviceName, "MethodMetadata[", constName, "]; exists {")
 		g.P("		ctx = context.WithValue(ctx, \"method_metadata\", metadata)")
 		g.P("	}")
 		g.P("	result, err := c.transport.Send(ctx, ", constName, ", req, (*", outputType, ")(nil))")
