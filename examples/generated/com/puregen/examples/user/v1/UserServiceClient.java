@@ -16,7 +16,13 @@ public class UserServiceClient {
      * metadata: {"method":"POST", "path":"/users"}
      */
     public CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception {
-        return transport.send(ctx, UserServiceMethods.UserService_CreateUser, request, CreateUserResponse.class);
+        // Create a copy of context and add method metadata
+        Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
+        Map<String, String> methodMetadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_CreateUser);
+        if (methodMetadata != null) {
+            enhancedCtx.put("method_metadata", methodMetadata);
+        }
+        return transport.send(enhancedCtx, UserServiceMethods.UserService_CreateUser, request, CreateUserResponse.class);
     }
 
     /**
@@ -26,7 +32,13 @@ public class UserServiceClient {
      * It returns the user details if found, otherwise indicates not found.
      */
     public GetUserResponse getUser(Map<String, Object> ctx, GetUserRequest request) throws Exception {
-        return transport.send(ctx, UserServiceMethods.UserService_GetUser, request, GetUserResponse.class);
+        // Create a copy of context and add method metadata
+        Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
+        Map<String, String> methodMetadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_GetUser);
+        if (methodMetadata != null) {
+            enhancedCtx.put("method_metadata", methodMetadata);
+        }
+        return transport.send(enhancedCtx, UserServiceMethods.UserService_GetUser, request, GetUserResponse.class);
     }
 
 }

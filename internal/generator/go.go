@@ -462,6 +462,10 @@ func generateGoClient(g *protogen.GeneratedFile, service *protogen.Service, comm
 		outputType := method.Output.GoIdent.GoName
 		constName := serviceName + "_" + method.GoName
 		g.P("func (c *", serviceName, "Client) ", method.GoName, "(ctx context.Context, req *", inputType, ") (*", outputType, ", error) {")
+		g.P("	// Add method metadata to context")
+		g.P("	if metadata, exists := MethodMetadata[", constName, "]; exists {")
+		g.P("		ctx = context.WithValue(ctx, \"method_metadata\", metadata)")
+		g.P("	}")
 		g.P("	result, err := c.transport.Send(ctx, ", constName, ", req, (*", outputType, ")(nil))")
 		g.P("	if err != nil {")
 		g.P("		return nil, err")

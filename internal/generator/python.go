@@ -506,7 +506,11 @@ func generatePythonClient(g *protogen.GeneratedFile, service *protogen.Service, 
 
 		g.P("    def ", methodName, "(self, ctx: Dict[str, Any], request: ", inputType, ") -> ", outputType, ":")
 		g.P("        \"\"\"", method.GoName, " client method\"\"\"")
-		g.P("        result = self.transport.send(ctx, ", constName, ", request, ", outputType, ")")
+		g.P("        # Create a copy of context and add method metadata")
+		g.P("        enhanced_ctx = ctx.copy() if ctx else {}")
+		g.P("        method_metadata = ", serviceName, "Methods.METHOD_METADATA.get(", constName, ", {})")
+		g.P("        enhanced_ctx['method_metadata'] = method_metadata")
+		g.P("        result = self.transport.send(enhanced_ctx, ", constName, ", request, ", outputType, ")")
 		g.P("        if isinstance(result, ", outputType, "):")
 		g.P("            return result")
 		g.P("        if isinstance(result, dict):")

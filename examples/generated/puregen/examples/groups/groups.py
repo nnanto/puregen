@@ -341,7 +341,11 @@ class GroupServiceClient:
 
     def create_group(self, ctx: Dict[str, Any], request: CreateGroupRequest) -> CreateGroupResponse:
         """CreateGroup client method"""
-        result = self.transport.send(ctx, GroupServiceMethods.GroupService_CreateGroup, request, CreateGroupResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_CreateGroup, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, GroupServiceMethods.GroupService_CreateGroup, request, CreateGroupResponse)
         if isinstance(result, CreateGroupResponse):
             return result
         if isinstance(result, dict):
@@ -350,7 +354,11 @@ class GroupServiceClient:
 
     def list_groups(self, ctx: Dict[str, Any], request: ListGroupsRequest) -> ListGroupsResponse:
         """ListGroups client method"""
-        result = self.transport.send(ctx, GroupServiceMethods.GroupService_ListGroups, request, ListGroupsResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_ListGroups, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, GroupServiceMethods.GroupService_ListGroups, request, ListGroupsResponse)
         if isinstance(result, ListGroupsResponse):
             return result
         if isinstance(result, dict):

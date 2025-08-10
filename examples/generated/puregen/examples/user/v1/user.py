@@ -368,7 +368,11 @@ class UserServiceClient:
 
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
         """CreateUser client method"""
-        result = self.transport.send(ctx, UserServiceMethods.UserService_CreateUser, request, CreateUserResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_CreateUser, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, UserServiceMethods.UserService_CreateUser, request, CreateUserResponse)
         if isinstance(result, CreateUserResponse):
             return result
         if isinstance(result, dict):
@@ -377,7 +381,11 @@ class UserServiceClient:
 
     def get_user(self, ctx: Dict[str, Any], request: GetUserRequest) -> GetUserResponse:
         """GetUser client method"""
-        result = self.transport.send(ctx, UserServiceMethods.UserService_GetUser, request, GetUserResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_GetUser, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, UserServiceMethods.UserService_GetUser, request, GetUserResponse)
         if isinstance(result, GetUserResponse):
             return result
         if isinstance(result, dict):

@@ -1202,7 +1202,11 @@ class BookingServiceClient:
 
     def start_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """StartHotelReservation client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_StartHotelReservation, request, HotelReservationResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartHotelReservation, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_StartHotelReservation, request, HotelReservationResponse)
         if isinstance(result, HotelReservationResponse):
             return result
         if isinstance(result, dict):
@@ -1211,7 +1215,11 @@ class BookingServiceClient:
 
     def describe_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """DescribeHotelReservation client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_DescribeHotelReservation, request, HotelReservationResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeHotelReservation, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_DescribeHotelReservation, request, HotelReservationResponse)
         if isinstance(result, HotelReservationResponse):
             return result
         if isinstance(result, dict):
@@ -1220,7 +1228,11 @@ class BookingServiceClient:
 
     def get_hotel_reservation_result(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """GetHotelReservationResult client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_GetHotelReservationResult, request, HotelReservationResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetHotelReservationResult, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_GetHotelReservationResult, request, HotelReservationResponse)
         if isinstance(result, HotelReservationResponse):
             return result
         if isinstance(result, dict):
@@ -1229,7 +1241,11 @@ class BookingServiceClient:
 
     def start_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """StartFlightBooking client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_StartFlightBooking, request, FlightBookingResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartFlightBooking, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_StartFlightBooking, request, FlightBookingResponse)
         if isinstance(result, FlightBookingResponse):
             return result
         if isinstance(result, dict):
@@ -1238,7 +1254,11 @@ class BookingServiceClient:
 
     def describe_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """DescribeFlightBooking client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_DescribeFlightBooking, request, FlightBookingResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeFlightBooking, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_DescribeFlightBooking, request, FlightBookingResponse)
         if isinstance(result, FlightBookingResponse):
             return result
         if isinstance(result, dict):
@@ -1247,7 +1267,11 @@ class BookingServiceClient:
 
     def get_flight_booking_result(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """GetFlightBookingResult client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_GetFlightBookingResult, request, FlightBookingResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetFlightBookingResult, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_GetFlightBookingResult, request, FlightBookingResponse)
         if isinstance(result, FlightBookingResponse):
             return result
         if isinstance(result, dict):
@@ -1256,7 +1280,11 @@ class BookingServiceClient:
 
     def start_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """StartTravelPackageBooking client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_StartTravelPackageBooking, request, TravelPackageBookingResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartTravelPackageBooking, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_StartTravelPackageBooking, request, TravelPackageBookingResponse)
         if isinstance(result, TravelPackageBookingResponse):
             return result
         if isinstance(result, dict):
@@ -1265,7 +1293,11 @@ class BookingServiceClient:
 
     def describe_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """DescribeTravelPackageBooking client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_DescribeTravelPackageBooking, request, TravelPackageBookingResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeTravelPackageBooking, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_DescribeTravelPackageBooking, request, TravelPackageBookingResponse)
         if isinstance(result, TravelPackageBookingResponse):
             return result
         if isinstance(result, dict):
@@ -1274,7 +1306,11 @@ class BookingServiceClient:
 
     def get_travel_package_booking_result(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """GetTravelPackageBookingResult client method"""
-        result = self.transport.send(ctx, BookingServiceMethods.BookingService_GetTravelPackageBookingResult, request, TravelPackageBookingResponse)
+        # Create a copy of context and add method metadata
+        enhanced_ctx = ctx.copy() if ctx else {}
+        method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetTravelPackageBookingResult, {})
+        enhanced_ctx['method_metadata'] = method_metadata
+        result = self.transport.send(enhanced_ctx, BookingServiceMethods.BookingService_GetTravelPackageBookingResult, request, TravelPackageBookingResponse)
         if isinstance(result, TravelPackageBookingResponse):
             return result
         if isinstance(result, dict):

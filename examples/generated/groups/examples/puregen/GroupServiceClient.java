@@ -13,12 +13,24 @@ public class GroupServiceClient {
 
     // CreateGroup creates a new group
     public CreateGroupResponse createGroup(Map<String, Object> ctx, CreateGroupRequest request) throws Exception {
-        return transport.send(ctx, GroupServiceMethods.GroupService_CreateGroup, request, CreateGroupResponse.class);
+        // Create a copy of context and add method metadata
+        Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
+        Map<String, String> methodMetadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_CreateGroup);
+        if (methodMetadata != null) {
+            enhancedCtx.put("method_metadata", methodMetadata);
+        }
+        return transport.send(enhancedCtx, GroupServiceMethods.GroupService_CreateGroup, request, CreateGroupResponse.class);
     }
 
     // ListGroups lists all groups with pagination
     public ListGroupsResponse listGroups(Map<String, Object> ctx, ListGroupsRequest request) throws Exception {
-        return transport.send(ctx, GroupServiceMethods.GroupService_ListGroups, request, ListGroupsResponse.class);
+        // Create a copy of context and add method metadata
+        Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
+        Map<String, String> methodMetadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_ListGroups);
+        if (methodMetadata != null) {
+            enhancedCtx.put("method_metadata", methodMetadata);
+        }
+        return transport.send(enhancedCtx, GroupServiceMethods.GroupService_ListGroups, request, ListGroupsResponse.class);
     }
 
 }
