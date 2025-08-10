@@ -291,7 +291,7 @@ class UserServiceService(ABC):
 
     """
     CreateUser creates a new user
-    metadata: {"method":"POST", "path":"/users"}
+    puregen:metadata: {"method":"POST", "path":"/users"}
     """
     @abstractmethod
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
@@ -300,7 +300,7 @@ class UserServiceService(ABC):
 
     """
     GetUser retrieves a user by ID
-    metadata:{"method":"GET", "path":"/users/{id}"}
+    puregen:metadata:{"method":"GET", "path":"/users/{id}"}
     This method retrieves a user by their unique ID.
     It returns the user details if found, otherwise indicates not found.
     """
@@ -314,7 +314,7 @@ class DefaultUserServiceService(UserServiceService):
 
     """
     CreateUser creates a new user
-    metadata: {"method":"POST", "path":"/users"}
+    puregen:metadata: {"method":"POST", "path":"/users"}
     """
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
         """CreateUser method implementation"""
@@ -323,7 +323,7 @@ class DefaultUserServiceService(UserServiceService):
 
     """
     GetUser retrieves a user by ID
-    metadata:{"method":"GET", "path":"/users/{id}"}
+    puregen:metadata:{"method":"GET", "path":"/users/{id}"}
     This method retrieves a user by their unique ID.
     It returns the user details if found, otherwise indicates not found.
     """

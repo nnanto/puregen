@@ -23,7 +23,7 @@ puregen is ideal for projects that need simple, readable generated code without 
 - **Simple data structures**: Generated classes/structs are easy to understand and modify
 - **JSON serialization**: Built-in JSON marshaling/unmarshaling support
 - **Service interfaces**: Clean interface definitions for RPC services
-- **Method metadata support**: Extract metadata from service method comments (*//metadata:{...}*) for HTTP routing, authorization, etc. [See details](#method-metadata-support)
+- **Method metadata support**: Extract metadata from service method comments (*//puregen:metadata{...}*) for HTTP routing, authorization, etc. [See details](#method-metadata-support)
 - **Client generation**: Ready-to-use clients with pluggable transport. [See details](#using-the-generated-code)
 
 ## Installation
@@ -135,11 +135,11 @@ message GetUserResponse {
 
 service UserService {
   // CreateUser creates a new user
-  // metadata: {"method":"POST", "path":"/users"}
+  // puregen:metadata {"method":"POST", "path":"/users"}
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
 
   // GetUser retrieves a user by ID
-  // metadata: {"method":"GET", "path":"/users/{id}"}
+  // puregen:metadata {"method":"GET", "path":"/users/{id}"}
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
 }
 ```
@@ -178,17 +178,17 @@ The generator supports extracting metadata from service method comments. This is
 
 #### Defining Metadata in Proto Files
 
-Add metadata to method comments using the `metadata:` prefix followed by a JSON object:
+Add metadata to method comments using the `puregen:metadata` prefix followed by a JSON object:
 
 ```protobuf
 service UserService {
-    // metadata:{"method":"GET", "path":"/users/{id}", "auth":"required"}
+    // puregen:metadata{"method":"GET", "path":"/users/{id}", "auth":"required"}
     rpc GetUser(GetUserRequest) returns (GetUserResponse);
     
-    // metadata:{"method":"POST", "path":"/users", "auth":"required", "role":"admin"}
+    // puregen:metadata{"method":"POST", "path":"/users", "auth":"required", "role":"admin"}
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
     
-    // metadata:{"method":"DELETE", "path":"/users/{id}", "auth":"required", "role":"admin"}
+    // puregen:metadata{"method":"DELETE", "path":"/users/{id}", "auth":"required", "role":"admin"}
     rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
 }
 ```

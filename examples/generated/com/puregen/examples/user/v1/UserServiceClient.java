@@ -13,7 +13,7 @@ public class UserServiceClient {
 
     /**
      * CreateUser creates a new user
-     * metadata: {"method":"POST", "path":"/users"}
+     * puregen:metadata: {"method":"POST", "path":"/users"}
      */
     public CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception {
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
@@ -26,7 +26,7 @@ public class UserServiceClient {
 
     /**
      * GetUser retrieves a user by ID
-     * metadata:{"method":"GET", "path":"/users/{id}"}
+     * puregen:metadata:{"method":"GET", "path":"/users/{id}"}
      * This method retrieves a user by their unique ID.
      * It returns the user details if found, otherwise indicates not found.
      */

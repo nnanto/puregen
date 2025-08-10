@@ -7,7 +7,7 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
-// parseMethodMetadata extracts metadata from method comments
+// parseMethodMetadata extracts metadata from method comments using puregen:metadata: directive
 func parseMethodMetadata(comments protogen.CommentSet) map[string]string {
 	// Use leading comments if available, otherwise trailing
 	comment := comments.Leading
@@ -22,8 +22,8 @@ func parseMethodMetadata(comments protogen.CommentSet) map[string]string {
 	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "metadata:") {
-			jsonStr := strings.TrimPrefix(line, "metadata:")
+		if strings.HasPrefix(line, "puregen:metadata:") {
+			jsonStr := strings.TrimPrefix(line, "puregen:metadata:")
 			jsonStr = strings.TrimSpace(jsonStr)
 
 			var metadata map[string]string
