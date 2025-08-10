@@ -341,7 +341,6 @@ class GroupServiceClient:
 
     def create_group(self, ctx: Dict[str, Any], request: CreateGroupRequest) -> CreateGroupResponse:
         """CreateGroup client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_CreateGroup, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -354,7 +353,6 @@ class GroupServiceClient:
 
     def list_groups(self, ctx: Dict[str, Any], request: ListGroupsRequest) -> ListGroupsResponse:
         """ListGroups client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_ListGroups, {})
         enhanced_ctx['method_metadata'] = method_metadata

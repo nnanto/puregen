@@ -13,7 +13,6 @@ public class GroupServiceClient {
 
     // CreateGroup creates a new group
     public CreateGroupResponse createGroup(Map<String, Object> ctx, CreateGroupRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_CreateGroup);
         if (methodMetadata != null) {
@@ -24,7 +23,6 @@ public class GroupServiceClient {
 
     // ListGroups lists all groups with pagination
     public ListGroupsResponse listGroups(Map<String, Object> ctx, ListGroupsRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = GroupServiceMethods.METHOD_METADATA.get(GroupServiceMethods.GroupService_ListGroups);
         if (methodMetadata != null) {

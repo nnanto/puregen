@@ -816,7 +816,6 @@ func NewBookingServiceClient(transport Transport) *BookingServiceClient {
 
 // Starts hotel reservation process for given search criteria and returns operation ID
 func (c *BookingServiceClient) StartHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_StartHotelReservation]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -832,7 +831,6 @@ func (c *BookingServiceClient) StartHotelReservation(ctx context.Context, req *H
 
 // Describes hotel reservation operations
 func (c *BookingServiceClient) DescribeHotelReservation(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_DescribeHotelReservation]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -848,7 +846,6 @@ func (c *BookingServiceClient) DescribeHotelReservation(ctx context.Context, req
 
 // Gets hotel reservation details for given operation ID
 func (c *BookingServiceClient) GetHotelReservationResult(ctx context.Context, req *HotelReservationRequest) (*HotelReservationResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_GetHotelReservationResult]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -864,7 +861,6 @@ func (c *BookingServiceClient) GetHotelReservationResult(ctx context.Context, re
 
 // Starts flight booking operation and returns operation ID
 func (c *BookingServiceClient) StartFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_StartFlightBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -880,7 +876,6 @@ func (c *BookingServiceClient) StartFlightBooking(ctx context.Context, req *Flig
 
 // Describes flight booking operations
 func (c *BookingServiceClient) DescribeFlightBooking(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_DescribeFlightBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -896,7 +891,6 @@ func (c *BookingServiceClient) DescribeFlightBooking(ctx context.Context, req *F
 
 // Gets flight booking results for given operation ID
 func (c *BookingServiceClient) GetFlightBookingResult(ctx context.Context, req *FlightBookingRequest) (*FlightBookingResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_GetFlightBookingResult]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -912,7 +906,6 @@ func (c *BookingServiceClient) GetFlightBookingResult(ctx context.Context, req *
 
 // Starts travel package booking operation and returns operation ID
 func (c *BookingServiceClient) StartTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_StartTravelPackageBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -928,7 +921,6 @@ func (c *BookingServiceClient) StartTravelPackageBooking(ctx context.Context, re
 
 // Describes travel package booking operations
 func (c *BookingServiceClient) DescribeTravelPackageBooking(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_DescribeTravelPackageBooking]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -944,7 +936,6 @@ func (c *BookingServiceClient) DescribeTravelPackageBooking(ctx context.Context,
 
 // Gets travel package booking results for given operation ID
 func (c *BookingServiceClient) GetTravelPackageBookingResult(ctx context.Context, req *TravelPackageBookingRequest) (*TravelPackageBookingResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[BookingService_GetTravelPackageBookingResult]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}

@@ -368,7 +368,6 @@ class UserServiceClient:
 
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:
         """CreateUser client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_CreateUser, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -381,7 +380,6 @@ class UserServiceClient:
 
     def get_user(self, ctx: Dict[str, Any], request: GetUserRequest) -> GetUserResponse:
         """GetUser client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_GetUser, {})
         enhanced_ctx['method_metadata'] = method_metadata

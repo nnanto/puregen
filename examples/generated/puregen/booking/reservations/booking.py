@@ -1202,7 +1202,6 @@ class BookingServiceClient:
 
     def start_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """StartHotelReservation client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartHotelReservation, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1215,7 +1214,6 @@ class BookingServiceClient:
 
     def describe_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """DescribeHotelReservation client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeHotelReservation, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1228,7 +1226,6 @@ class BookingServiceClient:
 
     def get_hotel_reservation_result(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:
         """GetHotelReservationResult client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetHotelReservationResult, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1241,7 +1238,6 @@ class BookingServiceClient:
 
     def start_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """StartFlightBooking client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartFlightBooking, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1254,7 +1250,6 @@ class BookingServiceClient:
 
     def describe_flight_booking(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """DescribeFlightBooking client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeFlightBooking, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1267,7 +1262,6 @@ class BookingServiceClient:
 
     def get_flight_booking_result(self, ctx: Dict[str, Any], request: FlightBookingRequest) -> FlightBookingResponse:
         """GetFlightBookingResult client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetFlightBookingResult, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1280,7 +1274,6 @@ class BookingServiceClient:
 
     def start_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """StartTravelPackageBooking client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartTravelPackageBooking, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1293,7 +1286,6 @@ class BookingServiceClient:
 
     def describe_travel_package_booking(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """DescribeTravelPackageBooking client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeTravelPackageBooking, {})
         enhanced_ctx['method_metadata'] = method_metadata
@@ -1306,7 +1298,6 @@ class BookingServiceClient:
 
     def get_travel_package_booking_result(self, ctx: Dict[str, Any], request: TravelPackageBookingRequest) -> TravelPackageBookingResponse:
         """GetTravelPackageBookingResult client method"""
-        # Create a copy of context and add method metadata
         enhanced_ctx = ctx.copy() if ctx else {}
         method_metadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetTravelPackageBookingResult, {})
         enhanced_ctx['method_metadata'] = method_metadata

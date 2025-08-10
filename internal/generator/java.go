@@ -447,7 +447,6 @@ func generateJavaClient(gen *protogen.Plugin, file *protogen.File, service *prot
 		constName := serviceName + "Methods." + serviceName + "_" + method.GoName
 
 		g.P("    public ", outputType, " ", methodName, "(Map<String, Object> ctx, ", inputType, " request) throws Exception {")
-		g.P("        // Create a copy of context and add method metadata")
 		g.P("        Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());")
 		g.P("        Map<String, String> methodMetadata = ", serviceName, "Methods.METHOD_METADATA.get(", constName, ");")
 		g.P("        if (methodMetadata != null) {")

@@ -221,7 +221,6 @@ func NewUserServiceClient(transport Transport) *UserServiceClient {
 // CreateUser creates a new user
 // metadata: {"method":"POST", "path":"/users"}
 func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[UserService_CreateUser]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -240,7 +239,6 @@ func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserReque
 // This method retrieves a user by their unique ID.
 // It returns the user details if found, otherwise indicates not found.
 func (c *UserServiceClient) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[UserService_GetUser]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}

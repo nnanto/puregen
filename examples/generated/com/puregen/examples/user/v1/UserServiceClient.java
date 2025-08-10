@@ -16,7 +16,6 @@ public class UserServiceClient {
      * metadata: {"method":"POST", "path":"/users"}
      */
     public CreateUserResponse createUser(Map<String, Object> ctx, CreateUserRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_CreateUser);
         if (methodMetadata != null) {
@@ -32,7 +31,6 @@ public class UserServiceClient {
      * It returns the user details if found, otherwise indicates not found.
      */
     public GetUserResponse getUser(Map<String, Object> ctx, GetUserRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = UserServiceMethods.METHOD_METADATA.get(UserServiceMethods.UserService_GetUser);
         if (methodMetadata != null) {

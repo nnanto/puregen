@@ -207,7 +207,6 @@ func NewGroupServiceClient(transport Transport) *GroupServiceClient {
 
 // CreateGroup creates a new group
 func (c *GroupServiceClient) CreateGroup(ctx context.Context, req *CreateGroupRequest) (*CreateGroupResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[GroupService_CreateGroup]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}
@@ -223,7 +222,6 @@ func (c *GroupServiceClient) CreateGroup(ctx context.Context, req *CreateGroupRe
 
 // ListGroups lists all groups with pagination
 func (c *GroupServiceClient) ListGroups(ctx context.Context, req *ListGroupsRequest) (*ListGroupsResponse, error) {
-	// Add method metadata to context
 	if metadata, exists := MethodMetadata[GroupService_ListGroups]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
 	}

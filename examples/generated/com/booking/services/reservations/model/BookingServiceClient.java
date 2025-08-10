@@ -13,7 +13,6 @@ public class BookingServiceClient {
 
     // Starts hotel reservation process for given search criteria and returns operation ID
     public HotelReservationResponse startHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartHotelReservation);
         if (methodMetadata != null) {
@@ -24,7 +23,6 @@ public class BookingServiceClient {
 
     // Describes hotel reservation operations
     public HotelReservationResponse describeHotelReservation(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeHotelReservation);
         if (methodMetadata != null) {
@@ -35,7 +33,6 @@ public class BookingServiceClient {
 
     // Gets hotel reservation details for given operation ID
     public HotelReservationResponse getHotelReservationResult(Map<String, Object> ctx, HotelReservationRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetHotelReservationResult);
         if (methodMetadata != null) {
@@ -46,7 +43,6 @@ public class BookingServiceClient {
 
     // Starts flight booking operation and returns operation ID
     public FlightBookingResponse startFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartFlightBooking);
         if (methodMetadata != null) {
@@ -57,7 +53,6 @@ public class BookingServiceClient {
 
     // Describes flight booking operations
     public FlightBookingResponse describeFlightBooking(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeFlightBooking);
         if (methodMetadata != null) {
@@ -68,7 +63,6 @@ public class BookingServiceClient {
 
     // Gets flight booking results for given operation ID
     public FlightBookingResponse getFlightBookingResult(Map<String, Object> ctx, FlightBookingRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetFlightBookingResult);
         if (methodMetadata != null) {
@@ -79,7 +73,6 @@ public class BookingServiceClient {
 
     // Starts travel package booking operation and returns operation ID
     public TravelPackageBookingResponse startTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_StartTravelPackageBooking);
         if (methodMetadata != null) {
@@ -90,7 +83,6 @@ public class BookingServiceClient {
 
     // Describes travel package booking operations
     public TravelPackageBookingResponse describeTravelPackageBooking(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_DescribeTravelPackageBooking);
         if (methodMetadata != null) {
@@ -101,7 +93,6 @@ public class BookingServiceClient {
 
     // Gets travel package booking results for given operation ID
     public TravelPackageBookingResponse getTravelPackageBookingResult(Map<String, Object> ctx, TravelPackageBookingRequest request) throws Exception {
-        // Create a copy of context and add method metadata
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = BookingServiceMethods.METHOD_METADATA.get(BookingServiceMethods.BookingService_GetTravelPackageBookingResult);
         if (methodMetadata != null) {
