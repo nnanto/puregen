@@ -2,7 +2,7 @@
 
 package com.demo.enums;
 
-    // puregen:generate:{"enumType": "int"}
+    // 
 public enum Task_Type {
     TYPE_UNKNOWN(0),
     TYPE_BUG(1),

@@ -8,19 +8,14 @@ import (
 
 // Messages
 
-// Test message with default values using puregen:generate directive
 type TestDefaults struct {
 	// String field with default value
-	// puregen:generate: {"value": "hello world"}
 	Message string `json:"message"`
 	// Integer field with default value
-	// puregen:generate: {"value": "42"}
 	Count int32 `json:"count"`
 	// Boolean field with default value
-	// puregen:generate: {"value": "true"}
 	Enabled bool `json:"enabled"`
 	// Float field with default value
-	// puregen:generate: {"value": "3.14"}
 	Ratio float32 `json:"ratio"`
 	// Field without default value (should use language defaults)
 	Description string `json:"description"`
@@ -77,33 +72,26 @@ func (m *NoDefaults) FromJSON(data []byte) error {
 // Test message with various edge cases for default values
 type EdgeCases struct {
 	// String with simple text
-	// puregen:generate: {"value": "Hello World"}
 	SimpleString string `json:"simpleString"`
 	// Empty string default
-	// puregen:generate: {"value": ""}
 	EmptyString string `json:"emptyString"`
 	// Zero values
-	// puregen:generate: {"value": "0"}
 	ZeroInt int32 `json:"zeroInt"`
-	// puregen:generate: {"value": "0.0"}
+	//
 	ZeroFloat float32 `json:"zeroFloat"`
-	// puregen:generate: {"value": "false"}
+	//
 	FalseBool bool `json:"falseBool"`
 	// Large numbers
-	// puregen:generate: {"value": "9223372036854775807"}
 	LargeInt int64 `json:"largeInt"`
 	// Negative numbers
-	// puregen:generate: {"value": "-42"}
 	NegativeInt int32 `json:"negativeInt"`
 	// Scientific notation
-	// puregen:generate: {"value": "1.23e-4"}
 	Scientific float64 `json:"scientific"`
 	// Field without directive (should use language defaults)
 	NoDirective string `json:"noDirective"`
 	// Different numeric types
-	// puregen:generate: {"value": "255"}
 	UnsignedValue uint32 `json:"unsignedValue"`
-	// puregen:generate: {"value": "2147483647"}
+	//
 	SignedValue int32 `json:"signedValue"`
 }
 

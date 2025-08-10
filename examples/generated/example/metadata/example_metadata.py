@@ -7,10 +7,7 @@ import json
 
 # Enums
 
-"""
-Example enum with metadata for validation and UI
-puregen:metadata: {"validation": "required", "ui_type": "dropdown", "category": "status"}
-"""
+# Example enum with metadata for validation and UI
 class TaskStatus:
     """TaskStatus enum values as string constants"""
     UNKNOWN = "UNKNOWN"
@@ -41,37 +38,19 @@ TaskStatusMetadata = {
 
 # Messages
 
-"""
-Example message with metadata for database mapping
-puregen:metadata: {"table": "tasks", "cache": "true", "partition_key": "user_id"}
-"""
+# Example message with metadata for database mapping
 @dataclass
 class Task:
     """Generated message class for Task"""
-    """
-    Primary key field with validation metadata
-    puregen:metadata: {"index": "primary", "validation": "uuid", "db_column": "task_id"}
-    """
+    # Primary key field with validation metadata
     id: str = ""
-    """
-    Required field with length constraints
-    puregen:metadata: {"validation": "required", "min_length": "1", "max_length": "200"}
-    """
+    # Required field with length constraints
     title: str = ""
-    """
-    Optional field with UI metadata
-    puregen:metadata: {"ui_widget": "textarea", "placeholder": "Enter task description..."}
-    """
+    # Optional field with UI metadata
     description: str = ""
-    """
-    Status field with validation and default value
-    puregen:metadata: {"validation": "enum", "default": "PENDING", "required": "true"}
-    """
+    # Status field with validation and default value
     status: str = 0
-    """
-    Timestamp field with format metadata
-    puregen:metadata: {"format": "unix_timestamp", "index": "secondary"}
-    """
+    # Timestamp field with format metadata
     created_at: int = 0
 
     def validate(self) -> bool:
@@ -164,10 +143,7 @@ TaskFieldMetadata = {
 @dataclass
 class CreateTaskRequest:
     """Generated message class for CreateTaskRequest"""
-    """
-    Required fields for task creation
-    puregen:metadata: {"validation": "required", "trim_whitespace": "true"}
-    """
+    # Required fields for task creation
     title: str = ""
     description: str = ""
 
@@ -254,7 +230,7 @@ class CreateTaskResponse:
 @dataclass
 class GetTaskRequest:
     """Generated message class for GetTaskRequest"""
-    # puregen:metadata: {"validation": "uuid"}
+    # 
     id: str = ""
 
     def validate(self) -> bool:
@@ -338,19 +314,13 @@ class GetTaskResponse:
 class TaskServiceService(ABC):
     """Abstract service interface for TaskService"""
 
-    """
-    Create task endpoint with HTTP mapping
-    puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
-    """
+    # Create task endpoint with HTTP mapping
     @abstractmethod
     def create_task(self, ctx: Dict[str, Any], request: CreateTaskRequest) -> CreateTaskResponse:
         """CreateTask method"""
         pass
 
-    """
-    Get task endpoint with caching
-    puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
-    """
+    # Get task endpoint with caching
     @abstractmethod
     def get_task(self, ctx: Dict[str, Any], request: GetTaskRequest) -> GetTaskResponse:
         """GetTask method"""
@@ -359,19 +329,13 @@ class TaskServiceService(ABC):
 class DefaultTaskServiceService(TaskServiceService):
     """Default implementation of TaskServiceService"""
 
-    """
-    Create task endpoint with HTTP mapping
-    puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
-    """
+    # Create task endpoint with HTTP mapping
     def create_task(self, ctx: Dict[str, Any], request: CreateTaskRequest) -> CreateTaskResponse:
         """CreateTask method implementation"""
         # TODO: Implement create_task
         raise NotImplementedError("Method create_task not implemented")
 
-    """
-    Get task endpoint with caching
-    puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
-    """
+    # Get task endpoint with caching
     def get_task(self, ctx: Dict[str, Any], request: GetTaskRequest) -> GetTaskResponse:
         """GetTask method implementation"""
         # TODO: Implement get_task

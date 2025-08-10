@@ -10,7 +10,7 @@ import json
 @dataclass
 class TestMessage:
     """Generated message class for TestMessage"""
-    # puregen:metadata: {"urls": "http://example.com/api/test"}
+    # 
     api_host: str = ""
     tpm_data: str = ""
     xml_content: str = ""

@@ -159,10 +159,8 @@ func (m *GetUserResponse) FromJSON(data []byte) error {
 // UserService provides operations for managing users
 type UserServiceService interface {
 	// CreateUser creates a new user
-	// puregen:metadata: {"method":"POST", "path":"/users"}
 	CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error)
 	// GetUser retrieves a user by ID
-	// puregen:metadata:{"method":"GET", "path":"/users/{id}"}
 	// This method retrieves a user by their unique ID.
 	// It returns the user details if found, otherwise indicates not found.
 	GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error)
@@ -171,14 +169,12 @@ type UserServiceService interface {
 type DefaultUserServiceService struct{}
 
 // CreateUser creates a new user
-// puregen:metadata: {"method":"POST", "path":"/users"}
 func (s *DefaultUserServiceService) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
 	// TODO: Implement CreateUser
 	return &CreateUserResponse{}, fmt.Errorf("method CreateUser not implemented")
 }
 
 // GetUser retrieves a user by ID
-// puregen:metadata:{"method":"GET", "path":"/users/{id}"}
 // This method retrieves a user by their unique ID.
 // It returns the user details if found, otherwise indicates not found.
 func (s *DefaultUserServiceService) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {
@@ -219,7 +215,6 @@ func NewUserServiceClient(transport Transport) *UserServiceClient {
 }
 
 // CreateUser creates a new user
-// puregen:metadata: {"method":"POST", "path":"/users"}
 func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserRequest) (*CreateUserResponse, error) {
 	if metadata, exists := MethodMetadata[UserService_CreateUser]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
@@ -235,7 +230,6 @@ func (c *UserServiceClient) CreateUser(ctx context.Context, req *CreateUserReque
 }
 
 // GetUser retrieves a user by ID
-// puregen:metadata:{"method":"GET", "path":"/users/{id}"}
 // This method retrieves a user by their unique ID.
 // It returns the user details if found, otherwise indicates not found.
 func (c *UserServiceClient) GetUser(ctx context.Context, req *GetUserRequest) (*GetUserResponse, error) {

@@ -23,6 +23,9 @@ func formatPythonComment(comments protogen.CommentSet) []string {
 		return result
 	}
 
+	// Filter out puregen directives before processing
+	comment = protogen.Comments(filterPuregenDirectives(string(comment)))
+
 	// Split by lines and format each line
 	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
 

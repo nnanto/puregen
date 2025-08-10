@@ -7,6 +7,26 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 )
 
+// filterPuregenDirectives removes lines containing puregen: directives from comment text
+func filterPuregenDirectives(comment string) string {
+	if comment == "" {
+		return comment
+	}
+
+	lines := strings.Split(comment, "\n")
+	var filteredLines []string
+
+	for _, line := range lines {
+		trimmedLine := strings.TrimSpace(line)
+		// Skip lines that contain puregen: directives
+		if !strings.Contains(trimmedLine, "puregen:") {
+			filteredLines = append(filteredLines, line)
+		}
+	}
+
+	return strings.Join(filteredLines, "\n")
+}
+
 // parseMethodMetadata extracts metadata from method comments using puregen:metadata: directive
 func parseMethodMetadata(comments protogen.CommentSet) map[string]string {
 	return parseMetadata(comments)

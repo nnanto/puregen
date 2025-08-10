@@ -9,53 +9,35 @@ import com.fasterxml.jackson.databind.*;
 
     // Test message with various edge cases for default values
 public class EdgeCases {
-    /**
-     * String with simple text
-     * puregen:generate: {"value": "Hello World"}
-     */
+    // String with simple text
     @JsonProperty("simpleString")
     private String simpleString;
 
-    /**
-     * Empty string default
-     * puregen:generate: {"value": ""}
-     */
+    // Empty string default
     @JsonProperty("emptyString")
     private String emptyString;
 
-    /**
-     * Zero values
-     * puregen:generate: {"value": "0"}
-     */
+    // Zero values
     @JsonProperty("zeroInt")
     private int zeroInt;
 
-    // puregen:generate: {"value": "0.0"}
+    // 
     @JsonProperty("zeroFloat")
     private float zeroFloat;
 
-    // puregen:generate: {"value": "false"}
+    // 
     @JsonProperty("falseBool")
     private boolean falseBool;
 
-    /**
-     * Large numbers
-     * puregen:generate: {"value": "9223372036854775807"}
-     */
+    // Large numbers
     @JsonProperty("largeInt")
     private long largeInt;
 
-    /**
-     * Negative numbers
-     * puregen:generate: {"value": "-42"}
-     */
+    // Negative numbers
     @JsonProperty("negativeInt")
     private int negativeInt;
 
-    /**
-     * Scientific notation
-     * puregen:generate: {"value": "1.23e-4"}
-     */
+    // Scientific notation
     @JsonProperty("scientific")
     private double scientific;
 
@@ -63,14 +45,11 @@ public class EdgeCases {
     @JsonProperty("noDirective")
     private String noDirective;
 
-    /**
-     * Different numeric types
-     * puregen:generate: {"value": "255"}
-     */
+    // Different numeric types
     @JsonProperty("unsignedValue")
     private int unsignedValue;
 
-    // puregen:generate: {"value": "2147483647"}
+    // 
     @JsonProperty("signedValue")
     private int signedValue;
 

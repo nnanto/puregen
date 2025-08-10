@@ -46,22 +46,16 @@ var TaskStatusMetadata = map[string]string{
 // Messages
 
 // Example message with metadata for database mapping
-// puregen:metadata: {"table": "tasks", "cache": "true", "partition_key": "user_id"}
 type Task struct {
 	// Primary key field with validation metadata
-	// puregen:metadata: {"index": "primary", "validation": "uuid", "db_column": "task_id"}
 	Id string `json:"id"`
 	// Required field with length constraints
-	// puregen:metadata: {"validation": "required", "min_length": "1", "max_length": "200"}
 	Title string `json:"title"`
 	// Optional field with UI metadata
-	// puregen:metadata: {"ui_widget": "textarea", "placeholder": "Enter task description..."}
 	Description string `json:"description"`
 	// Status field with validation and default value
-	// puregen:metadata: {"validation": "enum", "default": "PENDING", "required": "true"}
 	Status string `json:"status"`
 	// Timestamp field with format metadata
-	// puregen:metadata: {"format": "unix_timestamp", "index": "secondary"}
 	CreatedAt int64 `json:"createdAt"`
 }
 
@@ -127,7 +121,6 @@ var TaskFieldMetadata = map[string]map[string]string{
 
 type CreateTaskRequest struct {
 	// Required fields for task creation
-	// puregen:metadata: {"validation": "required", "trim_whitespace": "true"}
 	Title       string `json:"title"`
 	Description string `json:"description"`
 }
@@ -184,7 +177,7 @@ func (m *CreateTaskResponse) FromJSON(data []byte) error {
 }
 
 type GetTaskRequest struct {
-	// puregen:metadata: {"validation": "uuid"}
+	//
 	Id string `json:"id"`
 }
 
@@ -243,24 +236,20 @@ func (m *GetTaskResponse) FromJSON(data []byte) error {
 // Example service with method metadata
 type TaskServiceService interface {
 	// Create task endpoint with HTTP mapping
-	// puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
 	CreateTask(ctx context.Context, req *CreateTaskRequest) (*CreateTaskResponse, error)
 	// Get task endpoint with caching
-	// puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
 	GetTask(ctx context.Context, req *GetTaskRequest) (*GetTaskResponse, error)
 }
 
 type DefaultTaskServiceService struct{}
 
 // Create task endpoint with HTTP mapping
-// puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
 func (s *DefaultTaskServiceService) CreateTask(ctx context.Context, req *CreateTaskRequest) (*CreateTaskResponse, error) {
 	// TODO: Implement CreateTask
 	return &CreateTaskResponse{}, fmt.Errorf("method CreateTask not implemented")
 }
 
 // Get task endpoint with caching
-// puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
 func (s *DefaultTaskServiceService) GetTask(ctx context.Context, req *GetTaskRequest) (*GetTaskResponse, error) {
 	// TODO: Implement GetTask
 	return &GetTaskResponse{}, fmt.Errorf("method GetTask not implemented")
@@ -302,7 +291,6 @@ func NewTaskServiceClient(transport Transport) *TaskServiceClient {
 }
 
 // Create task endpoint with HTTP mapping
-// puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
 func (c *TaskServiceClient) CreateTask(ctx context.Context, req *CreateTaskRequest) (*CreateTaskResponse, error) {
 	if metadata, exists := MethodMetadata[TaskService_CreateTask]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)
@@ -318,7 +306,6 @@ func (c *TaskServiceClient) CreateTask(ctx context.Context, req *CreateTaskReque
 }
 
 // Get task endpoint with caching
-// puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
 func (c *TaskServiceClient) GetTask(ctx context.Context, req *GetTaskRequest) (*GetTaskResponse, error) {
 	if metadata, exists := MethodMetadata[TaskService_GetTask]; exists {
 		ctx = context.WithValue(ctx, "method_metadata", metadata)

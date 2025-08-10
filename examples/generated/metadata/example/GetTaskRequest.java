@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
 public class GetTaskRequest {
-    // puregen:metadata: {"validation": "uuid"}
+    // 
     @JsonProperty("id")
     private String id;
 

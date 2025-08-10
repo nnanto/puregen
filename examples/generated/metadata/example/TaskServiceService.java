@@ -4,14 +4,8 @@ package metadata.example;
 
     // Example service with method metadata
 public interface TaskServiceService {
-    /**
-     * Create task endpoint with HTTP mapping
-     * puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
-     */
+    // Create task endpoint with HTTP mapping
     CreateTaskResponse createTask(Map<String, Object> ctx, CreateTaskRequest request) throws Exception;
-    /**
-     * Get task endpoint with caching
-     * puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
-     */
+    // Get task endpoint with caching
     GetTaskResponse getTask(Map<String, Object> ctx, GetTaskRequest request) throws Exception;
 }

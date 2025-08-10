@@ -2,10 +2,7 @@
 
 package metadata.example;
 
-    /**
-     * Example enum with metadata for validation and UI
-     * puregen:metadata: {"validation": "required", "ui_type": "dropdown", "category": "status"}
-     */
+    // Example enum with metadata for validation and UI
 public final class TaskStatus {
     private TaskStatus() {} // Prevent instantiation
 

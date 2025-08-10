@@ -2,10 +2,7 @@
 
 package com.booking.services.reservations.model;
 
-    /**
-     * Operation types for booking system
-     * puregen:generate:{"enumType": "int"}
-     */
+    // Operation types for booking system
 public enum OperationType {
     OPERATIONTYPE_UNKNOWN(0),
     OPERATIONTYPE_HOTEL_RESERVATION(1),

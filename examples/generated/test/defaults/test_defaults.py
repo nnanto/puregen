@@ -7,29 +7,17 @@ import json
 
 # Messages
 
-# Test message with default values using puregen:generate directive
+# 
 @dataclass
 class TestDefaults:
     """Generated message class for TestDefaults"""
-    """
-    String field with default value
-    puregen:generate: {"value": "hello world"}
-    """
+    # String field with default value
     message: str = "hello world"
-    """
-    Integer field with default value
-    puregen:generate: {"value": "42"}
-    """
+    # Integer field with default value
     count: int = 42
-    """
-    Boolean field with default value
-    puregen:generate: {"value": "true"}
-    """
+    # Boolean field with default value
     enabled: bool = True
-    """
-    Float field with default value
-    puregen:generate: {"value": "3.14"}
-    """
+    # Float field with default value
     ratio: float = 3.14
     # Field without default value (should use language defaults)
     description: str = ""
@@ -136,48 +124,27 @@ class NoDefaults:
 @dataclass
 class EdgeCases:
     """Generated message class for EdgeCases"""
-    """
-    String with simple text
-    puregen:generate: {"value": "Hello World"}
-    """
+    # String with simple text
     simple_string: str = "Hello World"
-    """
-    Empty string default
-    puregen:generate: {"value": ""}
-    """
+    # Empty string default
     empty_string: str = ""
-    """
-    Zero values
-    puregen:generate: {"value": "0"}
-    """
+    # Zero values
     zero_int: int = 0
-    # puregen:generate: {"value": "0.0"}
+    # 
     zero_float: float = 0.0
-    # puregen:generate: {"value": "false"}
+    # 
     false_bool: bool = False
-    """
-    Large numbers
-    puregen:generate: {"value": "9223372036854775807"}
-    """
+    # Large numbers
     large_int: int = 9223372036854775807
-    """
-    Negative numbers
-    puregen:generate: {"value": "-42"}
-    """
+    # Negative numbers
     negative_int: int = -42
-    """
-    Scientific notation
-    puregen:generate: {"value": "1.23e-4"}
-    """
+    # Scientific notation
     scientific: float = 1.23e-4
     # Field without directive (should use language defaults)
     no_directive: str = ""
-    """
-    Different numeric types
-    puregen:generate: {"value": "255"}
-    """
+    # Different numeric types
     unsigned_value: int = 255
-    # puregen:generate: {"value": "2147483647"}
+    # 
     signed_value: int = 2147483647
 
     def validate(self) -> bool:

@@ -11,10 +11,7 @@ public class TaskServiceClient {
         this.transport = transport;
     }
 
-    /**
-     * Create task endpoint with HTTP mapping
-     * puregen:metadata: {"method": "POST", "path": "/api/v1/tasks", "auth": "required"}
-     */
+    // Create task endpoint with HTTP mapping
     public CreateTaskResponse createTask(Map<String, Object> ctx, CreateTaskRequest request) throws Exception {
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = TaskServiceMethods.METHOD_METADATA.get(TaskServiceMethods.TaskService_CreateTask);
@@ -24,10 +21,7 @@ public class TaskServiceClient {
         return transport.send(enhancedCtx, TaskServiceMethods.TaskService_CreateTask, request, CreateTaskResponse.class);
     }
 
-    /**
-     * Get task endpoint with caching
-     * puregen:metadata: {"method": "GET", "path": "/api/v1/tasks/{id}", "cache": "true", "cache_ttl": "300"}
-     */
+    // Get task endpoint with caching
     public GetTaskResponse getTask(Map<String, Object> ctx, GetTaskRequest request) throws Exception {
         Map<String, Object> enhancedCtx = new HashMap<>(ctx != null ? ctx : new HashMap<>());
         Map<String, String> methodMetadata = TaskServiceMethods.METHOD_METADATA.get(TaskServiceMethods.TaskService_GetTask);

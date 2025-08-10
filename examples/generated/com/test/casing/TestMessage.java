@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
 public class TestMessage {
-    // puregen:metadata: {"urls": "http://example.com/api/test"}
+    // 
     @JsonProperty("APIHost")
     private String apiHost;
 

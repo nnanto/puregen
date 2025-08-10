@@ -2,10 +2,7 @@
 
 package enums.test;
 
-    /**
-     * puregen:generate:{"enumType": "int"}
-     * Test enum that should be generated as integers
-     */
+    // Test enum that should be generated as integers
 public enum Status {
     STATUS_UNKNOWN(0),
     STATUS_ACTIVE(1),

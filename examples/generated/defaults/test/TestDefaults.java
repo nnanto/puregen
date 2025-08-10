@@ -7,33 +7,21 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
-    // Test message with default values using puregen:generate directive
+    // 
 public class TestDefaults {
-    /**
-     * String field with default value
-     * puregen:generate: {"value": "hello world"}
-     */
+    // String field with default value
     @JsonProperty("message")
     private String message;
 
-    /**
-     * Integer field with default value
-     * puregen:generate: {"value": "42"}
-     */
+    // Integer field with default value
     @JsonProperty("count")
     private int count;
 
-    /**
-     * Boolean field with default value
-     * puregen:generate: {"value": "true"}
-     */
+    // Boolean field with default value
     @JsonProperty("enabled")
     private boolean enabled;
 
-    /**
-     * Float field with default value
-     * puregen:generate: {"value": "3.14"}
-     */
+    // Float field with default value
     @JsonProperty("ratio")
     private float ratio;
 

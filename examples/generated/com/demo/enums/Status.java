@@ -2,10 +2,7 @@
 
 package com.demo.enums;
 
-    /**
-     * puregen:generate:{"enumType": "int"}
-     * Status enum should be generated as integers
-     */
+    // Status enum should be generated as integers
 public enum Status {
     STATUS_UNKNOWN(0),
     STATUS_ACTIVE(1),

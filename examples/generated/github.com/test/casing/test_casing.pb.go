@@ -9,7 +9,7 @@ import (
 // Messages
 
 type TestMessage struct {
-	// puregen:metadata: {"urls": "http://example.com/api/test"}
+	//
 	APIHost      string `json:"APIHost"`
 	TPMData      string `json:"TPMData"`
 	XMLContent   string `json:"XMLContent"`

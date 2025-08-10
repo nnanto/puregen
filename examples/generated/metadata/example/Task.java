@@ -7,43 +7,25 @@ import java.io.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
-    /**
-     * Example message with metadata for database mapping
-     * puregen:metadata: {"table": "tasks", "cache": "true", "partition_key": "user_id"}
-     */
+    // Example message with metadata for database mapping
 public class Task {
-    /**
-     * Primary key field with validation metadata
-     * puregen:metadata: {"index": "primary", "validation": "uuid", "db_column": "task_id"}
-     */
+    // Primary key field with validation metadata
     @JsonProperty("id")
     private String id;
 
-    /**
-     * Required field with length constraints
-     * puregen:metadata: {"validation": "required", "min_length": "1", "max_length": "200"}
-     */
+    // Required field with length constraints
     @JsonProperty("title")
     private String title;
 
-    /**
-     * Optional field with UI metadata
-     * puregen:metadata: {"ui_widget": "textarea", "placeholder": "Enter task description..."}
-     */
+    // Optional field with UI metadata
     @JsonProperty("description")
     private String description;
 
-    /**
-     * Status field with validation and default value
-     * puregen:metadata: {"validation": "enum", "default": "PENDING", "required": "true"}
-     */
+    // Status field with validation and default value
     @JsonProperty("status")
     private String status;
 
-    /**
-     * Timestamp field with format metadata
-     * puregen:metadata: {"format": "unix_timestamp", "index": "secondary"}
-     */
+    // Timestamp field with format metadata
     @JsonProperty("createdAt")
     private long createdAt;
 

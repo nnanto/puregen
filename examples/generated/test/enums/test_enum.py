@@ -8,10 +8,7 @@ from enum import IntEnum
 
 # Enums
 
-"""
-puregen:generate:{"enumType": "int"}
-Test enum that should be generated as integers
-"""
+# Test enum that should be generated as integers
 class Status(IntEnum):
     """Status enum values as integers"""
     STATUS_UNKNOWN = 0

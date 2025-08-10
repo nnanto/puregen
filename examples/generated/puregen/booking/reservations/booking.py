@@ -8,10 +8,7 @@ from enum import IntEnum
 
 # Enums
 
-"""
-Operation types for booking system
-puregen:generate:{"enumType": "int"}
-"""
+# Operation types for booking system
 class OperationType(IntEnum):
     """OperationType enum values as integers"""
     OPERATIONTYPE_UNKNOWN = 0

@@ -8,10 +8,7 @@ from enum import IntEnum
 
 # Enums
 
-"""
-puregen:generate:{"enumType": "int"}
-Status enum should be generated as integers
-"""
+# Status enum should be generated as integers
 class Status(IntEnum):
     """Status enum values as integers"""
     STATUS_UNKNOWN = 0
@@ -44,7 +41,7 @@ class Priority:
         """Check if value is a valid Priority"""
         return value in cls.VALUES
 
-# puregen:generate:{"enumType": "int"}
+# 
 class Task_Type(IntEnum):
     """Task_Type enum values as integers"""
     TYPE_UNKNOWN = 0

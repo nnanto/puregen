@@ -8,10 +8,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 
 public class CreateTaskRequest {
-    /**
-     * Required fields for task creation
-     * puregen:metadata: {"validation": "required", "trim_whitespace": "true"}
-     */
+    // Required fields for task creation
     @JsonProperty("title")
     private String title;
 
