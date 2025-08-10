@@ -22,7 +22,7 @@ func main() {
 
 	var flags flag.FlagSet
 	languageFlag := flags.String("language", "all", "target language: go, java, python, or all")
-	transportNamespaceFlag := flags.String("transport_namespace", "", "namespace for global transport class (e.g., 'transport' or 'common.transport')")
+	commonNamespaceFlag := flags.String("common_namespace", "", "namespace for common classes/interfaces (e.g., 'common' or 'shared.transport')")
 
 	protogen.Options{
 		ParamFunc: flags.Set,
@@ -30,7 +30,7 @@ func main() {
 		gen.SupportedFeatures = uint64(pluginpb.CodeGeneratorResponse_FEATURE_PROTO3_OPTIONAL)
 
 		language := *languageFlag
-		transportNamespace := *transportNamespaceFlag
+		commonNamespace := *commonNamespaceFlag
 
 		for _, f := range gen.Files {
 			if !f.Generate {
@@ -39,15 +39,15 @@ func main() {
 
 			switch language {
 			case "go":
-				generator.GenerateGoFile(gen, f, transportNamespace)
+				generator.GenerateGoFile(gen, f, commonNamespace)
 			case "java":
-				generator.GenerateJavaFile(gen, f, transportNamespace)
+				generator.GenerateJavaFile(gen, f, commonNamespace)
 			case "python":
-				generator.GeneratePythonFile(gen, f, transportNamespace)
+				generator.GeneratePythonFile(gen, f, commonNamespace)
 			case "all":
-				generator.GenerateGoFile(gen, f, transportNamespace)
-				generator.GenerateJavaFile(gen, f, transportNamespace)
-				generator.GeneratePythonFile(gen, f, transportNamespace)
+				generator.GenerateGoFile(gen, f, commonNamespace)
+				generator.GenerateJavaFile(gen, f, commonNamespace)
+				generator.GeneratePythonFile(gen, f, commonNamespace)
 			default:
 				return fmt.Errorf("unsupported language: %s", language)
 			}

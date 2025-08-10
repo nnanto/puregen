@@ -134,14 +134,14 @@ func writeGoComment(g *protogen.GeneratedFile, comments protogen.CommentSet) {
 }
 
 // GenerateGoFile generates Go code for the given protobuf file
-func GenerateGoFile(gen *protogen.Plugin, file *protogen.File, transportNamespace string) {
+func GenerateGoFile(gen *protogen.Plugin, file *protogen.File, commonNamespace string) {
 	if len(file.Messages) == 0 && len(file.Services) == 0 {
 		return
 	}
 
 	// Generate global transport if namespace is provided and we have services
-	if transportNamespace != "" && len(file.Services) > 0 {
-		generateGlobalTransportGo(gen, transportNamespace)
+	if commonNamespace != "" && len(file.Services) > 0 {
+		generateGlobalTransportGo(gen, commonNamespace)
 	}
 
 	filename := file.GeneratedFilenamePrefix + ".pb.go"
@@ -163,9 +163,9 @@ func GenerateGoFile(gen *protogen.Plugin, file *protogen.File, transportNamespac
 		g.P(`"fmt"`)
 	}
 	// Import global transport if namespace is provided and we have services
-	if transportNamespace != "" && len(file.Services) > 0 {
+	if commonNamespace != "" && len(file.Services) > 0 {
 		// Convert namespace to Go import path
-		importPath := strings.ReplaceAll(transportNamespace, ".", "/")
+		importPath := strings.ReplaceAll(commonNamespace, ".", "/")
 		g.P(`"`, importPath, `"`)
 	}
 	g.P(")")
@@ -222,7 +222,7 @@ func GenerateGoFile(gen *protogen.Plugin, file *protogen.File, transportNamespac
 		g.P()
 	}
 	for _, service := range file.Services {
-		generateGoClient(g, service, transportNamespace)
+		generateGoClient(g, service, commonNamespace)
 	}
 }
 
@@ -425,11 +425,11 @@ func generateGoService(g *protogen.GeneratedFile, service *protogen.Service) {
 	}
 }
 
-func generateGoClient(g *protogen.GeneratedFile, service *protogen.Service, transportNamespace string) {
+func generateGoClient(g *protogen.GeneratedFile, service *protogen.Service, commonNamespace string) {
 	serviceName := service.GoName
 
 	// Only generate Transport interface if no global namespace is provided
-	if transportNamespace == "" {
+	if commonNamespace == "" {
 		// Generate Transport interface
 		g.P("type Transport interface {")
 		g.P("	Send(ctx context.Context, methodName string, inputData interface{}, outputType interface{}) (interface{}, error)")
@@ -517,19 +517,19 @@ func getGoFieldType(field *protogen.Field) string {
 var createdTransportNamespacesGo = make(map[string]bool)
 
 // generateGlobalTransportGo creates a global Transport interface in the specified namespace
-func generateGlobalTransportGo(gen *protogen.Plugin, transportNamespace string) {
+func generateGlobalTransportGo(gen *protogen.Plugin, commonNamespace string) {
 	// Only create once per namespace
-	if createdTransportNamespacesGo[transportNamespace] {
+	if createdTransportNamespacesGo[commonNamespace] {
 		return
 	}
-	createdTransportNamespacesGo[transportNamespace] = true
+	createdTransportNamespacesGo[commonNamespace] = true
 
 	// Create the transport Go file
-	filename := strings.ReplaceAll(transportNamespace, ".", "/") + "/transport.go"
+	filename := strings.ReplaceAll(commonNamespace, ".", "/") + "/transport.go"
 	g := gen.NewGeneratedFile(filename, "")
 
 	// Get package name (last part of namespace)
-	parts := strings.Split(transportNamespace, ".")
+	parts := strings.Split(commonNamespace, ".")
 	packageName := parts[len(parts)-1]
 
 	// Generate file header

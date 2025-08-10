@@ -6,6 +6,34 @@ The generated code can be used in three different ways:
 2. **As Server Implementation** - Service implementations with HTTP endpoints
 3. **As Client with Custom Transport** - Client libraries with pluggable transport
 
+## Code Generation Options
+
+The generator supports several options:
+
+- `language` - Target language (go, java, python, or all)
+- `common_namespace` - Namespace for common/shared classes like Transport interface (e.g., 'shared', 'common.transport')
+
+When `common_namespace` is specified, Transport interfaces/classes are generated in a global namespace and imported by clients. When not specified, each client generates its own local Transport interface.
+
+#### Usage
+# Common namespace for all languages
+protoc --plugin=./build/protoc-gen-puregen \
+       --puregen_out=./output \
+       --puregen_opt=language=all,common_namespace=shared \
+       examples/proto/user.proto
+
+# Multi-level common namespace
+protoc --plugin=./build/protoc-gen-puregen \
+       --puregen_out=./output \
+       --puregen_opt=language=python,common_namespace=common.transport \
+       examples/proto/user.proto
+
+# Without common namespace (local transport interfaces)
+protoc --plugin=./build/protoc-gen-puregen \
+       --puregen_out=./output \
+       --puregen_opt=language=all \
+       examples/proto/user.proto
+
 ## Language-Specific Examples
 
 ### As Models Only
