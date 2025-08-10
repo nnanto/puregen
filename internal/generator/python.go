@@ -419,27 +419,54 @@ func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
 		g.P()
 	}
 
-	// Generate field metadata if available
+	// Generate field constants and metadata if any fields have metadata
+	hasFieldMetadata := false
 	for _, field := range msg.Fields {
 		fieldMetadata := parseFieldMetadata(field.Comments)
 		if fieldMetadata != nil {
-			fieldName := field.GoName // Use original field name directly
-			g.P("# Metadata for field ", field.GoName, " in ", msg.GoIdent.GoName)
-			g.P(msg.GoIdent.GoName, fieldName, "Metadata = {")
-			// Sort keys for consistent output
-			var keys []string
-			for key := range fieldMetadata {
-				keys = append(keys, key)
-			}
-			sort.Strings(keys)
-
-			for _, key := range keys {
-				value := fieldMetadata[key]
-				g.P("    \"", key, "\": \"", value, "\",")
-			}
-			g.P("}")
-			g.P()
+			hasFieldMetadata = true
+			break
 		}
+	}
+
+	if hasFieldMetadata {
+		// Generate field constants
+		g.P("# Field name constants for ", msg.GoIdent.GoName)
+		for _, field := range msg.Fields {
+			fieldMetadata := parseFieldMetadata(field.Comments)
+			if fieldMetadata != nil {
+				constName := msg.GoIdent.GoName + "_" + field.GoName + "_FIELD"
+				constValue := msg.GoIdent.GoName + "_" + field.GoName
+				g.P(constName, " = \"", constValue, "\"")
+			}
+		}
+		g.P()
+
+		// Generate MessageField metadata map
+		g.P("# MessageField metadata for ", msg.GoIdent.GoName)
+		g.P(msg.GoIdent.GoName, "FieldMetadata = {")
+		for _, field := range msg.Fields {
+			fieldMetadata := parseFieldMetadata(field.Comments)
+			if fieldMetadata != nil {
+				constName := msg.GoIdent.GoName + "_" + field.GoName + "_FIELD"
+				g.P("    ", constName, ": {")
+
+				// Sort keys for consistent output
+				var keys []string
+				for key := range fieldMetadata {
+					keys = append(keys, key)
+				}
+				sort.Strings(keys)
+
+				for _, key := range keys {
+					value := fieldMetadata[key]
+					g.P("        \"", key, "\": \"", value, "\",")
+				}
+				g.P("    },")
+			}
+		}
+		g.P("}")
+		g.P()
 	}
 }
 

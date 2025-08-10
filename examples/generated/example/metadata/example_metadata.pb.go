@@ -89,37 +89,40 @@ var TaskMetadata = map[string]string{
 	"table":         "tasks",
 }
 
-// TaskIdMetadata contains metadata for field Id in Task
-var TaskIdMetadata = map[string]string{
-	"db_column":  "task_id",
-	"index":      "primary",
-	"validation": "uuid",
-}
+// Field name constants for Task
+const (
+	Task_Id_FIELD          = "Task_Id"
+	Task_Title_FIELD       = "Task_Title"
+	Task_Description_FIELD = "Task_Description"
+	Task_Status_FIELD      = "Task_Status"
+	Task_CreatedAt_FIELD   = "Task_CreatedAt"
+)
 
-// TaskTitleMetadata contains metadata for field Title in Task
-var TaskTitleMetadata = map[string]string{
-	"max_length": "200",
-	"min_length": "1",
-	"validation": "required",
-}
-
-// TaskDescriptionMetadata contains metadata for field Description in Task
-var TaskDescriptionMetadata = map[string]string{
-	"placeholder": "Enter task description...",
-	"ui_widget":   "textarea",
-}
-
-// TaskStatusMetadata contains metadata for field Status in Task
-var TaskStatusMetadata = map[string]string{
-	"default":    "PENDING",
-	"required":   "true",
-	"validation": "enum",
-}
-
-// TaskCreatedAtMetadata contains metadata for field CreatedAt in Task
-var TaskCreatedAtMetadata = map[string]string{
-	"format": "unix_timestamp",
-	"index":  "secondary",
+// MessageField metadata for Task
+var TaskFieldMetadata = map[string]map[string]string{
+	Task_Id_FIELD: {
+		"db_column":  "task_id",
+		"index":      "primary",
+		"validation": "uuid",
+	},
+	Task_Title_FIELD: {
+		"max_length": "200",
+		"min_length": "1",
+		"validation": "required",
+	},
+	Task_Description_FIELD: {
+		"placeholder": "Enter task description...",
+		"ui_widget":   "textarea",
+	},
+	Task_Status_FIELD: {
+		"default":    "PENDING",
+		"required":   "true",
+		"validation": "enum",
+	},
+	Task_CreatedAt_FIELD: {
+		"format": "unix_timestamp",
+		"index":  "secondary",
+	},
 }
 
 type CreateTaskRequest struct {
@@ -146,10 +149,17 @@ func (m *CreateTaskRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
-// CreateTaskRequestTitleMetadata contains metadata for field Title in CreateTaskRequest
-var CreateTaskRequestTitleMetadata = map[string]string{
-	"trim_whitespace": "true",
-	"validation":      "required",
+// Field name constants for CreateTaskRequest
+const (
+	CreateTaskRequest_Title_FIELD = "CreateTaskRequest_Title"
+)
+
+// MessageField metadata for CreateTaskRequest
+var CreateTaskRequestFieldMetadata = map[string]map[string]string{
+	CreateTaskRequest_Title_FIELD: {
+		"trim_whitespace": "true",
+		"validation":      "required",
+	},
 }
 
 type CreateTaskResponse struct {
@@ -195,9 +205,16 @@ func (m *GetTaskRequest) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
-// GetTaskRequestIdMetadata contains metadata for field Id in GetTaskRequest
-var GetTaskRequestIdMetadata = map[string]string{
-	"validation": "uuid",
+// Field name constants for GetTaskRequest
+const (
+	GetTaskRequest_Id_FIELD = "GetTaskRequest_Id"
+)
+
+// MessageField metadata for GetTaskRequest
+var GetTaskRequestFieldMetadata = map[string]map[string]string{
+	GetTaskRequest_Id_FIELD: {
+		"validation": "uuid",
+	},
 }
 
 type GetTaskResponse struct {

@@ -127,37 +127,38 @@ TaskMetadata = {
     "table": "tasks",
 }
 
-# Metadata for field Id in Task
-TaskIdMetadata = {
-    "db_column": "task_id",
-    "index": "primary",
-    "validation": "uuid",
-}
+# Field name constants for Task
+Task_Id_FIELD = "Task_Id"
+Task_Title_FIELD = "Task_Title"
+Task_Description_FIELD = "Task_Description"
+Task_Status_FIELD = "Task_Status"
+Task_CreatedAt_FIELD = "Task_CreatedAt"
 
-# Metadata for field Title in Task
-TaskTitleMetadata = {
-    "max_length": "200",
-    "min_length": "1",
-    "validation": "required",
-}
-
-# Metadata for field Description in Task
-TaskDescriptionMetadata = {
-    "placeholder": "Enter task description...",
-    "ui_widget": "textarea",
-}
-
-# Metadata for field Status in Task
-TaskStatusMetadata = {
-    "default": "PENDING",
-    "required": "true",
-    "validation": "enum",
-}
-
-# Metadata for field CreatedAt in Task
-TaskCreatedAtMetadata = {
-    "format": "unix_timestamp",
-    "index": "secondary",
+# MessageField metadata for Task
+TaskFieldMetadata = {
+    Task_Id_FIELD: {
+        "db_column": "task_id",
+        "index": "primary",
+        "validation": "uuid",
+    },
+    Task_Title_FIELD: {
+        "max_length": "200",
+        "min_length": "1",
+        "validation": "required",
+    },
+    Task_Description_FIELD: {
+        "placeholder": "Enter task description...",
+        "ui_widget": "textarea",
+    },
+    Task_Status_FIELD: {
+        "default": "PENDING",
+        "required": "true",
+        "validation": "enum",
+    },
+    Task_CreatedAt_FIELD: {
+        "format": "unix_timestamp",
+        "index": "secondary",
+    },
 }
 
 @dataclass
@@ -204,10 +205,15 @@ class CreateTaskRequest:
             kwargs['description'] = data['description']
         return cls(**kwargs)
 
-# Metadata for field Title in CreateTaskRequest
-CreateTaskRequestTitleMetadata = {
-    "trim_whitespace": "true",
-    "validation": "required",
+# Field name constants for CreateTaskRequest
+CreateTaskRequest_Title_FIELD = "CreateTaskRequest_Title"
+
+# MessageField metadata for CreateTaskRequest
+CreateTaskRequestFieldMetadata = {
+    CreateTaskRequest_Title_FIELD: {
+        "trim_whitespace": "true",
+        "validation": "required",
+    },
 }
 
 @dataclass
@@ -281,9 +287,14 @@ class GetTaskRequest:
             kwargs['id'] = data['id']
         return cls(**kwargs)
 
-# Metadata for field Id in GetTaskRequest
-GetTaskRequestIdMetadata = {
-    "validation": "uuid",
+# Field name constants for GetTaskRequest
+GetTaskRequest_Id_FIELD = "GetTaskRequest_Id"
+
+# MessageField metadata for GetTaskRequest
+GetTaskRequestFieldMetadata = {
+    GetTaskRequest_Id_FIELD: {
+        "validation": "uuid",
+    },
 }
 
 @dataclass
