@@ -23,7 +23,7 @@ puregen is ideal for projects that need simple, readable generated code without 
 - **Simple data structures**: Generated classes/structs are easy to understand and modify
 - **JSON serialization**: Built-in JSON marshaling/unmarshaling support
 - **Service interfaces**: Clean interface definitions for RPC services
-- **Comprehensive metadata support**: Extract metadata from service methods, messages, enums, and fields using `puregen:metadata` directive for HTTP routing, database mapping, validation, UI configuration, etc. [See details](doc/metadata-support.md)
+- **Comprehensive directive support**: Customize code generation with `puregen:generate` and `puregen:metadata` directives for default values, enum types, HTTP routing, database mapping, validation, UI configuration, etc. [See details](doc/directives.md)
 - **Client generation**: Ready-to-use clients with pluggable transport. [See details](#using-the-generated-code)
 
 ## Installation
@@ -98,19 +98,35 @@ option go_package = "github.com/nnanto/puregen/examples/proto/gen/go";
 option java_package = "com.example.proto.v1";
 
 // User represents a user in the system
+// puregen:metadata: {"table": "users", "cache": "true"}
 message User {
   int32 id = 1;
+  // puregen:generate: {"value": "Anonymous"}
   string name = 2;
   string email = 3;
+  // Default to active status
+  // puregen:generate: {"value": "true"}
   bool is_active = 4;
   UserProfile profile = 5;
+  UserStatus status = 6;
 }
 
 // UserProfile contains additional user information
 message UserProfile {
+  // Default bio for new users
+  // puregen:generate: {"value": "No bio provided"}
   string bio = 1;
   string avatar_url = 2;
   int64 created_at = 3;
+}
+
+// Status enum with integer generation
+// puregen:generate: {"enumType": "int"}
+// puregen:metadata: {"validation": "required", "default": "ACTIVE"}
+enum UserStatus {
+  USER_STATUS_UNKNOWN = 0;
+  USER_STATUS_ACTIVE = 1;
+  USER_STATUS_INACTIVE = 2;
 }
 
 // CreateUserRequest is the request message for creating a user
