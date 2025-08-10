@@ -20,7 +20,8 @@ public class BookingStatsResponse {
     @JsonProperty("totalBookings")
     private int totalBookings;
 
-    public BookingStatsResponse() {}
+    public BookingStatsResponse() {
+    }
 
     public double getTotalAmountCharged() {
         return totalAmountCharged;

@@ -12,7 +12,8 @@ public class ListBookingsRequest {
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 
-    public ListBookingsRequest() {}
+    public ListBookingsRequest() {
+    }
 
     public PaymentInfo getPaymentInfo() {
         return paymentInfo;

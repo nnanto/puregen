@@ -11,7 +11,8 @@ public class CreateTaskResponse {
     @JsonProperty("task")
     private Task task;
 
-    public CreateTaskResponse() {}
+    public CreateTaskResponse() {
+    }
 
     public Task getTask() {
         return task;

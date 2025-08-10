@@ -20,7 +20,8 @@ public class BookingOperationRequest {
     @JsonProperty("confirm")
     private boolean confirm;
 
-    public BookingOperationRequest() {}
+    public BookingOperationRequest() {
+    }
 
     public String getOperationId() {
         return operationId;

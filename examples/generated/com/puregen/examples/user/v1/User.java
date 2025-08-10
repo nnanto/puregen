@@ -27,7 +27,8 @@ public class User {
     @JsonProperty("profile")
     private UserProfile profile;
 
-    public User() {}
+    public User() {
+    }
 
     public int getId() {
         return id;

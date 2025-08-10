@@ -16,7 +16,8 @@ public class BookingConfirmationRequest {
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 
-    public BookingConfirmationRequest() {}
+    public BookingConfirmationRequest() {
+    }
 
     public List<String> getBookingIds() {
         return bookingIds;

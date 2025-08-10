@@ -18,7 +18,8 @@ public class CreateTaskRequest {
     @JsonProperty("description")
     private String description;
 
-    public CreateTaskRequest() {}
+    public CreateTaskRequest() {
+    }
 
     public String getTitle() {
         return title;

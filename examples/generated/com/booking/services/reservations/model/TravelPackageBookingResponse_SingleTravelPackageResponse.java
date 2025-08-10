@@ -29,7 +29,8 @@ public class TravelPackageBookingResponse_SingleTravelPackageResponse {
     @JsonProperty("error")
     private Error error;
 
-    public TravelPackageBookingResponse_SingleTravelPackageResponse() {}
+    public TravelPackageBookingResponse_SingleTravelPackageResponse() {
+    }
 
     public String getPackageName() {
         return packageName;

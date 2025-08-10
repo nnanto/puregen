@@ -20,7 +20,8 @@ public class PaymentInfo {
     @JsonProperty("operationType")
     private OperationType operationType;
 
-    public PaymentInfo() {}
+    public PaymentInfo() {
+    }
 
     public String getPaymentMethod() {
         return paymentMethod;

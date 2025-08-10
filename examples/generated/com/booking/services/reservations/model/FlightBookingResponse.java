@@ -25,7 +25,8 @@ public class FlightBookingResponse {
     @JsonProperty("bookingStats")
     private BookingStatsResponse bookingStats;
 
-    public FlightBookingResponse() {}
+    public FlightBookingResponse() {
+    }
 
     public List<FlightBookingResponse_SingleFlightBooking> getFlightBooking() {
         return flightBooking;

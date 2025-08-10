@@ -17,7 +17,8 @@ public class TravelPackageBookingRequest {
     @JsonProperty("paymentInfo")
     private PaymentInfo paymentInfo;
 
-    public TravelPackageBookingRequest() {}
+    public TravelPackageBookingRequest() {
+    }
 
     public List<String> getDestinations() {
         return destinations;

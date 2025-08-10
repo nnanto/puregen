@@ -21,7 +21,8 @@ public class ListBookingsResponse {
     @JsonProperty("error")
     private Error error;
 
-    public ListBookingsResponse() {}
+    public ListBookingsResponse() {
+    }
 
     public List<String> getConfirmedBookingIds() {
         return confirmedBookingIds;

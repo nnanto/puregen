@@ -47,7 +47,8 @@ public class Task {
     @JsonProperty("createdAt")
     private long createdAt;
 
-    public Task() {}
+    public Task() {
+    }
 
     public String getId() {
         return id;

@@ -18,7 +18,8 @@ public class CreateUserResponse {
     @JsonProperty("message")
     private String message;
 
-    public CreateUserResponse() {}
+    public CreateUserResponse() {
+    }
 
     public User getUser() {
         return user;

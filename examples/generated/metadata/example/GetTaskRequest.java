@@ -12,7 +12,8 @@ public class GetTaskRequest {
     @JsonProperty("id")
     private String id;
 
-    public GetTaskRequest() {}
+    public GetTaskRequest() {
+    }
 
     public String getId() {
         return id;

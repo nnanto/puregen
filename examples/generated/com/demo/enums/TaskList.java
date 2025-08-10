@@ -11,7 +11,8 @@ public class TaskList {
     @JsonProperty("tasks")
     private List<Task> tasks = new ArrayList<>();
 
-    public TaskList() {}
+    public TaskList() {
+    }
 
     public List<Task> getTasks() {
         return tasks;

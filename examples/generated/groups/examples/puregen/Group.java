@@ -21,7 +21,8 @@ public class Group {
     @JsonProperty("createdAt")
     private long createdAt;
 
-    public Group() {}
+    public Group() {
+    }
 
     public String getId() {
         return id;

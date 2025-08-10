@@ -32,7 +32,8 @@ public class FlightBookingRequest {
     @JsonProperty("numberOfPassengers")
     private int numberOfPassengers;
 
-    public FlightBookingRequest() {}
+    public FlightBookingRequest() {
+    }
 
     public List<String> getFlightRoutes() {
         return flightRoutes;

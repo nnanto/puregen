@@ -16,7 +16,8 @@ public class CreateGroupResponse {
     @JsonProperty("error")
     private Error error;
 
-    public CreateGroupResponse() {}
+    public CreateGroupResponse() {
+    }
 
     public Group getGroup() {
         return group;

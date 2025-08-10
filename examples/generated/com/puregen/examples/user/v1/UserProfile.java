@@ -18,7 +18,8 @@ public class UserProfile {
     @JsonProperty("createdAt")
     private long createdAt;
 
-    public UserProfile() {}
+    public UserProfile() {
+    }
 
     public String getBio() {
         return bio;

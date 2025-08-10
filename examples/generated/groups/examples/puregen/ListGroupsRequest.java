@@ -15,7 +15,8 @@ public class ListGroupsRequest {
     @JsonProperty("pageToken")
     private String pageToken;
 
-    public ListGroupsRequest() {}
+    public ListGroupsRequest() {
+    }
 
     public int getPageSize() {
         return pageSize;

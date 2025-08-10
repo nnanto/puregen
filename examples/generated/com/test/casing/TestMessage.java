@@ -39,7 +39,8 @@ public class TestMessage {
     @JsonProperty("HTMLContent")
     private String htmlContent;
 
-    public TestMessage() {}
+    public TestMessage() {
+    }
 
     public String getApiHost() {
         return apiHost;

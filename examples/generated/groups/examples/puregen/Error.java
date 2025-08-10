@@ -20,7 +20,8 @@ public class Error {
     @JsonProperty("details")
     private String details;
 
-    public Error() {}
+    public Error() {
+    }
 
     public int getCode() {
         return code;

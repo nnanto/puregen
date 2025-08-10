@@ -24,7 +24,8 @@ public class Task {
     @JsonProperty("type")
     private Task_Type type;
 
-    public Task() {}
+    public Task() {
+    }
 
     public String getId() {
         return id;

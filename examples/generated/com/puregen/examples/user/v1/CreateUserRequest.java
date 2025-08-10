@@ -18,7 +18,8 @@ public class CreateUserRequest {
     @JsonProperty("profile")
     private UserProfile profile;
 
-    public CreateUserRequest() {}
+    public CreateUserRequest() {
+    }
 
     public String getName() {
         return name;

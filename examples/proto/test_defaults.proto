@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package test.defaults;
+
+option go_package = "test/defaults";
+
+// Test message with default values using puregen:generate directive
+message TestDefaults {
+    // String field with default value
+    // puregen:generate: {"value": "hello world"}
+    string message = 1;
+    
+    // Integer field with default value  
+    // puregen:generate: {"value": "42"}
+    int32 count = 2;
+    
+    // Boolean field with default value
+    // puregen:generate: {"value": "true"}
+    bool enabled = 3;
+    
+    // Float field with default value
+    // puregen:generate: {"value": "3.14"}
+    float ratio = 4;
+    
+    // Field without default value (should use language defaults)
+    string description = 5;
+    
+    // Field without default value
+    int32 age = 6;
+}
+
+// Test message without any default values
+message NoDefaults {
+    string name = 1;
+    int32 value = 2;
+    bool flag = 3;
+}
+
+
+
+// Test message with various edge cases for default values
+message EdgeCases {
+    // String with simple text
+    // puregen:generate: {"value": "Hello World"}
+    string simple_string = 1;
+    
+    // Empty string default
+    // puregen:generate: {"value": ""}
+    string empty_string = 2;
+    
+    // Zero values
+    // puregen:generate: {"value": "0"}
+    int32 zero_int = 3;
+    
+    // puregen:generate: {"value": "0.0"}
+    float zero_float = 4;
+    
+    // puregen:generate: {"value": "false"}
+    bool false_bool = 5;
+    
+    // Large numbers
+    // puregen:generate: {"value": "9223372036854775807"}
+    int64 large_int = 6;
+    
+    // Negative numbers
+    // puregen:generate: {"value": "-42"}
+    int32 negative_int = 7;
+    
+    // Scientific notation
+    // puregen:generate: {"value": "1.23e-4"}
+    double scientific = 8;
+    
+    // Field without directive (should use language defaults)
+    string no_directive = 9;
+    
+    // Different numeric types
+    // puregen:generate: {"value": "255"}
+    uint32 unsigned_value = 10;
+    
+    // puregen:generate: {"value": "2147483647"}
+    sint32 signed_value = 11;
+}

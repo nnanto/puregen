@@ -17,7 +17,8 @@ public class HotelReservationResponse_SingleHotelReservationResponse {
     @JsonProperty("error")
     private Error error;
 
-    public HotelReservationResponse_SingleHotelReservationResponse() {}
+    public HotelReservationResponse_SingleHotelReservationResponse() {
+    }
 
     public List<HotelReservationResponse_AvailableRoom> getAvailableRooms() {
         return availableRooms;

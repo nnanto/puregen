@@ -15,7 +15,8 @@ public class ListGroupsResponse {
     @JsonProperty("nextPageToken")
     private String nextPageToken;
 
-    public ListGroupsResponse() {}
+    public ListGroupsResponse() {
+    }
 
     public List<Group> getGroups() {
         return groups;

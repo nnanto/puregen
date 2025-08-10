@@ -21,7 +21,8 @@ public class BookingOperationResponse {
     @JsonProperty("error")
     private Error error;
 
-    public BookingOperationResponse() {}
+    public BookingOperationResponse() {
+    }
 
     public String getOperationId() {
         return operationId;

@@ -36,7 +36,8 @@ public class HotelReservationRequest {
     @JsonProperty("numberOfGuests")
     private int numberOfGuests;
 
-    public HotelReservationRequest() {}
+    public HotelReservationRequest() {
+    }
 
     public List<String> getHotelLocations() {
         return hotelLocations;

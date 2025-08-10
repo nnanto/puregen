@@ -19,7 +19,8 @@ public class CreateGroupRequest {
     @JsonProperty("owner")
     private Principal owner;
 
-    public CreateGroupRequest() {}
+    public CreateGroupRequest() {
+    }
 
     public String getName() {
         return name;

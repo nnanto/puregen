@@ -21,7 +21,8 @@ public class HotelReservationResponse_AvailableRoom {
     @JsonProperty("availableRooms")
     private int availableRooms;
 
-    public HotelReservationResponse_AvailableRoom() {}
+    public HotelReservationResponse_AvailableRoom() {
+    }
 
     public HotelReservationResponse_Hotel getHotel() {
         return hotel;

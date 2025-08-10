@@ -14,7 +14,8 @@ public class TestMessage {
     @JsonProperty("priority")
     private String priority;
 
-    public TestMessage() {}
+    public TestMessage() {
+    }
 
     public Status getStatus() {
         return status;

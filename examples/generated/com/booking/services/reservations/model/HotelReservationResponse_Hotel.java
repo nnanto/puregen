@@ -25,7 +25,8 @@ public class HotelReservationResponse_Hotel {
     @JsonProperty("address")
     private String address;
 
-    public HotelReservationResponse_Hotel() {}
+    public HotelReservationResponse_Hotel() {
+    }
 
     public String getName() {
         return name;

@@ -25,7 +25,8 @@ public class HotelReservationResponse {
     @JsonProperty("bookingStats")
     private BookingStatsResponse bookingStats;
 
-    public HotelReservationResponse() {}
+    public HotelReservationResponse() {
+    }
 
     public List<HotelReservationResponse_SingleHotelReservationResponse> getResult() {
         return result;

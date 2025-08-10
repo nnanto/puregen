@@ -25,7 +25,8 @@ public class BookingHeader {
     @JsonProperty("requestTimestamp")
     private long requestTimestamp;
 
-    public BookingHeader() {}
+    public BookingHeader() {
+    }
 
     public String getUserId() {
         return userId;

@@ -24,7 +24,8 @@ public class Principal {
     @JsonProperty("roles")
     private List<String> roles = new ArrayList<>();
 
-    public Principal() {}
+    public Principal() {
+    }
 
     public String getId() {
         return id;

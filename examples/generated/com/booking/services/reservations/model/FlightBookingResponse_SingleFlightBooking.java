@@ -37,7 +37,8 @@ public class FlightBookingResponse_SingleFlightBooking {
     @JsonProperty("hotelRecommendations")
     private HotelReservationResponse_SingleHotelReservationResponse hotelRecommendations;
 
-    public FlightBookingResponse_SingleFlightBooking() {}
+    public FlightBookingResponse_SingleFlightBooking() {
+    }
 
     public String getFlightNumber() {
         return flightNumber;

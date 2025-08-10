@@ -15,7 +15,8 @@ public class GetUserResponse {
     @JsonProperty("found")
     private boolean found;
 
-    public GetUserResponse() {}
+    public GetUserResponse() {
+    }
 
     public User getUser() {
         return user;

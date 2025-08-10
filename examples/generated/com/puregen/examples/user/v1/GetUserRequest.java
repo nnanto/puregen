@@ -12,7 +12,8 @@ public class GetUserRequest {
     @JsonProperty("id")
     private int id;
 
-    public GetUserRequest() {}
+    public GetUserRequest() {
+    }
 
     public int getId() {
         return id;
