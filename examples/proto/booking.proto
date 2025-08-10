@@ -72,6 +72,7 @@ service BookingService {
 
 
 // Operation types for booking system
+// puregen:generate:{"enumType": "int"}
 enum OperationType {
   // Unknown operation type
   OperationType_UNKNOWN = 0;
@@ -92,6 +93,8 @@ message PaymentInfo {
   string paymentMethod = 1;
   // Card token or payment reference
   string paymentToken = 2;
+
+  OperationType operationType = 3;
 }
 
 // Error Response

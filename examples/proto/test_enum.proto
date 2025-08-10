@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package test.enums;
+
+option go_package = "test/enums";
+
+// puregen:generate:{"enumType": "int"}
+// Test enum that should be generated as integers
+enum Status {
+  STATUS_UNKNOWN = 0;
+  STATUS_ACTIVE = 1;
+  STATUS_INACTIVE = 2;
+}
+
+// Default enum that should be generated as string constants
+enum Priority {
+  PRIORITY_LOW = 0;
+  PRIORITY_MEDIUM = 1;
+  PRIORITY_HIGH = 2;
+}
+
+message TestMessage {
+  Status status = 1;
+  Priority priority = 2;
+}

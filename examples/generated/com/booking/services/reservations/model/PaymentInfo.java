@@ -17,6 +17,9 @@ public class PaymentInfo {
     @JsonProperty("paymentToken")
     private String paymentToken;
 
+    @JsonProperty("operationType")
+    private OperationType operationType;
+
     public PaymentInfo() {}
 
     public String getPaymentMethod() {
@@ -35,6 +38,14 @@ public class PaymentInfo {
         this.paymentToken = paymentToken;
     }
 
+    public OperationType getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(OperationType operationType) {
+        this.operationType = operationType;
+    }
+
     public static class Builder {
         private PaymentInfo instance = new PaymentInfo();
 
@@ -45,6 +56,11 @@ public class PaymentInfo {
 
         public Builder setPaymentToken(String paymentToken) {
             instance.setPaymentToken(paymentToken);
+            return this;
+        }
+
+        public Builder setOperationType(OperationType operationType) {
+            instance.setOperationType(operationType);
             return this;
         }
 

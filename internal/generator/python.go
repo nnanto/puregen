@@ -91,6 +91,20 @@ func GeneratePythonFile(gen *protogen.Plugin, file *protogen.File, commonNamespa
 	g.P("from abc import ABC, abstractmethod")
 	g.P("import json")
 
+	// Check if we need IntEnum import
+	enumsForImport := collectAllEnums(file)
+	needsIntEnum := false
+	for _, enum := range enumsForImport {
+		directive := parsePuregenDirective(enum.Comments)
+		if directive != nil && directive.EnumType == "int" {
+			needsIntEnum = true
+			break
+		}
+	}
+	if needsIntEnum {
+		g.P("from enum import IntEnum")
+	}
+
 	// Import global transport if namespace is provided and we have services
 	if commonNamespace != "" && len(file.Services) > 0 {
 		g.P("from ", commonNamespace, " import Transport")
@@ -117,6 +131,16 @@ func GeneratePythonFile(gen *protogen.Plugin, file *protogen.File, commonNamespa
 		for _, message := range importedMessages {
 			generatePythonMessage(g, message)
 		}
+	}
+
+	// Generate all enums (including nested and unreferenced)
+	allEnums := collectAllEnums(file)
+	if len(allEnums) > 0 {
+		g.P("# Enums")
+		g.P()
+	}
+	for _, enum := range allEnums {
+		generatePythonEnum(g, enum)
 	}
 
 	// Generate messages
@@ -191,6 +215,66 @@ func generatePythonMethodConstants(g *protogen.GeneratedFile, service *protogen.
 	}
 	g.P("    }")
 	g.P()
+}
+
+func generatePythonEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
+	enumName := enum.GoIdent.GoName
+
+	// Parse puregen directive to determine enum type
+	directive := parsePuregenDirective(enum.Comments)
+	useStringConstants := true // Default to string constants
+	
+	if directive != nil && directive.EnumType == "int" {
+		useStringConstants = false
+	}
+
+	// Generate enum comment
+	writePythonComment(g, enum.Comments)
+
+	if useStringConstants {
+		// Generate string constants class
+		g.P("class ", enumName, ":")
+		g.P("    \"\"\"", enumName, " enum values as string constants\"\"\"")
+		
+		for _, value := range enum.Values {
+			valueName := strings.ToUpper(string(value.Desc.Name()))
+			g.P("    ", valueName, " = \"", value.Desc.Name(), "\"")
+		}
+		g.P()
+
+		// Generate list of all values for validation
+		g.P("    VALUES = [")
+		for _, value := range enum.Values {
+			valueName := strings.ToUpper(string(value.Desc.Name()))
+			g.P("        ", valueName, ",")
+		}
+		g.P("    ]")
+		g.P()
+
+		// Generate validation method
+		g.P("    @classmethod")
+		g.P("    def is_valid(cls, value: str) -> bool:")
+		g.P("        \"\"\"Check if value is a valid ", enumName, "\"\"\"")
+		g.P("        return value in cls.VALUES")
+		g.P()
+	} else {
+		// Generate IntEnum class
+		g.P("class ", enumName, "(IntEnum):")
+		g.P("    \"\"\"", enumName, " enum values as integers\"\"\"")
+		
+		for _, value := range enum.Values {
+			valueName := strings.ToUpper(string(value.Desc.Name()))
+			g.P("    ", valueName, " = ", value.Desc.Number())
+		}
+		g.P()
+
+		// Generate validation method
+		g.P("    @classmethod")
+		g.P("    def is_valid(cls, value: int) -> bool:")
+		g.P("        \"\"\"Check if value is a valid ", enumName, "\"\"\"")
+		g.P("        return value in [item.value for item in cls]")
+		g.P()
+	}
 }
 
 func generatePythonMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
@@ -480,7 +564,15 @@ func getPythonFieldType(field *protogen.Field) string {
 	case "bytes":
 		baseType = "bytes"
 	case "enum":
-		baseType = "int" // Enum as int for simplicity
+		// Check if enum is using string constants
+		directive := parsePuregenDirective(field.Enum.Comments)
+		if directive == nil || directive.EnumType != "int" {
+			// Default to string constants
+			baseType = "str"
+		} else {
+			// Use integer enum type
+			baseType = "int"
+		}
 	case "message":
 		baseType = field.Message.GoIdent.GoName
 	default:

@@ -15,7 +15,7 @@ public class HotelReservationRequest {
 
     // List of preferred room types
     @JsonProperty("roomTypes")
-    private List<HotelReservationRequest_RoomType> roomTypes = new ArrayList<>();
+    private List<String> roomTypes = new ArrayList<>();
 
     // Maximum price per night
     @JsonProperty("maxPricePerNight")
@@ -53,15 +53,15 @@ public class HotelReservationRequest {
         this.hotelLocations.add(item);
     }
 
-    public List<HotelReservationRequest_RoomType> getRoomTypes() {
+    public List<String> getRoomTypes() {
         return roomTypes;
     }
 
-    public void setRoomTypes(List<HotelReservationRequest_RoomType> roomTypes) {
+    public void setRoomTypes(List<String> roomTypes) {
         this.roomTypes = roomTypes;
     }
 
-    public void addRoomTypes(HotelReservationRequest_RoomType item) {
+    public void addRoomTypes(String item) {
         if (this.roomTypes == null) {
             this.roomTypes = new ArrayList<>();
         }
@@ -116,7 +116,7 @@ public class HotelReservationRequest {
             return this;
         }
 
-        public Builder setRoomTypes(List<HotelReservationRequest_RoomType> roomTypes) {
+        public Builder setRoomTypes(List<String> roomTypes) {
             instance.setRoomTypes(roomTypes);
             return this;
         }

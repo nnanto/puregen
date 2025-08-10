@@ -15,7 +15,7 @@ public class BookingOperationResponse {
 
     // Status of the booking
     @JsonProperty("status")
-    private BookingStatus status;
+    private String status;
 
     // Error message
     @JsonProperty("error")
@@ -31,11 +31,11 @@ public class BookingOperationResponse {
         this.operationId = operationId;
     }
 
-    public BookingStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(BookingStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -55,7 +55,7 @@ public class BookingOperationResponse {
             return this;
         }
 
-        public Builder setStatus(BookingStatus status) {
+        public Builder setStatus(String status) {
             instance.setStatus(status);
             return this;
         }

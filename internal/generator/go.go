@@ -72,6 +72,21 @@ func GenerateGoFile(gen *protogen.Plugin, file *protogen.File, commonNamespace s
 	if len(file.Services) > 0 {
 		g.P(`"fmt"`)
 	}
+	
+	// Add fmt import if we have any int enums
+	hasIntEnums := false
+	enumsForImport := collectAllEnums(file)
+	for _, enum := range enumsForImport {
+		directive := parsePuregenDirective(enum.Comments)
+		if directive != nil && directive.EnumType == "int" {
+			hasIntEnums = true
+			break
+		}
+	}
+	if hasIntEnums && len(file.Services) == 0 {
+		g.P(`"fmt"`)
+	}
+	
 	// Import global transport if namespace is provided and we have services
 	if commonNamespace != "" && len(file.Services) > 0 {
 		// Convert namespace to Go import path
@@ -91,12 +106,13 @@ func GenerateGoFile(gen *protogen.Plugin, file *protogen.File, commonNamespace s
 		}
 	}
 
-	// Generate enums
-	if len(file.Enums) > 0 {
+	// Generate all enums (including nested and unreferenced)
+	allEnums := collectAllEnums(file)
+	if len(allEnums) > 0 {
 		g.P("// Enums")
 		g.P()
 	}
-	for _, enum := range file.Enums {
+	for _, enum := range allEnums {
 		generateGoEnum(g, enum)
 	}
 
@@ -176,71 +192,106 @@ func generateGoMethodConstants(g *protogen.GeneratedFile, service *protogen.Serv
 func generateGoEnum(g *protogen.GeneratedFile, enum *protogen.Enum) {
 	enumName := enum.GoIdent.GoName
 
-	// Generate type declaration
-	g.P("type ", enumName, " int32")
-	g.P()
+	// Parse puregen directive to determine enum type
+	directive := parsePuregenDirective(enum.Comments)
+	useStringConstants := true // Default to string constants
+	
+	if directive != nil && directive.EnumType == "int" {
+		useStringConstants = false
+	}
 
-	// Generate constants
-	g.P("const (")
-	for i, value := range enum.Values {
-		valueName := value.GoIdent.GoName
-		if i == 0 {
-			g.P("	", valueName, " ", enumName, " = ", value.Desc.Number())
-		} else {
-			g.P("	", valueName, " = ", value.Desc.Number())
+	if useStringConstants {
+		// Generate string constants
+		g.P("// ", enumName, " enum values as string constants")
+		g.P("const (")
+		for _, value := range enum.Values {
+			valueName := value.GoIdent.GoName
+			g.P("	", valueName, " = \"", value.Desc.Name(), "\"")
 		}
+		g.P(")")
+		g.P()
+
+		// Generate slice of all values for validation
+		g.P("var ", enumName, "Values = []string{")
+		for _, value := range enum.Values {
+			valueName := value.GoIdent.GoName
+			g.P("	", valueName, ",")
+		}
+		g.P("}")
+		g.P()
+
+		// Generate validation function
+		g.P("func IsValid", enumName, "(value string) bool {")
+		g.P("	for _, v := range ", enumName, "Values {")
+		g.P("		if v == value {")
+		g.P("			return true")
+		g.P("		}")
+		g.P("	}")
+		g.P("	return false")
+		g.P("}")
+		g.P()
+	} else {
+		// Generate traditional int32 enum
+		g.P("type ", enumName, " int32")
+		g.P()
+
+		// Generate constants
+		g.P("const (")
+		for i, value := range enum.Values {
+			valueName := value.GoIdent.GoName
+			if i == 0 {
+				g.P("	", valueName, " ", enumName, " = ", value.Desc.Number())
+			} else {
+				g.P("	", valueName, " = ", value.Desc.Number())
+			}
+		}
+		g.P(")")
+		g.P()
+
+		// Generate value map for String() method
+		g.P("var ", enumName, "_name = map[int32]string{")
+		for _, value := range enum.Values {
+			g.P("	", value.Desc.Number(), ": \"", value.Desc.Name(), "\",")
+		}
+		g.P("}")
+		g.P()
+
+		// Generate reverse map for parsing
+		g.P("var ", enumName, "_value = map[string]int32{")
+		for _, value := range enum.Values {
+			g.P("	\"", value.Desc.Name(), "\": ", value.Desc.Number(), ",")
+		}
+		g.P("}")
+		g.P()
+
+		// Generate String() method
+		g.P("func (x ", enumName, ") String() string {")
+		g.P("	if name, ok := ", enumName, "_name[int32(x)]; ok {")
+		g.P("		return name")
+		g.P("	}")
+		g.P("	return fmt.Sprintf(\"", enumName, "(%d)\", x)")
+		g.P("}")
+		g.P()
+
+		// Generate Parse method
+		g.P("func Parse", enumName, "(s string) (", enumName, ", error) {")
+		g.P("	if value, ok := ", enumName, "_value[s]; ok {")
+		g.P("		return ", enumName, "(value), nil")
+		g.P("	}")
+		g.P("	return 0, fmt.Errorf(\"invalid ", enumName, " value: %s\", s)")
+		g.P("}")
+		g.P()
+
+		// Generate IsValid method
+		g.P("func (x ", enumName, ") IsValid() bool {")
+		g.P("	_, ok := ", enumName, "_name[int32(x)]")
+		g.P("	return ok")
+		g.P("}")
+		g.P()
 	}
-	g.P(")")
-	g.P()
-
-	// Generate value map for String() method
-	g.P("var ", enumName, "_name = map[int32]string{")
-	for _, value := range enum.Values {
-		g.P("	", value.Desc.Number(), ": \"", value.Desc.Name(), "\",")
-	}
-	g.P("}")
-	g.P()
-
-	// Generate reverse map for parsing
-	g.P("var ", enumName, "_value = map[string]int32{")
-	for _, value := range enum.Values {
-		g.P("	\"", value.Desc.Name(), "\": ", value.Desc.Number(), ",")
-	}
-	g.P("}")
-	g.P()
-
-	// Generate String() method
-	g.P("func (x ", enumName, ") String() string {")
-	g.P("	if name, ok := ", enumName, "_name[int32(x)]; ok {")
-	g.P("		return name")
-	g.P("	}")
-	g.P("	return fmt.Sprintf(\"", enumName, "(%d)\", x)")
-	g.P("}")
-	g.P()
-
-	// Generate Parse method
-	g.P("func Parse", enumName, "(s string) (", enumName, ", error) {")
-	g.P("	if value, ok := ", enumName, "_value[s]; ok {")
-	g.P("		return ", enumName, "(value), nil")
-	g.P("	}")
-	g.P("	return 0, fmt.Errorf(\"invalid ", enumName, " value: %s\", s)")
-	g.P("}")
-	g.P()
-
-	// Generate IsValid method
-	g.P("func (x ", enumName, ") IsValid() bool {")
-	g.P("	_, ok := ", enumName, "_name[int32(x)]")
-	g.P("	return ok")
-	g.P("}")
-	g.P()
 }
 
 func generateGoMessage(g *protogen.GeneratedFile, msg *protogen.Message) {
-	// Generate nested enums first
-	for _, enum := range msg.Enums {
-		generateGoEnum(g, enum)
-	}
-
 	// Generate message comment
 	writeGoComment(g, msg.Comments)
 
@@ -411,7 +462,15 @@ func getGoFieldType(field *protogen.Field) string {
 	case "bytes":
 		baseType = "[]byte"
 	case "enum":
-		baseType = field.Enum.GoIdent.GoName
+		// Check if enum is using string constants
+		directive := parsePuregenDirective(field.Enum.Comments)
+		if directive == nil || directive.EnumType != "int" {
+			// Default to string constants
+			baseType = "string"
+		} else {
+			// Use integer enum type
+			baseType = field.Enum.GoIdent.GoName
+		}
 	case "message":
 		baseType = "*" + field.Message.GoIdent.GoName
 	default:

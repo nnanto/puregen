@@ -35,6 +35,40 @@ func parseMethodMetadata(comments protogen.CommentSet) map[string]string {
 	return nil
 }
 
+// PuregenDirective represents a parsed puregen directive from comments
+type PuregenDirective struct {
+	EnumType string `json:"enumType,omitempty"`
+	// Add other directive fields as needed
+}
+
+// parsePuregenDirective extracts puregen directives from comments
+func parsePuregenDirective(comments protogen.CommentSet) *PuregenDirective {
+	// Use leading comments if available, otherwise trailing
+	comment := comments.Leading
+	if comment == "" && comments.Trailing != "" {
+		comment = comments.Trailing
+	}
+
+	if comment == "" {
+		return nil
+	}
+
+	lines := strings.Split(strings.TrimSpace(string(comment)), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "puregen:generate:") {
+			jsonStr := strings.TrimPrefix(line, "puregen:generate:")
+			jsonStr = strings.TrimSpace(jsonStr)
+
+			var directive PuregenDirective
+			if err := json.Unmarshal([]byte(jsonStr), &directive); err == nil {
+				return &directive
+			}
+		}
+	}
+	return nil
+}
+
 // fileExists checks if a file already exists in the plugin's file list
 func fileExists(gen *protogen.Plugin, filename string) bool {
 	// Check if the file is already being generated in this run
@@ -174,4 +208,34 @@ func isSamePackageMessage(msg *protogen.Message, currentFile *protogen.File) boo
 	currentFileDesc := currentFile.Desc
 
 	return msgPackage == currentPackage && msgFile != currentFileDesc
+}
+
+// collectAllEnums collects all enums from the file including nested enums
+func collectAllEnums(file *protogen.File) []*protogen.Enum {
+	var allEnums []*protogen.Enum
+
+	// Add file-level enums
+	allEnums = append(allEnums, file.Enums...)
+
+	// Add enums from messages (including nested)
+	for _, message := range file.Messages {
+		allEnums = append(allEnums, collectEnumsFromMessage(message)...)
+	}
+
+	return allEnums
+}
+
+// collectEnumsFromMessage recursively collects all enums from a message and its nested messages
+func collectEnumsFromMessage(msg *protogen.Message) []*protogen.Enum {
+	var enums []*protogen.Enum
+
+	// Add enums from this message
+	enums = append(enums, msg.Enums...)
+
+	// Recursively collect from nested messages
+	for _, nested := range msg.Messages {
+		enums = append(enums, collectEnumsFromMessage(nested)...)
+	}
+
+	return enums
 }

@@ -15,7 +15,7 @@ public class HotelReservationResponse {
 
     // Status of the request
     @JsonProperty("status")
-    private BookingStatus status;
+    private String status;
 
     // Error message
     @JsonProperty("error")
@@ -42,11 +42,11 @@ public class HotelReservationResponse {
         this.result.add(item);
     }
 
-    public BookingStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(BookingStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -74,7 +74,7 @@ public class HotelReservationResponse {
             return this;
         }
 
-        public Builder setStatus(BookingStatus status) {
+        public Builder setStatus(String status) {
             instance.setStatus(status);
             return this;
         }

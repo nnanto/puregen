@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package demo.enums;
+
+option go_package = "demo/enums";
+option java_package = "com.demo.enums";
+
+// puregen:generate:{"enumType": "int"}
+// Status enum should be generated as integers
+enum Status {
+  STATUS_UNKNOWN = 0;
+  STATUS_ACTIVE = 1;
+  STATUS_INACTIVE = 2;
+  STATUS_SUSPENDED = 3;
+}
+
+// Priority enum should be generated as string constants (default)
+enum Priority {
+  PRIORITY_LOW = 0;
+  PRIORITY_MEDIUM = 1;
+  PRIORITY_HIGH = 2;
+  PRIORITY_CRITICAL = 3;
+}
+
+// Type enum nested in message should also be integers
+message Task {
+  // puregen:generate:{"enumType": "int"}
+  enum Type {
+    TYPE_UNKNOWN = 0;
+    TYPE_BUG = 1;
+    TYPE_FEATURE = 2;
+    TYPE_ENHANCEMENT = 3;
+  }
+  
+  string id = 1;
+  string title = 2;
+  Status status = 3;
+  Priority priority = 4;
+  Type type = 5;
+}
+
+message TaskList {
+  repeated Task tasks = 1;
+}
+
+service TaskService {
+  rpc CreateTask(Task) returns (Task);
+  rpc ListTasks(TaskList) returns (TaskList);
+}

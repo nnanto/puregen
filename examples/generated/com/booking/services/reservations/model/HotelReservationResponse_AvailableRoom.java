@@ -15,7 +15,7 @@ public class HotelReservationResponse_AvailableRoom {
 
     // Room type
     @JsonProperty("roomType")
-    private HotelReservationRequest_RoomType roomType;
+    private String roomType;
 
     // Available rooms count
     @JsonProperty("availableRooms")
@@ -31,11 +31,11 @@ public class HotelReservationResponse_AvailableRoom {
         this.hotel = hotel;
     }
 
-    public HotelReservationRequest_RoomType getRoomType() {
+    public String getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(HotelReservationRequest_RoomType roomType) {
+    public void setRoomType(String roomType) {
         this.roomType = roomType;
     }
 
@@ -55,7 +55,7 @@ public class HotelReservationResponse_AvailableRoom {
             return this;
         }
 
-        public Builder setRoomType(HotelReservationRequest_RoomType roomType) {
+        public Builder setRoomType(String roomType) {
             instance.setRoomType(roomType);
             return this;
         }

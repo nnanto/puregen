@@ -52,52 +52,58 @@ func (x OperationType) IsValid() bool {
 	return ok
 }
 
-type BookingStatus int32
-
+// BookingStatus enum values as string constants
 const (
-	BookingStatus_BookingStatus_UNKNOWN              BookingStatus = 0
-	BookingStatus_BookingStatus_CONFIRMED                          = 1
-	BookingStatus_BookingStatus_FAILED                             = 2
-	BookingStatus_BookingStatus_PENDING                            = 3
-	BookingStatus_BookingStatus_PARTIAL_CONFIRMATION               = 4
-	BookingStatus_BookingStatus_CANCELLED                          = 5
+	BookingStatus_BookingStatus_UNKNOWN              = "BookingStatus_UNKNOWN"
+	BookingStatus_BookingStatus_CONFIRMED            = "BookingStatus_CONFIRMED"
+	BookingStatus_BookingStatus_FAILED               = "BookingStatus_FAILED"
+	BookingStatus_BookingStatus_PENDING              = "BookingStatus_PENDING"
+	BookingStatus_BookingStatus_PARTIAL_CONFIRMATION = "BookingStatus_PARTIAL_CONFIRMATION"
+	BookingStatus_BookingStatus_CANCELLED            = "BookingStatus_CANCELLED"
 )
 
-var BookingStatus_name = map[int32]string{
-	0: "BookingStatus_UNKNOWN",
-	1: "BookingStatus_CONFIRMED",
-	2: "BookingStatus_FAILED",
-	3: "BookingStatus_PENDING",
-	4: "BookingStatus_PARTIAL_CONFIRMATION",
-	5: "BookingStatus_CANCELLED",
+var BookingStatusValues = []string{
+	BookingStatus_BookingStatus_UNKNOWN,
+	BookingStatus_BookingStatus_CONFIRMED,
+	BookingStatus_BookingStatus_FAILED,
+	BookingStatus_BookingStatus_PENDING,
+	BookingStatus_BookingStatus_PARTIAL_CONFIRMATION,
+	BookingStatus_BookingStatus_CANCELLED,
 }
 
-var BookingStatus_value = map[string]int32{
-	"BookingStatus_UNKNOWN":              0,
-	"BookingStatus_CONFIRMED":            1,
-	"BookingStatus_FAILED":               2,
-	"BookingStatus_PENDING":              3,
-	"BookingStatus_PARTIAL_CONFIRMATION": 4,
-	"BookingStatus_CANCELLED":            5,
-}
-
-func (x BookingStatus) String() string {
-	if name, ok := BookingStatus_name[int32(x)]; ok {
-		return name
+func IsValidBookingStatus(value string) bool {
+	for _, v := range BookingStatusValues {
+		if v == value {
+			return true
+		}
 	}
-	return fmt.Sprintf("BookingStatus(%d)", x)
+	return false
 }
 
-func ParseBookingStatus(s string) (BookingStatus, error) {
-	if value, ok := BookingStatus_value[s]; ok {
-		return BookingStatus(value), nil
+// HotelReservationRequest_RoomType enum values as string constants
+const (
+	HotelReservationRequest_RoomType_UNKNOWN   = "RoomType_UNKNOWN"
+	HotelReservationRequest_RoomType_STANDARD  = "RoomType_STANDARD"
+	HotelReservationRequest_RoomType_DELUXE    = "RoomType_DELUXE"
+	HotelReservationRequest_RoomType_SUITE     = "RoomType_SUITE"
+	HotelReservationRequest_RoomType_EXECUTIVE = "RoomType_EXECUTIVE"
+)
+
+var HotelReservationRequest_RoomTypeValues = []string{
+	HotelReservationRequest_RoomType_UNKNOWN,
+	HotelReservationRequest_RoomType_STANDARD,
+	HotelReservationRequest_RoomType_DELUXE,
+	HotelReservationRequest_RoomType_SUITE,
+	HotelReservationRequest_RoomType_EXECUTIVE,
+}
+
+func IsValidHotelReservationRequest_RoomType(value string) bool {
+	for _, v := range HotelReservationRequest_RoomTypeValues {
+		if v == value {
+			return true
+		}
 	}
-	return 0, fmt.Errorf("invalid BookingStatus value: %s", s)
-}
-
-func (x BookingStatus) IsValid() bool {
-	_, ok := BookingStatus_name[int32(x)]
-	return ok
+	return false
 }
 
 // Messages
@@ -107,7 +113,8 @@ type PaymentInfo struct {
 	// Payment method (e.g., credit card, PayPal)
 	PaymentMethod string `json:"paymentMethod"`
 	// Card token or payment reference
-	PaymentToken string `json:"paymentToken"`
+	PaymentToken  string        `json:"paymentToken"`
+	OperationType OperationType `json:"operationType"`
 }
 
 func NewPaymentInfo() *PaymentInfo {
@@ -212,7 +219,7 @@ type BookingOperationResponse struct {
 	// Operation ID
 	OperationId string `json:"operationId"`
 	// Status of the booking
-	Status BookingStatus `json:"status"`
+	Status string `json:"status"`
 	// Error message
 	Error *Error `json:"error"`
 }
@@ -333,57 +340,12 @@ func (m *BookingStatsResponse) FromJSON(data []byte) error {
 	return json.Unmarshal(data, m)
 }
 
-type HotelReservationRequest_RoomType int32
-
-const (
-	HotelReservationRequest_RoomType_UNKNOWN   HotelReservationRequest_RoomType = 0
-	HotelReservationRequest_RoomType_STANDARD                                   = 1
-	HotelReservationRequest_RoomType_DELUXE                                     = 2
-	HotelReservationRequest_RoomType_SUITE                                      = 3
-	HotelReservationRequest_RoomType_EXECUTIVE                                  = 4
-)
-
-var HotelReservationRequest_RoomType_name = map[int32]string{
-	0: "RoomType_UNKNOWN",
-	1: "RoomType_STANDARD",
-	2: "RoomType_DELUXE",
-	3: "RoomType_SUITE",
-	4: "RoomType_EXECUTIVE",
-}
-
-var HotelReservationRequest_RoomType_value = map[string]int32{
-	"RoomType_UNKNOWN":   0,
-	"RoomType_STANDARD":  1,
-	"RoomType_DELUXE":    2,
-	"RoomType_SUITE":     3,
-	"RoomType_EXECUTIVE": 4,
-}
-
-func (x HotelReservationRequest_RoomType) String() string {
-	if name, ok := HotelReservationRequest_RoomType_name[int32(x)]; ok {
-		return name
-	}
-	return fmt.Sprintf("HotelReservationRequest_RoomType(%d)", x)
-}
-
-func ParseHotelReservationRequest_RoomType(s string) (HotelReservationRequest_RoomType, error) {
-	if value, ok := HotelReservationRequest_RoomType_value[s]; ok {
-		return HotelReservationRequest_RoomType(value), nil
-	}
-	return 0, fmt.Errorf("invalid HotelReservationRequest_RoomType value: %s", s)
-}
-
-func (x HotelReservationRequest_RoomType) IsValid() bool {
-	_, ok := HotelReservationRequest_RoomType_name[int32(x)]
-	return ok
-}
-
 // Request for hotel reservation
 type HotelReservationRequest struct {
 	// Hotel search criteria
 	HotelLocations []string `json:"hotelLocations"`
 	// List of preferred room types
-	RoomTypes []HotelReservationRequest_RoomType `json:"roomTypes"`
+	RoomTypes []string `json:"roomTypes"`
 	// Maximum price per night
 	MaxPricePerNight float64 `json:"maxPricePerNight"`
 	// Required payment information
@@ -417,7 +379,7 @@ type HotelReservationResponse struct {
 	// List of results for each search location
 	Result []*HotelReservationResponse_SingleHotelReservationResponse `json:"result"`
 	// Status of the request
-	Status BookingStatus `json:"status"`
+	Status string `json:"status"`
 	// Error message
 	Error *Error `json:"error"`
 	// Booking stats
@@ -475,7 +437,7 @@ type HotelReservationResponse_AvailableRoom struct {
 	// Hotel information
 	Hotel *HotelReservationResponse_Hotel `json:"hotel"`
 	// Room type
-	RoomType HotelReservationRequest_RoomType `json:"roomType"`
+	RoomType string `json:"roomType"`
 	// Available rooms count
 	AvailableRooms int32 `json:"availableRooms"`
 }
@@ -561,7 +523,7 @@ type FlightBookingResponse struct {
 	// Error message
 	Error *Error `json:"error"`
 	// Status of the request
-	Status BookingStatus `json:"status"`
+	Status string `json:"status"`
 	// Booking stats
 	BookingStats *BookingStatsResponse `json:"bookingStats"`
 }
@@ -650,7 +612,7 @@ type TravelPackageBookingResponse struct {
 	// Error message
 	Error *Error `json:"error"`
 	// Status of the request
-	Status BookingStatus `json:"status"`
+	Status string `json:"status"`
 	// Booking stats
 	BookingStats *BookingStatsResponse `json:"bookingStats"`
 }

@@ -4,6 +4,71 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
 from abc import ABC, abstractmethod
 import json
+from enum import IntEnum
+
+# Enums
+
+"""
+Operation types for booking system
+puregen:generate:{"enumType": "int"}
+"""
+class OperationType(IntEnum):
+    """OperationType enum values as integers"""
+    OPERATIONTYPE_UNKNOWN = 0
+    OPERATIONTYPE_HOTEL_RESERVATION = 1
+    OPERATIONTYPE_FLIGHT_BOOKING = 2
+    OPERATIONTYPE_TRAVEL_PACKAGE = 3
+
+    @classmethod
+    def is_valid(cls, value: int) -> bool:
+        """Check if value is a valid OperationType"""
+        return value in [item.value for item in cls]
+
+# Status of the booking request
+class BookingStatus:
+    """BookingStatus enum values as string constants"""
+    BOOKINGSTATUS_UNKNOWN = "BookingStatus_UNKNOWN"
+    BOOKINGSTATUS_CONFIRMED = "BookingStatus_CONFIRMED"
+    BOOKINGSTATUS_FAILED = "BookingStatus_FAILED"
+    BOOKINGSTATUS_PENDING = "BookingStatus_PENDING"
+    BOOKINGSTATUS_PARTIAL_CONFIRMATION = "BookingStatus_PARTIAL_CONFIRMATION"
+    BOOKINGSTATUS_CANCELLED = "BookingStatus_CANCELLED"
+
+    VALUES = [
+        BOOKINGSTATUS_UNKNOWN,
+        BOOKINGSTATUS_CONFIRMED,
+        BOOKINGSTATUS_FAILED,
+        BOOKINGSTATUS_PENDING,
+        BOOKINGSTATUS_PARTIAL_CONFIRMATION,
+        BOOKINGSTATUS_CANCELLED,
+    ]
+
+    @classmethod
+    def is_valid(cls, value: str) -> bool:
+        """Check if value is a valid BookingStatus"""
+        return value in cls.VALUES
+
+# Enum for room types
+class HotelReservationRequest_RoomType:
+    """HotelReservationRequest_RoomType enum values as string constants"""
+    ROOMTYPE_UNKNOWN = "RoomType_UNKNOWN"
+    ROOMTYPE_STANDARD = "RoomType_STANDARD"
+    ROOMTYPE_DELUXE = "RoomType_DELUXE"
+    ROOMTYPE_SUITE = "RoomType_SUITE"
+    ROOMTYPE_EXECUTIVE = "RoomType_EXECUTIVE"
+
+    VALUES = [
+        ROOMTYPE_UNKNOWN,
+        ROOMTYPE_STANDARD,
+        ROOMTYPE_DELUXE,
+        ROOMTYPE_SUITE,
+        ROOMTYPE_EXECUTIVE,
+    ]
+
+    @classmethod
+    def is_valid(cls, value: str) -> bool:
+        """Check if value is a valid HotelReservationRequest_RoomType"""
+        return value in cls.VALUES
 
 # Messages
 
@@ -15,6 +80,7 @@ class PaymentInfo:
     payment_method: str = ""
     # Card token or payment reference
     payment_token: str = ""
+    operation_type: int = 0
 
     def validate(self) -> bool:
         """Validate the message fields"""
@@ -32,6 +98,8 @@ class PaymentInfo:
             result['paymentMethod'] = self.payment_method
         if self.payment_token is not None:
             result['paymentToken'] = self.payment_token
+        if self.operation_type is not None:
+            result['operationType'] = self.operation_type
         return result
 
     @classmethod
@@ -48,6 +116,8 @@ class PaymentInfo:
             kwargs['payment_method'] = data['paymentMethod']
         if 'paymentToken' in data:
             kwargs['payment_token'] = data['paymentToken']
+        if 'operationType' in data:
+            kwargs['operation_type'] = data['operationType']
         return cls(**kwargs)
 
 # Error Response
@@ -203,7 +273,7 @@ class BookingOperationResponse:
     # Operation ID
     operation_id: str = ""
     # Status of the booking
-    status: int = 0
+    status: str = 0
     # Error message
     error: Optional['Error'] = None
 
@@ -427,7 +497,7 @@ class HotelReservationRequest:
     # Hotel search criteria
     hotel_locations: List[str] = field(default_factory=list)
     # List of preferred room types
-    room_types: List[int] = field(default_factory=list)
+    room_types: List[str] = field(default_factory=list)
     # Maximum price per night
     max_price_per_night: float = 0.0
     # Required payment information
@@ -499,7 +569,7 @@ class HotelReservationResponse:
     # List of results for each search location
     result: List['HotelReservationResponse_SingleHotelReservationResponse'] = field(default_factory=list)
     # Status of the request
-    status: int = 0
+    status: str = 0
     # Error message
     error: Optional['Error'] = None
     # Booking stats
@@ -609,7 +679,7 @@ class HotelReservationResponse_AvailableRoom:
     # Hotel information
     hotel: Optional['HotelReservationResponse_Hotel'] = None
     # Room type
-    room_type: int = 0
+    room_type: str = 0
     # Available rooms count
     available_rooms: int = 0
 
@@ -769,7 +839,7 @@ class FlightBookingResponse:
     # Error message
     error: Optional['Error'] = None
     # Status of the request
-    status: int = 0
+    status: str = 0
     # Booking stats
     booking_stats: Optional['BookingStatsResponse'] = None
 
@@ -940,7 +1010,7 @@ class TravelPackageBookingResponse:
     # Error message
     error: Optional['Error'] = None
     # Status of the request
-    status: int = 0
+    status: str = 0
     # Booking stats
     booking_stats: Optional['BookingStatsResponse'] = None
 
