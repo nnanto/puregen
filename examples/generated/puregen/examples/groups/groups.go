@@ -193,15 +193,11 @@ var GroupServiceMethodMetadata = map[string]map[string]string{}
 
 // Client
 
-type Transport interface {
-	Send(ctx context.Context, methodName string, inputData interface{}, outputType interface{}) (interface{}, error)
-}
-
 type GroupServiceClient struct {
-	transport Transport
+	transport PuregenTransport
 }
 
-func NewGroupServiceClient(transport Transport) *GroupServiceClient {
+func NewGroupServiceClient(transport PuregenTransport) *GroupServiceClient {
 	return &GroupServiceClient{transport: transport}
 }
 

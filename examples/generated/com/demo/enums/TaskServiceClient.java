@@ -5,9 +5,9 @@ package com.demo.enums;
 import java.util.*;
 
 public class TaskServiceClient {
-    private final Transport transport;
+    private final PuregenTransport transport;
 
-    public TaskServiceClient(Transport transport) {
+    public TaskServiceClient(PuregenTransport transport) {
         this.transport = transport;
     }
 

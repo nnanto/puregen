@@ -197,15 +197,11 @@ var TaskServiceMethodMetadata = map[string]map[string]string{}
 
 // Client
 
-type Transport interface {
-	Send(ctx context.Context, methodName string, inputData interface{}, outputType interface{}) (interface{}, error)
-}
-
 type TaskServiceClient struct {
-	transport Transport
+	transport PuregenTransport
 }
 
-func NewTaskServiceClient(transport Transport) *TaskServiceClient {
+func NewTaskServiceClient(transport PuregenTransport) *TaskServiceClient {
 	return &TaskServiceClient{transport: transport}
 }
 

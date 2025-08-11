@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
 from abc import ABC, abstractmethod
 import json
+from .puregen_transport import PuregenTransport
 
 # Messages
 
@@ -344,18 +345,10 @@ class UserServiceMethods:
 
 # Client
 
-class Transport(ABC):
-    """Abstract transport interface for client communication"""
-
-    @abstractmethod
-    def send(self, ctx: Dict[str, Any], method_name: str, input_data: Any, output_type: type) -> Any:
-        """Send request and return response"""
-        pass
-
 class UserServiceClient:
     """Client for UserService service"""
 
-    def __init__(self, transport: Transport):
+    def __init__(self, transport: PuregenTransport):
         self.transport = transport
 
     def create_user(self, ctx: Dict[str, Any], request: CreateUserRequest) -> CreateUserResponse:

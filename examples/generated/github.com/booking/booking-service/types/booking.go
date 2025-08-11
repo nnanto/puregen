@@ -764,15 +764,11 @@ var BookingServiceMethodMetadata = map[string]map[string]string{}
 
 // Client
 
-type Transport interface {
-	Send(ctx context.Context, methodName string, inputData interface{}, outputType interface{}) (interface{}, error)
-}
-
 type BookingServiceClient struct {
-	transport Transport
+	transport PuregenTransport
 }
 
-func NewBookingServiceClient(transport Transport) *BookingServiceClient {
+func NewBookingServiceClient(transport PuregenTransport) *BookingServiceClient {
 	return &BookingServiceClient{transport: transport}
 }
 

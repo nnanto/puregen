@@ -5,6 +5,7 @@ from typing import Optional, List, Dict, Any
 from abc import ABC, abstractmethod
 import json
 from enum import IntEnum
+from .puregen_transport import PuregenTransport
 
 # Enums
 
@@ -1253,18 +1254,10 @@ class BookingServiceMethods:
 
 # Client
 
-class Transport(ABC):
-    """Abstract transport interface for client communication"""
-
-    @abstractmethod
-    def send(self, ctx: Dict[str, Any], method_name: str, input_data: Any, output_type: type) -> Any:
-        """Send request and return response"""
-        pass
-
 class BookingServiceClient:
     """Client for BookingService service"""
 
-    def __init__(self, transport: Transport):
+    def __init__(self, transport: PuregenTransport):
         self.transport = transport
 
     def start_hotel_reservation(self, ctx: Dict[str, Any], request: HotelReservationRequest) -> HotelReservationResponse:

@@ -202,15 +202,11 @@ var UserServiceMethodMetadata = map[string]map[string]string{
 
 // Client
 
-type Transport interface {
-	Send(ctx context.Context, methodName string, inputData interface{}, outputType interface{}) (interface{}, error)
-}
-
 type UserServiceClient struct {
-	transport Transport
+	transport PuregenTransport
 }
 
-func NewUserServiceClient(transport Transport) *UserServiceClient {
+func NewUserServiceClient(transport PuregenTransport) *UserServiceClient {
 	return &UserServiceClient{transport: transport}
 }
 

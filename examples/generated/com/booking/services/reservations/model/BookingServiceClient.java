@@ -5,9 +5,9 @@ package com.booking.services.reservations.model;
 import java.util.*;
 
 public class BookingServiceClient {
-    private final Transport transport;
+    private final PuregenTransport transport;
 
-    public BookingServiceClient(Transport transport) {
+    public BookingServiceClient(PuregenTransport transport) {
         this.transport = transport;
     }
 

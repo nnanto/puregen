@@ -5,9 +5,9 @@ package com.puregen.examples.user.v1;
 import java.util.*;
 
 public class UserServiceClient {
-    private final Transport transport;
+    private final PuregenTransport transport;
 
-    public UserServiceClient(Transport transport) {
+    public UserServiceClient(PuregenTransport transport) {
         this.transport = transport;
     }
 

@@ -5,9 +5,9 @@ package groups.examples.puregen;
 import java.util.*;
 
 public class GroupServiceClient {
-    private final Transport transport;
+    private final PuregenTransport transport;
 
-    public GroupServiceClient(Transport transport) {
+    public GroupServiceClient(PuregenTransport transport) {
         this.transport = transport;
     }
 
